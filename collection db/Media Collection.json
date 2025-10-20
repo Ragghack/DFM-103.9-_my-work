@@ -1,0 +1,33 @@
+{
+  _id: ObjectId,
+  filename: String,
+  originalName: String,
+  fileType: {
+    type: String,
+    enum: ['image', 'audio', 'video', 'document', 'other']
+  },
+  mimeType: String,
+  size: Number, // in bytes
+  path: String,
+  url: String,
+  thumbnail: String,
+  category: {
+    type: String,
+    enum: ['news', 'articles', 'economy', 'finance', 'emissions']
+  },
+  uploadedBy: { type: ObjectId, ref: 'User' },
+  description: String,
+  tags: [String],
+  isFeatured: Boolean,
+  usedIn: [{
+    contentType: String, // 'article', 'news', etc.
+    contentId: ObjectId
+  }],
+  metadata: {
+    width: Number,
+    height: Number,
+    duration: Number,
+    format: String
+  },
+  createdAt: Date
+}

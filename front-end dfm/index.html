@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dfm Media - Radio Station</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1814;
+            --primary-accent: #D4AF37; /* Gold color */
+            --secondary-dark: #2d2b24;
+            --light-bg: #F8F5F0; /* Milky white */
+            --card-bg: #ffffff;
+            --text-primary: #1a1814;
+            --text-secondary: #333333;
+            --border-light: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --box-text-color: #1a1814;
+        }
+        
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --light-bg: #121212;
+            --card-bg: #1a1a1a;
+            --text-primary: #D4AF37; /* Gold headers */
+            --text-secondary: #ffffff; /* White minor text */
+            --border-light: #333333;
+            --glass-bg: rgba(26, 24, 20, 0.9);
+            --glass-border: rgba(212, 175, 55, 0.1);
+            --box-text-color: #f8f3c9;
+        }
+        
+        [data-theme="dark"] .featured-article p {
+            color: #fffbe6 !important;
+        }
+        
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--light-bg);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--secondary-dark);
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            margin-left: 15px;
+        }
+        
+        .theme-toggle-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-accent);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .theme-toggle-handle {
+            transform: translateX(24px);
+        }
+        
+        .theme-toggle i {
+            font-size: 12px;
+            z-index: 1;
+            color: var(--primary-dark);
+        }
+        
+        .theme-toggle .fa-sun {
+            margin-right: auto;
+            padding-left: 4px;
+        }
+        
+        .theme-toggle .fa-moon {
+            margin-left: auto;
+            padding-right: 4px;
+        }
+        
+        /* Enhanced Glassmorphism Effects */
+        .glass {
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        /* Enhanced Header & Navigation */
+        header { 
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 32px rgba(26, 24, 20, 0.3);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        
+        header .navbar-brand { 
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(90deg, var(--primary-accent), #fff 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .navbar-nav .nav-link {
+            position: relative;
+            margin: 0 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 12px 16px !important;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: linear-gradient(45deg, var(--primary-accent), rgba(212, 175, 55, 0.6));
+            border-radius: 10px;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .navbar-nav .nav-link:hover::before,
+        .navbar-nav .nav-link.active::before {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--primary-dark) !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Enhanced Breaking News with Animation */
+        .breaking-news { 
+            padding: 8px 0;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(270deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            color: var(--primary-dark); 
+            padding: 16px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .breaking-news::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .breaking-news span {
+            flex-shrink: 0;
+            padding: 4px 12px;
+            font-size: 0.9rem;
+            background: var(--primary-dark);
+            color: var(--primary-accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-right: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .marquee-container {
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .marquee {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            color: var(--primary-dark);
+        }
+        
+        @keyframes marquee {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Enhanced Cards with Micro-interactions */
+        .news-card { 
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            background: var(--card-bg);
+            position: relative;
+            color: var(--text-secondary);
+            min-height: 480px;
+        }
+        
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, var(--primary-accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .news-card:hover::before {
+            opacity: 1;
+        }
+        
+        .news-card:hover { 
+            transform: translateY(-12px) scale(1.02); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .news-card img { 
+            height: 320px;
+            object-fit: cover;
+            filter: brightness(0.9) contrast(1.1);
+        }
+        
+        .news-card:hover img {
+            transform: scale(1.1);
+            filter: brightness(1) contrast(1.2);
+        }
+        
+        .news-card .card-title { 
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Quick links icon container */
+        .quick-link-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Enhanced Section Headers */
+        .section-header {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            font-weight: 900;
+            font-size: 2rem;
+            color: var(--text-primary);
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), rgba(212, 175, 55, 0.3));
+            border-radius: 2px;
+        }
+        
+        /* Enhanced Live Player */
+        .live-player { 
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .live-player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .play-btn {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+        
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-accent), #fff);
+            z-index: -1;
+            opacity: 0;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
+        }
+        
+        .play-btn:hover::before {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Enhanced Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 50px 0 30px;
+        }
+        
+         .social-icons a {
+            color: var(--primary-accent) !important;
+            font-size: 1.6rem;
+            margin: 0 10px;
+            transition: color 0.3s, text-shadow 0.3s;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.7), 0 0 2px #fff;
+        }
+        .social-icons a:hover {
+            color: #fff200 !important;
+            text-shadow: 0 0 16px #fff200, 0 0 4px var(--primary-accent);
+        }
+        
+        /* Search & Notification System */
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.95rem;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* Navigation dropdown styles */
+        .dropdown-menu {
+            background: var(--card-bg);
+            border: 1px solid var(--primary-accent);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .dropdown-item {
+            color: var(--text-secondary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 5px;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Audio controls in navbar */
+        .audio-control {
+            background: none;
+            border: none;
+            color: var(--primary-accent);
+            font-size: 1.5rem;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        
+        /* Featured Article Styles */
+        .featured-article {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .featured-content {
+            background: rgba(255,255,255,0.08);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .trending-list .list-group-item {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border-light);
+            padding: 15px 10px;
+        }
+        
+        .trending-list .list-group-item:last-child {
+            border-bottom: none;
+        }
+        
+        .trending-list .list-group-item a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .trending-list .list-group-item a:hover {
+            color: var(--primary-accent);
+            padding-left: 5px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .section-header {
+                font-size: 1.8rem;
+            }
+            
+            .navbar-nav .nav-link {
+                margin: 4px 0;
+                text-align: center;
+            }
+            
+            .search-container {
+                margin: 15px auto;
+            }
+            
+            .marquee {
+                animation: marquee 15s linear infinite;
+            }
+            
+            .featured-article h2 {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .section-header {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
+            
+            .news-card {
+                min-height: auto;
+            }
+            
+            .quick-link-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .featured-article p {
+                font-size: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <!-- Logo and station name -->
+                <a class="navbar-brand d-flex align-items-center" href="index.html" style="font-weight:800; font-size:2rem; letter-spacing:-0.025em;">
+                    <i class="fas fa-microphone-alt me-2" style="color:#D4AF37; font-size:2.2rem;"></i>
+                    <span style="color:#D4AF37;">DFM</span><span style="color:#fff; margin-left:4px;"> MEDIA</span>
+                </a>
+                
+                <!-- Search Container -->
+                <div class="search-container d-none d-lg-block">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="search" class="search-input" placeholder="Search news...">
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Theme Toggle Button -->
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                        <div class="theme-toggle-handle"></div>
+                    </div>
+                    
+                    <!-- Audio Controls -->
+                    <button class="audio-control" id="playButton" title="Play radio">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="audio-control" id="stopButton" title="Stop radio">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    
+                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="emmsion.html"><i class="fas fa-broadcast-tower me-1"></i> Emission</a></li>
+                        
+                        <!-- Economy Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="economyDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-chart-line me-1"></i> Economy
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="economy.html">Economy</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-africa">Eco Africa</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-agriculture">Eco Agriculture</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-innovation">Eco Innovation</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Finance Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="financeDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-coins me-1"></i> Finance
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="finance.html">Finance Market</a></li>
+                                <li><a class="dropdown-item" href="finance.html#budget">National Budget</a></li>
+                                <li><a class="dropdown-item" href="finance.html#banking">Bank Projects</a></li>
+                                <li><a class="dropdown-item" href="finance.html#statistics">Statistics of the Day</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Articles Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="articlesDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-newspaper me-1"></i> Articles
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="articles.html">Articles</a></li>
+                                <li><a class="dropdown-item" href="articles.html#newsletter">Newsletter</a></li>
+                                <li><a class="dropdown-item" href="articles.html#blog">Blog</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li class="nav-item"><a class="nav-link" href="actuality.html"><i class="fas fa-bullhorn me-1"></i> Actuality</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breaking News Ticker -->
+    <div class="breaking-news">
+        <div class="container d-flex align-items-center">
+            <span><i class="fas fa-bolt me-2"></i>BREAKING NEWS</span>
+            <div class="marquee-container w-100">
+                <div class="marquee">
+                    DFM Radio launches its news portal | Follow economy, politics and sports live | New tax reform announced for 2025 | World Cup preparations underway | Inflation down for the 3rd consecutive month
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Featured Content Section -->
+        <section aria-labelledby="featured-content" class="mb-5">
+            <div class="row g-4 align-items-stretch">
+                <!-- Featured Article -->
+                <div class="col-12 col-lg-8 d-flex">
+                    <article class="featured-article card glass shadow-lg border-0 rounded-4 overflow-hidden flex-fill d-flex flex-column justify-content-between h-100">
+                        <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80" class="w-100" alt="Economic charts showing positive growth" loading="lazy" style="max-height:340px; object-fit:cover;">
+                        <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1">
+                            <div class="card-overlay" style="top:24px;right:24px;">Featured</div>
+                            <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">Economy shows signs of recovery despite inflation</h2>
+                            <p class="mb-4 fs-5" style="color:var(--text-secondary);">Latest economic indicators show moderate but stable growth in the first quarter of 2025, driven by the services sector.</p>
+                            <a href="#" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-start" onclick="showPage('article-detail')" aria-label="Read the full article on economic recovery">Read more <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i></a>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Side Trending News -->
+                <div class="col-12 col-lg-4 d-flex">
+                    <section aria-labelledby="trending-news" class="w-100 d-flex flex-column justify-content-between">
+                        <h5 class="section-header" id="trending-news">Nos Emissions</h5>
+                        <ul class="list-group trending-list flex-grow-1" role="list">
+                            <li class="list-group-item" role="listitem"><a href="emmsion.html">New economic developments in Europe</a></li>
+                            <li class="list-group-item" role="listitem"><a href="emmsion.html">National debate on pensions tonight at 8pm</a></li>
+                            <li class="list-group-item" role="listitem"><a href="emmsion.html">Tax reforms: what changes in 2025</a></li>
+                            <li class="list-group-item" role="listitem"><a href="emmsion.html">Education budget: historic increase</a></li>
+                            <li class="list-group-item" role="listitem"><a href="emmsion.html">Exclusive interview with the finance minister</a></li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current News Section -->
+        <section aria-labelledby="current-news" class="my-5">
+            <h2 class="section-header" id="current-news">Current News</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col d-flex">
+                    <article class="card news-card w-100 h-100 d-flex flex-column">
+                        <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="Economic growth charts">
+                        <div class="card-body d-flex flex-column flex-grow-1">
+                            <span class="badge bg-warning text-dark mb-2">Economy</span>
+                            <h5 class="card-title">Cameroon Economy Shows Growth</h5>
+                            <p class="card-text flex-grow-1">Latest reports indicate a 3.2% growth in Cameroon's economy this quarter, exceeding expectations.</p>
+                            <a href="economy.html" class="btn btn-sm btn-dark mt-auto">Read more</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col d-flex">
+                    <article class="card news-card w-100 h-100 d-flex flex-column">
+                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="Agricultural development">
+                        <div class="card-body d-flex flex-column flex-grow-1">
+                            <span class="badge bg-success text-white mb-2">Agriculture</span>
+                            <h5 class="card-title">New Farming Techniques Boost Yields</h5>
+                            <p class="card-text flex-grow-1">Local farmers are adopting innovative techniques that have increased crop yields by up to 40%.</p>
+                            <a href="economy.html#eco-agriculture" class="btn btn-sm btn-dark mt-auto">Read more</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col d-flex">
+                    <article class="card news-card w-100 h-100 d-flex flex-column">
+                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="Tech innovation">
+                        <div class="card-body d-flex flex-column flex-grow-1">
+                            <span class="badge bg-info text-white mb-2">Innovation</span>
+                            <h5 class="card-title">Tech Startups Flourish in Douala</h5>
+                            <p class="card-text flex-grow-1">The startup ecosystem in Douala is experiencing unprecedented growth with several new funding rounds.</p>
+                            <a href="economy.html#eco-innovation" class="btn btn-sm btn-dark mt-auto">Read more</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Links Section -->
+        <section aria-labelledby="quick-links" class="my-5">
+            <h2 class="section-header" id="quick-links">Explore Our Content</h2>
+            <div class="row">
+                <div class="col-md-3 col-6 mb-4">
+                    <a href="economy.html" class="card news-card text-center text-decoration-none">
+                        <div class="card-body">
+                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                <i class="fas fa-chart-line fa-2x text-dark"></i>
+                            </div>
+                            <h5 class="card-title">Economy</h5>
+                            <p class="card-text">Market trends and analysis</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <a href="finance.html" class="card news-card text-center text-decoration-none">
+                        <div class="card-body">
+                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                <i class="fas fa-coins fa-2x text-dark"></i>
+                            </div>
+                            <h5 class="card-title">Finance</h5>
+                            <p class="card-text">Banking and investment news</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <a href="articles.html" class="card news-card text-center text-decoration-none">
+                        <div class="card-body">
+                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                <i class="fas fa-newspaper fa-2x text-dark"></i>
+                            </div>
+                            <h5 class="card-title">Articles</h5>
+                            <p class="card-text">In-depth analysis and reports</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <a href="actuality.html" class="card news-card text-center text-decoration-none">
+                        <div class="card-body">
+                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                <i class="fas fa-bullhorn fa-2x text-dark"></i>
+                            </div>
+                            <h5 class="card-title">Actuality</h5>
+                            <p class="card-text">Current events and programs</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Radio Player Section -->
+        <section aria-labelledby="radio-player" class="my-5">
+            <h2 class="section-header" id="radio-player">Live Radio</h2>
+            <div class="card news-card text-center p-4">
+                <div class="row justify-content-center">
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card news-card text-center p-3">
+                            <h6 class="mb-2">Economic Debate</h6>
+                            <button class="play-btn" title="Play Economic Debate">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Guest: Finance Minister</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card news-card text-center p-3">
+                            <h6 class="mb-2">Market Update</h6>
+                            <button class="play-btn" title="Play Market Update">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Live: Stock Trends</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card news-card text-center p-3">
+                            <h6 class="mb-2">Banking Hour</h6>
+                            <button class="play-btn" title="Play Banking Hour">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Live: Banking Projects</div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- Blog Comments Section -->
+        <section aria-labelledby="blog-comments" class="my-5">
+            <h2 class="section-header" id="blog-comments">From Our Blog</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card news-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-warning rounded-circle p-2 me-2">
+                                    <i class="fas fa-user text-dark"></i>
+                                </div>
+                                <h6 class="card-subtitle mb-0">John Doe</h6>
+                            </div>
+                            <p class="card-text">"The economic analysis provided by Dfm Media has been invaluable for my business decisions. Keep up the great work!"</p>
+                            <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card news-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-warning rounded-circle p-2 me-2">
+                                    <i class="fas fa-user text-dark"></i>
+                                </div>
+                                <h6 class="card-subtitle mb-0">Marie Ngassa</h6>
+                            </div>
+                            <p class="card-text">"I appreciate the focus on African economic trends. It's refreshing to hear perspectives that are relevant to our context."</p>
+                            <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card news-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-warning rounded-circle p-2 me-2">
+                                    <i class="fas fa-user text-dark"></i>
+                                </div>
+                                <h6 class="card-subtitle mb-0">Paul Biya</h6>
+                            </div>
+                            <p class="card-text">"The agricultural segment last week provided excellent insights into modern farming techniques. Very informative!"</p>
+                            <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Live Radio Player Footer -->
+    <div class="live-player">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span>🎙️ Listen to DFM Radio Live</span>
+            <div>
+                <button class="play-btn me-2" id="footerPlay" title="Play radio">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="play-btn" id="footerStop" title="Stop radio">
+                    <i class="fas fa-stop"></i>
+                </button>
+            </div>
+            <span>Live: Economic Debate - Guest: Finance Minister</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>DFM Media</h5>
+                    <p>Your reliable source for economic, political and social news.</p>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Connect With Us</h5>
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="Phone"><i class="fas fa-phone"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <address>
+                        DFM Media<br>
+                        Cameroon<br>
+                        <i class="fas fa-envelope me-2"></i> contact@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-2"></i> +237 6XX XXX XXX
+                    </address>
+                </div>
+            </div>
+            <hr class="my-4">
+            <p class="mb-0">&copy; 2025 DFM Media – All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or respect OS preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        // Apply the saved theme
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+        } else {
+            body.removeAttribute('data-theme');
+        }
+        
+        // Toggle theme function
+        function toggleTheme() {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Add event listener to theme toggle button
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        // Audio controls functionality
+        const playButton = document.getElementById('playButton');
+        const stopButton = document.getElementById('stopButton');
+        const radioPlay = document.getElementById('radioPlay');
+        const radioStop = document.getElementById('radioStop');
+        const footerPlay = document.getElementById('footerPlay');
+        const footerStop = document.getElementById('footerStop');
+        
+        function playAudio() {
+            // In a real implementation, this would play the radio stream
+            console.log('Playing audio...');
+            showNotification('Radio is now playing', 'info');
+        }
+        
+        function stopAudio() {
+            // In a real implementation, this would stop the radio stream
+            console.log('Stopping audio...');
+            showNotification('Radio stopped', 'info');
+        }
+        
+        playButton.addEventListener('click', playAudio);
+        stopButton.addEventListener('click', stopAudio);
+        radioPlay.addEventListener('click', playAudio);
+        radioStop.addEventListener('click', stopAudio);
+        footerPlay.addEventListener('click', playAudio);
+        footerStop.addEventListener('click', stopAudio);
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '1050';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            // Add to body
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Simulated financial data (in a real implementation, this would come from Google API)
+        function updateFinancialData() {
+            // This would fetch real data from an API
+            console.log('Updating financial data...');
+        }
+        
+        // Update financial data on page load
+        document.addEventListener('DOMContentLoaded', updateFinancialData);
+    </script>
+</body>
+</html>

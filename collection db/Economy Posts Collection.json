@@ -1,0 +1,35 @@
+{
+  _id: ObjectId,
+  title: String,
+  slug: String,
+  content: String,
+  summary: String,
+  subcategory: {
+    type: String,
+    enum: ['eco_africa', 'eco_agriculture', 'eco_innovation', 'market_analysis']
+  },
+  region: {
+    type: String,
+    enum: ['central_africa', 'west_africa', 'east_africa', 'southern_africa', 'global']
+  },
+  author: { type: ObjectId, ref: 'User' },
+  economicImpact: {
+    type: String,
+    enum: ['low', 'medium', 'high']
+  },
+  indicators: [String],
+  featuredImage: String,
+  dataFiles: [String],
+  charts: [String],
+  status: {
+    type: String,
+    enum: ['draft', 'published', 'scheduled'],
+    default: 'draft'
+  },
+  featured: Boolean,
+  tags: [String],
+  views: Number,
+  scheduleDate: Date,
+  createdAt: Date,
+  updatedAt: Date
+}

@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emission - DFM Media Radio Station</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1814;
+            --primary-accent: #D4AF37; /* Gold color */
+            --secondary-dark: #2d2b24;
+            --light-bg: #F8F5F0; /* Milky white */
+            --card-bg: #ffffff;
+            --text-primary: #1a1814;
+            --text-secondary: #333333;
+            --border-light: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --box-text-color: #1a1814;
+        }
+        
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --light-bg: #121212;
+            --card-bg: #1a1a1a;
+            --text-primary: #D4AF37; /* Gold headers */
+            --text-secondary: #ffffff; /* White minor text */
+            --border-light: #333333;
+            --glass-bg: rgba(26, 24, 20, 0.9);
+            --glass-border: rgba(212, 175, 55, 0.1);
+            --box-text-color: #f8f3c9;
+        }
+        
+        [data-theme="dark"] .featured-article p {
+            color: #fffbe6 !important;
+        }
+        
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--light-bg);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--secondary-dark);
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            margin-left: 15px;
+        }
+        
+        .theme-toggle-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-accent);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .theme-toggle-handle {
+            transform: translateX(24px);
+        }
+        
+        .theme-toggle i {
+            font-size: 12px;
+            z-index: 1;
+            color: var(--primary-dark);
+        }
+        
+        .theme-toggle .fa-sun {
+            margin-right: auto;
+            padding-left: 4px;
+        }
+        
+        .theme-toggle .fa-moon {
+            margin-left: auto;
+            padding-right: 4px;
+        }
+        
+        /* Enhanced Glassmorphism Effects */
+        .glass {
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        /* Enhanced Header & Navigation */
+        header { 
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 32px rgba(26, 24, 20, 0.3);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        
+        header .navbar-brand { 
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(90deg, var(--primary-accent), #fff 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .navbar-nav .nav-link {
+            position: relative;
+            margin: 0 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 12px 16px !important;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: linear-gradient(45deg, var(--primary-accent), rgba(212, 175, 55, 0.6));
+            border-radius: 10px;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .navbar-nav .nav-link:hover::before,
+        .navbar-nav .nav-link.active::before {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--primary-dark) !important;
+            transform: translateY(-2px);
+        }
+        /* Enhanced Breaking News with Animation */
+        .breaking-news { 
+            padding: 8px 0;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(270deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            color: var(--primary-dark); 
+            padding: 16px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .breaking-news::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .breaking-news span {
+            flex-shrink: 0;
+            padding: 4px 12px;
+            font-size: 0.9rem;
+            background: var(--primary-dark);
+            color: var(--primary-accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-right: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .marquee-container {
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .marquee {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            color: var(--primary-dark);
+        }
+        
+        @keyframes marquee {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Enhanced Cards with Micro-interactions */
+        .news-card { 
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            background: var(--card-bg);
+            position: relative;
+            color: var(--text-secondary);
+        }
+        
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, var(--primary-accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .news-card:hover::before {
+            opacity: 1;
+        }
+        
+        .news-card:hover { 
+            transform: translateY(-8px) scale(1.02); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .news-card img { 
+            height: 200px;
+            object-fit: cover;
+            filter: brightness(0.9) contrast(1.1);
+        }
+        
+        .news-card:hover img {
+            transform: scale(1.1);
+            filter: brightness(1) contrast(1.2);
+        }
+        
+        .news-card .card-title { 
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Quick links icon container */
+        .quick-link-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Enhanced Section Headers */
+        .section-header {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            font-weight: 900;
+            font-size: 2rem;
+            color: var(--text-primary);
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), rgba(212, 175, 55, 0.3));
+            border-radius: 2px;
+        }
+        
+        /* Enhanced Live Player */
+        .live-player { 
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .live-player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .play-btn {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+        
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-accent), #fff);
+            z-index: -1;
+            opacity: 0;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
+        }
+        
+        .play-btn:hover::before {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Enhanced Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 50px 0 30px;
+        }
+        
+        .social-icons a {
+            color: var(--primary-accent);
+            font-size: 1.4rem;
+            margin: 0 12px;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary-dark);
+            background: var(--primary-accent);
+            transform: translateY(-5px) scale(1.1);
+        }
+        
+        /* Search & Notification System */
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* Navigation dropdown styles */
+        .dropdown-menu {
+            background: var(--card-bg);
+            border: 1px solid var(--primary-accent);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .dropdown-item {
+            color: var(--text-secondary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 5px;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Audio controls in navbar */
+        .audio-control {
+            background: none;
+            border: none;
+            color: var(--primary-accent);
+            font-size: 1.5rem;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        
+        /* Featured Article Styles */
+        .featured-article {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .featured-content {
+            background: rgba(255,255,255,0.08);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .trending-list .list-group-item {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border-light);
+            padding: 15px 10px;
+        }
+        
+        .trending-list .list-group-item:last-child {
+            border-bottom: none;
+        }
+        
+        .trending-list .list-group-item a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .trending-list .list-group-item a:hover {
+            color: var(--primary-accent);
+            padding-left: 5px;
+        }
+        
+        /* Emission Page Specific Styles */
+        .episode-player {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .progress-container {
+            background: var(--border-light);
+            border-radius: 5px;
+            height: 8px;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            background: var(--primary-accent);
+            border-radius: 5px;
+            height: 100%;
+            width: 0%;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .player-controls-emission {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .volume-slider {
+            width: 100px;
+            accent-color: var(--primary-accent);
+        }
+        
+        .comments-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        
+        .comment {
+            border-bottom: 1px solid var(--border-light);
+            padding: 20px 0;
+        }
+        
+        .comment:last-child {
+            border-bottom: none;
+        }
+        
+        .comment-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .comment-form {
+            margin-top: 30px;
+        }
+        
+        .episode-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 25px;
+            padding: 8px 20px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border-color: var(--primary-accent);
+        }
+        
+        /* Video Stream Styles */
+        .video-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-placeholder {
+            background: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        #studio-video {
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .section-header {
+                font-size: 1.8rem;
+            }
+            
+            .navbar-nav .nav-link {
+                margin: 4px 0;
+                text-align: center;
+            }
+            
+            .search-container {
+                margin: 15px auto;
+            }
+            
+            .marquee {
+                animation: marquee 15s linear infinite;
+            }
+            
+            .featured-article h2 {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .section-header {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
+            
+            .news-card {
+                min-height: auto;
+            }
+            
+            .quick-link-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .featured-article p {
+                font-size: 1rem !important;
+            }
+            
+            .player-controls-emission {
+                flex-wrap: wrap;
+            }
+            
+            .episode-filter {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <!-- Logo and station name -->
+                <a class="navbar-brand" href="index.html">
+                    <i class="fas fa-microphone-alt me-2"></i>DFM MEDIA
+                </a>
+                
+                <!-- Search Container -->
+                <div class="search-container d-none d-lg-block">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="search" class="search-input" placeholder="Search news...">
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Theme Toggle Button -->
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                        <div class="theme-toggle-handle"></div>
+                    </div>
+                    
+                    <!-- Audio Controls -->
+                    <button class="audio-control" id="playButton" title="Play radio">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="audio-control" id="stopButton" title="Stop radio">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    
+                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
+                        
+                        <!-- Economy Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="economyDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-chart-line me-1"></i> Economy
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="economy.html">Economy</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-africa">Eco Africa</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-agriculture">Eco Agriculture</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-innovation">Eco Innovation</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Finance Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="financeDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-coins me-1"></i> Finance
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="finance.html">Finance Market</a></li>
+                                <li><a class="dropdown-item" href="finance.html#budget">National Budget</a></li>
+                                <li><a class="dropdown-item" href="finance.html#banking">Bank Projects</a></li>
+                                <li><a class="dropdown-item" href="finance.html#statistics">Statistics of the Day</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Articles Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="articlesDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-newspaper me-1"></i> Articles
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="articles.html">Articles</a></li>
+                                <li><a class="dropdown-item" href="articles.html#newsletter">Newsletter</a></li>
+                                <li><a class="dropdown-item" href="articles.html#blog">Blog</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li class="nav-item"><a class="nav-link" href="actuality.html"><i class="fas fa-bullhorn me-1"></i> Actuality</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="emission.html"><i class="fas fa-podcast me-1"></i> Emission</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breaking News Ticker -->
+    <div class="breaking-news">
+        <div class="container d-flex align-items-center">
+            <span><i class="fas fa-bolt me-2"></i>BREAKING NEWS</span>
+            <div class="marquee-container w-100">
+                <div class="marquee">
+                    DFM Radio launches its Emission Archive | Listen to previous broadcasts | New comment feature available | Exclusive interview with the Minister of Economy
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Page Header -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h1 class="section-header">Emission Archive</h1>
+                <p class="lead">Listen to our previous broadcasts and share your thoughts</p>
+            </div>
+        </div>
+
+        <!-- Featured Episode -->
+        <section aria-labelledby="featured-episode" class="mb-5">
+            <h2 class="section-header glass" id="featured-episode">Featured Episode</h2>
+            <div class="row">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="episode-player">
+                        <h3>Economic Outlook 2025: Opportunities & Challenges</h3>
+                        <p class="text-muted">Aired: June 15, 2025 | Duration: 45:32</p>
+                        
+                        <div class="time-display">
+                            <span id="current-time">0:00</span>
+                            <span id="total-time">45:32</span>
+                        </div>
+                        
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                        </div>
+                        
+                        <div class="player-controls-emission">
+                            <button class="play-btn" id="rewind-btn" title="Rewind 15 seconds">
+                                <i class="fas fa-backward-step"></i>
+                            </button>
+                            <button class="play-btn" id="play-pause-btn" title="Play/Pause">
+                                <i class="fas fa-play" id="play-icon"></i>
+                            </button>
+                            <button class="play-btn" id="forward-btn" title="Forward 15 seconds">
+                                <i class="fas fa-forward-step"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="volume-control">
+                            <i class="fas fa-volume-up"></i>
+                            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="80">
+                        </div>
+                    </div>
+                    
+                    <div class="episode-description mt-4">
+                        <h4>Episode Description</h4>
+                        <p>In this special edition, our experts analyze the economic outlook for 2025. We discuss the challenges and opportunities facing the African economy, with a focus on Cameroon. Our guests include Dr. Marie Ngassa, economist at the University of Yaoundé, and Mr. Jean Paul, director of the National Investment Agency.</p>
+                        
+                        <h5>Key Topics:</h5>
+                        <ul>
+                            <li>Economic growth projections for Central Africa</li>
+                            <li>Impact of global markets on local economies</li>
+                            <li>Investment opportunities in emerging sectors</li>
+                            <li>Government policies and their economic impact</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card news-card h-100">
+                        <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80" class="card-img-top" alt="Economic discussion panel">
+                        <div class="card-body">
+                            <h5 class="card-title">Guest Speakers</h5>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" class="comment-avatar me-3" alt="Dr. Marie Ngassa">
+                                <div>
+                                    <h6 class="mb-0">Dr. Marie Ngassa</h6>
+                                    <small class="text-muted">Economist, University of Yaoundé</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" class="comment-avatar me-3" alt="Mr. Jean Paul">
+                                <div>
+                                    <h6 class="mb-0">Mr. Jean Paul</h6>
+                                    <small class="text-muted">Director, National Investment Agency</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center">
+                                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" class="comment-avatar me-3" alt="Moderator">
+                                <div>
+                                    <h6 class="mb-0">Sarah Tamo</h6>
+                                    <small class="text-muted">Moderator, DFM Media</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Studio Video Stream Section -->
+        <section aria-labelledby="live-studio" class="my-5">
+            <h2 class="section-header" id="live-studio">Live Studio Stream</h2>
+            
+            <div class="row">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="card news-card">
+                        <div class="card-body p-0">
+                            <!-- Video Player Container -->
+                            <div class="video-container position-relative">
+                                <div id="video-placeholder" class="video-placeholder d-flex align-items-center justify-content-center" style="height: 400px;">
+                                    <div class="text-center text-light">
+                                        <i class="fas fa-video fa-3x mb-3 text-warning"></i>
+                                        <h4>Live Studio Feed</h4>
+                                        <p class="mb-3">Studio stream is currently offline</p>
+                                        <div class="spinner-border text-warning" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Video element (hidden by default, shown when stream is active) -->
+                                <video id="studio-video" class="w-100 d-none" style="height: 400px; object-fit: cover;" controls>
+                                    <source src="" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                
+                                <!-- Live Badge -->
+                                <div class="position-absolute top-0 start-0 m-3">
+                                    <span class="badge bg-danger px-3 py-2" id="live-badge">
+                                        <i class="fas fa-circle me-1"></i> LIVE
+                                    </span>
+                                </div>
+                                
+                                <!-- Viewers Count -->
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    <span class="badge bg-dark px-3 py-2">
+                                        <i class="fas fa-eye me-1"></i> <span id="viewer-count">0</span> viewers
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Video Controls -->
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="mb-0">DFM Media Studio</h4>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-secondary btn-sm" id="fullscreen-btn" title="Fullscreen">
+                                            <i class="fas fa-expand"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm" id="picture-in-picture-btn" title="Picture in Picture">
+                                            <i class="fas fa-clone"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-muted mb-4">
+                                    Watch our live studio sessions, interviews, and behind-the-scenes content. 
+                                    Our studio is active during business hours (8:00 AM - 6:00 PM GMT+1).
+                                </p>
+                                
+                                <!-- Stream Status -->
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="me-3">
+                                        <span class="badge bg-secondary" id="stream-status">OFFLINE</span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <small class="text-muted" id="stream-schedule">
+                                            Next live session: Today at 2:00 PM
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Quality Selector -->
+                                <div class="d-flex align-items-center">
+                                    <small class="text-muted me-2">Quality:</small>
+                                    <select class="form-select form-select-sm w-auto" id="quality-selector">
+                                        <option value="auto">Auto</option>
+                                        <option value="720p">720p</option>
+                                        <option value="480p">480p</option>
+                                        <option value="360p">360p</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- Upcoming Live Sessions -->
+                    <div class="card news-card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center">
+                                <i class="fas fa-calendar-alt me-2 text-warning"></i>
+                                Upcoming Live Sessions
+                            </h5>
+                            
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Economic Roundtable</h6>
+                                        <small class="text-muted">Today 2:00 PM</small>
+                                    </div>
+                                    <p class="mb-1 small">Discussion on market trends with industry experts</p>
+                                </div>
+                                
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Minister Interview</h6>
+                                        <small class="text-muted">Tomorrow 10:00 AM</small>
+                                    </div>
+                                    <p class="mb-1 small">Exclusive interview with the Finance Minister</p>
+                                </div>
+                                
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Tech Innovation Showcase</h6>
+                                        <small class="text-muted">June 20, 3:00 PM</small>
+                                    </div>
+                                    <p class="mb-1 small">Live demo of new agricultural technologies</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Studio Guests -->
+                    <div class="card news-card">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center">
+                                <i class="fas fa-users me-2 text-warning"></i>
+                                In Studio Today
+                            </h5>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60&q=80" 
+                                     class="comment-avatar me-3" alt="Sarah Tamo">
+                                <div>
+                                    <h6 class="mb-0">Sarah Tamo</h6>
+                                    <small class="text-muted">Senior Presenter</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60&q=80" 
+                                     class="comment-avatar me-3" alt="Technical Producer">
+                                <div>
+                                    <h6 class="mb-0">David Nkeng</h6>
+                                    <small class="text-muted">Technical Producer</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="comment-avatar bg-warning d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-user text-dark"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Guest Expert</h6>
+                                    <small class="text-muted">To be announced</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Episode Filter -->
+        <section aria-labelledby="browse-episodes" class="my-5">
+            <h2 class="section-header" id="browse-episodes">Browse Episodes</h2>
+            
+            <div class="episode-filter">
+                <button class="filter-btn active" data-filter="all">All Episodes</button>
+                <button class="filter-btn" data-filter="recent">Recent</button>
+                <button class="filter-btn" data-filter="popular">Most Popular</button>
+                <button class="filter-btn" data-filter="economy">Economy</button>
+                <button class="filter-btn" data-filter="finance">Finance</button>
+              
+                <button class="filter-btn" data-filter="interview">Interviews</button>
+            </div>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="episodes-container">
+                <!-- Episode cards will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Comments Section -->
+        <section aria-labelledby="comments-section" class="my-5">
+            <h2 class="section-header" id="comments-section">Listener Comments</h2>
+            
+            <div class="comments-section">
+                <div class="comment">
+                    <div class="d-flex">
+                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" class="comment-avatar me-3" alt="User avatar">
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0">Thomas Mbappe</h5>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                            <p>This was an excellent discussion! I particularly appreciated Dr. Ngassa's analysis of the agricultural sector. As a farmer, I found her insights very valuable for planning next season's crops.</p>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="fas fa-thumbs-up me-1"></i> 12</button>
+                                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comment">
+                    <div class="d-flex">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" class="comment-avatar me-3" alt="User avatar">
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0">Aisha Conde</h5>
+                                <small class="text-muted">5 hours ago</small>
+                            </div>
+                            <p>I would have liked to hear more about the impact of digital currencies on our economy. Maybe that could be a topic for a future episode? Overall, great content as always from DFM Media!</p>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="fas fa-thumbs-up me-1"></i> 8</button>
+                                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
+                            </div>
+                            
+                            <!-- Reply -->
+                            <div class="comment mt-4 ms-4">
+                                <div class="d-flex">
+                                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" class="comment-avatar me-3" alt="DFM Media avatar">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h5 class="mb-0">DFM Media Team</h5>
+                                            <small class="text-muted">1 hour ago</small>
+                                        </div>
+                                        <p>Thank you for the suggestion, Aisha! We are actually planning an episode on digital currencies next month. Stay tuned!</p>
+                                        <div class="d-flex align-items-center">
+                                            <button class="btn btn-sm btn-outline-primary me-2"><i class="fas fa-thumbs-up me-1"></i> 5</button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comment">
+                    <div class="d-flex">
+                        <img src="https://images.unsplash.com/photo-1590086782792-42dd2350140d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" class="comment-avatar me-3" alt="User avatar">
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0">Marc Kouam</h5>
+                                <small class="text-muted">1 day ago</small>
+                            </div>
+                            <p>The discussion about infrastructure development was particularly enlightening. I hope the government officials were listening! We need more investment in rural areas to boost economic growth.</p>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="fas fa-thumbs-up me-1"></i> 15</button>
+                                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Comment Form -->
+                <div class="comment-form">
+                    <h4 class="mb-3">Add Your Comment</h4>
+                    <form id="new-comment-form">
+                        <div class="mb-3">
+                            <label for="comment-name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="comment-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="comment-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment-text" class="form-label">Your Comment</label>
+                            <textarea class="form-control" id="comment-text" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-warning">Submit Comment</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- Current News for Future Listeners -->
+        <section class="my-5" aria-labelledby="current-news">
+            <h2 class="section-header" id="current-news">Current News Highlights</h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>New economic developments in Europe</strong></li>
+                <li class="list-group-item">National debate on pensions tonight at 8pm</li>
+                <li class="list-group-item">Tax reforms: what changes in 2025</li>
+                <li class="list-group-item">Education budget: historic increase</li>
+                <li class="list-group-item">Exclusive interview with the finance minister</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Live Radio Player Footer -->
+    <div class="live-player">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span>🎙️ Listen to DFM Radio Live</span>
+            <div>
+                <button class="play-btn me-2" id="footerPlay" title="Play radio">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="play-btn" id="footerStop" title="Stop radio">
+                    <i class="fas fa-stop"></i>
+                </button>
+            </div>
+            <span>Now Playing: Morning Economic Briefing</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>DFM Media</h5>
+                    <p>Your reliable source for economic, political and social news.</p>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Connect With Us</h5>
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="Phone"><i class="fas fa-phone"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <address>
+                        DFM Media<br>
+                        Cameroon<br>
+                        <i class="fas fa-envelope me-2"></i> contact@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-2"></i> +237 6XX XXX XXX
+                    </address>
+                </div>
+            </div>
+            <hr class="my-4">
+            <p class="mb-0">&copy; 2025 DFM Media – All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or respect OS preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        // Apply the saved theme
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+        } else {
+            body.removeAttribute('data-theme');
+        }
+        
+        // Toggle theme function
+        function toggleTheme() {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Add event listener to theme toggle button
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        // Audio controls functionality
+        const playButton = document.getElementById('playButton');
+        const stopButton = document.getElementById('stopButton');
+        const footerPlay = document.getElementById('footerPlay');
+        const footerStop = document.getElementById('footerStop');
+        
+        function playAudio() {
+            // In a real implementation, this would play the radio stream
+            console.log('Playing audio...');
+            showNotification('Radio is now playing', 'info');
+        }
+        
+        function stopAudio() {
+            // In a real implementation, this would stop the radio stream
+            console.log('Stopping audio...');
+            showNotification('Radio stopped', 'info');
+        }
+        
+        playButton.addEventListener('click', playAudio);
+        stopButton.addEventListener('click', stopAudio);
+        footerPlay.addEventListener('click', playAudio);
+        footerStop.addEventListener('click', stopAudio);
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '1050';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            // Add to body
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Episode Player Functionality
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const rewindBtn = document.getElementById('rewind-btn');
+        const forwardBtn = document.getElementById('forward-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalTimeEl = document.getElementById('total-time');
+        const volumeSlider = document.getElementById('volume-slider');
+        const playIcon = document.getElementById('play-icon');
+        
+        let isPlaying = false;
+        let currentTime = 0;
+        const totalTime = 2732; // 45:32 in seconds
+        
+        // Format time function
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Update time display
+        function updateTimeDisplay() {
+            currentTimeEl.textContent = formatTime(currentTime);
+            totalTimeEl.textContent = formatTime(totalTime);
+            progressBar.style.width = `${(currentTime / totalTime) * 100}%`;
+        }
+        
+        // Play/Pause functionality
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+                // In a real implementation, this would play the audio
+                simulatePlayback();
+            } else {
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+            }
+        }
+        
+        // Simulate playback (for demo purposes)
+        function simulatePlayback() {
+            if (isPlaying && currentTime < totalTime) {
+                setTimeout(() => {
+                    currentTime += 1;
+                    updateTimeDisplay();
+                    if (isPlaying) simulatePlayback();
+                }, 1000);
+            } else if (currentTime >= totalTime) {
+                isPlaying = false;
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+                currentTime = 0;
+                updateTimeDisplay();
+            }
+        }
+        
+        // Rewind functionality
+        function rewind() {
+            currentTime = Math.max(0, currentTime - 15);
+            updateTimeDisplay();
+        }
+        
+        // Forward functionality
+        function forward() {
+            currentTime = Math.min(totalTime, currentTime + 15);
+            updateTimeDisplay();
+        }
+        
+        // Set progress on click
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            currentTime = (clickX / width) * totalTime;
+            updateTimeDisplay();
+        }
+        
+        // Set volume
+        function setVolume() {
+            // In a real implementation, this would set the audio volume
+            console.log(`Volume set to: ${volumeSlider.value}%`);
+        }
+        
+        // Add event listeners
+        playPauseBtn.addEventListener('click', togglePlayPause);
+        rewindBtn.addEventListener('click', rewind);
+        forwardBtn.addEventListener('click', forward);
+        progressContainer.addEventListener('click', setProgress);
+        volumeSlider.addEventListener('input', setVolume);
+        
+        // Initialize time display
+        updateTimeDisplay();
+        
+        // Episode Filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const episodesContainer = document.getElementById('episodes-container');
+        
+        // Sample episode data
+        const episodes = [
+            { 
+                title: "Economic Outlook 2025", 
+                date: "2025-06-15", 
+                duration: "45:32", 
+                category: "economy", 
+                image: "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
+                popular: true,
+                recent: true
+            },
+            { 
+                title: "Agricultural Innovations", 
+                date: "2025-06-10", 
+                duration: "38:15", 
+                category: "economy", 
+                image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
+                popular: true,
+                recent: false
+            },
+            { 
+                title: "Banking Sector Reforms", 
+                date: "2025-06-05", 
+                duration: "42:20", 
+                category: "finance", 
+                image: "https://images.unsplash.com/photo-1551554781-c46200fa918d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
+                popular: false,
+                recent: false
+            },
+            { 
+                title: "Political Analysis", 
+                date: "2025-06-01", 
+                duration: "50:10", 
+                category: "politics", 
+                image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
+                popular: true,
+                recent: false
+            },
+            { 
+                title: "Interview with Finance Minister", 
+                date: "2025-05-28", 
+                duration: "55:45", 
+                category: "interview", 
+                image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
+                popular: true,
+                recent: false
+            },
+            { 
+                title: "Tech Startups in Africa", 
+                date: "2025-05-25", 
+                duration: "40:30", 
+                category: "economy", 
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
+                popular: false,
+                recent: false
+            }
+        ];
+        
+        // Render episodes
+        function renderEpisodes(filter = 'all') {
+            episodesContainer.innerHTML = '';
+            
+            const filteredEpisodes = episodes.filter(episode => {
+                if (filter === 'all') return true;
+                if (filter === 'recent') return episode.recent;
+                if (filter === 'popular') return episode.popular;
+                return episode.category === filter;
+            });
+            
+            filteredEpisodes.forEach(episode => {
+                const episodeCard = document.createElement('div');
+                episodeCard.className = 'col';
+                episodeCard.innerHTML = `
+                    <div class="card news-card h-100">
+                        <img src="${episode.image}" class="card-img-top" alt="${episode.title}">
+                        <div class="card-body d-flex flex-column">
+                            <span class="badge bg-warning text-dark mb-2">${episode.category.charAt(0).toUpperCase() + episode.category.slice(1)}</span>
+                            <h5 class="card-title">${episode.title}</h5>
+                            <div class="d-flex justify-content-between text-muted mb-3">
+                                <small><i class="fas fa-calendar me-1"></i> ${new Date(episode.date).toLocaleDateString()}</small>
+                                <small><i class="fas fa-clock me-1"></i> ${episode.duration}</small>
+                            </div>
+                            <p class="card-text flex-grow-1">Listen to this insightful discussion about ${episode.title.toLowerCase()}.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <a href="#" class="btn btn-sm btn-dark">Listen Now</a>
+                                <div class="d-flex align-items-center">
+                                    <small class="text-muted me-2"><i class="fas fa-play-circle me-1"></i> 245</small>
+                                    <small class="text-muted"><i class="fas fa-comment me-1"></i> 18</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                episodesContainer.appendChild(episodeCard);
+            });
+        }
+        
+        // Filter episodes
+        function filterEpisodes() {
+            const filter = this.dataset.filter;
+            
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Render filtered episodes
+            renderEpisodes(filter);
+        }
+        
+        // Add event listeners to filter buttons
+        filterButtons.forEach(button => {
+            button.addEventListener('click', filterEpisodes);
+        });
+        
+        // Initial render
+        renderEpisodes();
+        
+        // Comment Form Handling
+        const commentForm = document.getElementById('new-comment-form');
+        
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('comment-name').value;
+            const email = document.getElementById('comment-email').value;
+            const text = document.getElementById('comment-text').value;
+            
+            // In a real implementation, this would send the data to a server
+            console.log(`New comment from ${name} (${email}): ${text}`);
+            
+            // Show success message
+            showNotification('Your comment has been submitted successfully!', 'success');
+            
+            // Reset form
+            commentForm.reset();
+        });
+        
+        // Video Stream Functionality
+        const videoElement = document.getElementById('studio-video');
+        const videoPlaceholder = document.getElementById('video-placeholder');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const pipBtn = document.getElementById('picture-in-picture-btn');
+        const qualitySelector = document.getElementById('quality-selector');
+        const streamStatus = document.getElementById('stream-status');
+        const viewerCount = document.getElementById('viewer-count');
+        const liveBadge = document.getElementById('live-badge');
+        
+        // Simulate live stream (in real implementation, this would connect to actual stream)
+        function initializeVideoStream() {
+            // Check if stream is available (simulated)
+            const isStreamLive = Math.random() > 0.5; // 50% chance stream is "live"
+            
+            if (isStreamLive) {
+                // Show video element and hide placeholder
+                videoElement.classList.remove('d-none');
+                videoPlaceholder.classList.add('d-none');
+                
+                // Update status
+                streamStatus.textContent = 'LIVE';
+                streamStatus.className = 'badge bg-danger';
+                liveBadge.classList.remove('d-none');
+                
+                // Simulate viewer count
+                simulateViewerCount();
+                
+                // Load sample video (in real implementation, this would be your live stream URL)
+                videoElement.src = 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4';
+                videoElement.load();
+                
+            } else {
+                // Show offline state
+                streamStatus.textContent = 'OFFLINE';
+                streamStatus.className = 'badge bg-secondary';
+                liveBadge.classList.add('d-none');
+                viewerCount.textContent = '0';
+            }
+        }
+        
+        // Simulate viewer count changes
+        function simulateViewerCount() {
+            let count = Math.floor(Math.random() * 100) + 50; // Random between 50-150
+            viewerCount.textContent = count;
+            
+            // Update count every 30 seconds
+            setInterval(() => {
+                const change = Math.floor(Math.random() * 10) - 3; // -3 to +6
+                count = Math.max(0, count + change);
+                viewerCount.textContent = count;
+            }, 30000);
+        }
+        
+        // Fullscreen functionality
+        fullscreenBtn.addEventListener('click', () => {
+            if (videoElement.requestFullscreen) {
+                videoElement.requestFullscreen();
+            } else if (videoElement.webkitRequestFullscreen) {
+                videoElement.webkitRequestFullscreen();
+            } else if (videoElement.mozRequestFullScreen) {
+                videoElement.mozRequestFullScreen();
+            }
+        });
+        
+        // Picture in Picture functionality
+        pipBtn.addEventListener('click', async () => {
+            try {
+                if (videoElement !== document.pictureInPictureElement) {
+                    await videoElement.requestPictureInPicture();
+                } else {
+                    await document.exitPictureInPicture();
+                }
+            } catch (error) {
+                console.error('Picture in Picture failed:', error);
+            }
+        });
+        
+        // Quality selector (simulated)
+        qualitySelector.addEventListener('change', (e) => {
+            const quality = e.target.value;
+            showNotification(`Stream quality set to ${quality}`, 'info');
+            // In real implementation, this would switch stream quality
+        });
+        
+        // Initialize video stream when page loads
+        document.addEventListener('DOMContentLoaded', initializeVideoStream);
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>

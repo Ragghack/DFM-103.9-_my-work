@@ -1,0 +1,21 @@
+{
+  _id: ObjectId,
+  username: String,
+  email: String,
+  password: String, // hashed
+  role: {
+    type: String,
+    enum: ['super_admin', 'content_manager', 'editor', 'viewer']
+  },
+  profile: {
+    firstName: String,
+    lastName: String,
+    avatar: String,
+    bio: String
+  },
+  permissions: [String],
+  isActive: Boolean,
+  lastLogin: Date,
+  createdAt: Date,
+  updatedAt: Date
+}

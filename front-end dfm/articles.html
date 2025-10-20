@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles - DFM Media</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1814;
+            --primary-accent: #D4AF37; /* Gold color */
+            --secondary-dark: #2d2b24;
+            --light-bg: #F8F5F0; /* Milky white */
+            --card-bg: #ffffff;
+            --text-primary: #1a1814;
+            --text-secondary: #333333;
+            --border-light: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --box-text-color: #1a1814;
+        }
+        
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --light-bg: #121212;
+            --card-bg: #1a1a1a;
+            --text-primary: #D4AF37; /* Gold headers */
+            --text-secondary: #ffffff; /* White minor text */
+            --border-light: #333333;
+            --glass-bg: rgba(26, 24, 20, 0.9);
+            --glass-border: rgba(212, 175, 55, 0.1);
+            --box-text-color: #f8f3c9;
+        }
+        
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--light-bg);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--secondary-dark);
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            margin-left: 15px;
+        }
+        
+        .theme-toggle-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-accent);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .theme-toggle-handle {
+            transform: translateX(24px);
+        }
+        
+        .theme-toggle i {
+            font-size: 12px;
+            z-index: 1;
+            color: var(--primary-dark);
+        }
+        
+        .theme-toggle .fa-sun {
+            margin-right: auto;
+            padding-left: 4px;
+        }
+        
+        .theme-toggle .fa-moon {
+            margin-left: auto;
+            padding-right: 4px;
+        }
+        
+        /* Enhanced Glassmorphism Effects */
+        .glass {
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        /* Enhanced Header & Navigation */
+        header { 
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 32px rgba(26, 24, 20, 0.3);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        
+        header .navbar-brand { 
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(90deg, var(--primary-accent), #fff 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .navbar-nav .nav-link {
+            position: relative;
+            margin: 0 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 12px 16px !important;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: linear-gradient(45deg, var(--primary-accent), rgba(212, 175, 55, 0.6));
+            border-radius: 10px;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .navbar-nav .nav-link:hover::before,
+        .navbar-nav .nav-link.active::before {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--primary-dark) !important;
+            transform: translateY(-2px);
+        }
+        /* Enhanced Breaking News with Animation */
+        .breaking-news { 
+            padding: 8px 0;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(270deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            color: var(--primary-dark); 
+            padding: 16px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .breaking-news::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s linear infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .breaking-news span {
+            flex-shrink: 0;
+            padding: 4px 12px;
+            font-size: 0.9rem;
+            background: var(--primary-dark);
+            color: var(--primary-accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-right: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .marquee-container {
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .marquee {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            color: var(--primary-dark);
+        }
+        
+        @keyframes marquee {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Enhanced Cards with Micro-interactions */
+        .news-card { 
+            border: none; 
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            background: var(--card-bg);
+            position: relative;
+            color: var(--text-secondary);
+        }
+        
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, var(--primary-accent), transparent);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .news-card:hover::before {
+            opacity: 1;
+        }
+        
+        .news-card:hover { 
+            transform: translateY(-12px) scale(1.02); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .news-card img { 
+            height: 220px; 
+            object-fit: cover;
+            filter: brightness(0.9) contrast(1.1);
+        }
+        
+        .news-card:hover img {
+            transform: scale(1.1);
+            filter: brightness(1) contrast(1.2);
+        }
+        
+        .news-card .card-title { 
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            -webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Enhanced Section Headers */
+        .section-header {
+            position: relative;
+            margin-bottom: 40px;
+            padding-bottom: 16px;
+            font-weight: 800;
+            font-size: 1.75rem;
+            color: var(--text-primary);
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), rgba(212, 175, 55, 0.3));
+            border-radius: 2px;
+        }
+        
+        /* Enhanced Live Player */
+        .live-player { 
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .live-player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .play-btn {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+        
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-accent), #fff);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
+        }
+        
+        .play-btn:hover::before {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Enhanced Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 50px 0 30px;
+        }
+        
+        .social-icons a {
+            color: var(--primary-accent);
+            font-size: 1.4rem;
+            margin: 0 12px;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            -webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+            backdrop-filter: blur(10px);
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary-dark);
+            background: var(--primary-accent);
+            transform: translateY(-5px) scale(1.1);
+        }
+        
+        /* Search & Notification System */
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.95rem;
+            -webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+            backdrop-filter: blur(10px);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* Navigation dropdown styles */
+        .dropdown-menu {
+            background: var(--card-bg);
+            border: 1px solid var(--primary-accent);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .dropdown-item {
+            color: var(--text-secondary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 5px;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Audio controls in navbar */
+        .audio-control {
+            background: none;
+            border: none;
+            color: var(--primary-accent);
+            font-size: 1.5rem;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        
+        /* Articles specific styles */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--primary-accent);
+        }
+        
+        .article-tags {
+            margin-top: 20px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .article-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary-accent);
+        }
+        
+        .action-btn i {
+            margin-right: 5px;
+        }
+        
+        .comment-section {
+            margin-top: 40px;
+        }
+        
+        .comment {
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .comment-meta {
+            flex: 1;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .comment-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+        
+        .comment-actions {
+            display: flex;
+            margin-top: 15px;
+        }
+        
+        .comment-action {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-action:hover {
+            color: var(--primary-accent);
+        }
+        
+        .comment-action i {
+            margin-right: 5px;
+        }
+        
+        .newsletter-form {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            /* Adjusted to shift left */
+            margin-left: -40px;
+            width: calc(100% + 80px);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            background: var(--light-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: var(--text-secondary);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+        }
+        
+        .blog-post {
+            margin-bottom: 40px;
+        }
+        
+        .blog-content {
+            line-height: 1.8;
+        }
+        
+        /* NEW: Adjusted newsletter container */
+        .newsletter-container {
+            position: relative;
+        }
+        
+        /* NEW: Info box positioning */
+        .newsletter-info-box {
+            margin-top: 30px;
+            margin-left: 40px;
+            width: calc(100% - 40px);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar-nav .nav-link {
+                margin: 4px 0;
+                text-align: center;
+            }
+            
+            .search-container {
+                margin: 15px auto;
+            }
+            
+            .marquee {
+                animation: marquee 15s linear infinite;
+            }
+            
+            .article-actions {
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                margin-bottom: 10px;
+            }
+            
+            /* Responsive adjustments for newsletter */
+            .newsletter-form {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .newsletter-info-box {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <!-- Logo and station name -->
+                <a class="navbar-brand" href="index.html">
+                    <i class="fas fa-microphone-alt me-2"></i>DFM MEDIA
+                </a>
+                
+                <!-- Search Container -->
+                <div class="search-container d-none d-lg-block">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="search" class="search-input" placeholder="Search articles...">
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Theme Toggle Button -->
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                        <div class="theme-toggle-handle"></div>
+                    </div>
+                    
+                    <!-- Audio Controls -->
+                    <button class="audio-control" id="playButton">
+                        <i class="fas fa-play"></i>
+                        <span class="visually-hidden">Play audio</span>
+                    </button>
+                    <button class="audio-control" id="stopButton">
+                        <i class="fas fa-stop"></i>
+                        <span class="visually-hidden">Stop audio</span>
+                    </button>
+                    
+                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="visually-hidden">Toggle navigation</span>
+                    </button>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="emmsion.html"><i class="fas fa-broadcast-tower me-1"></i> Emission</a></li>
+                        
+                        <!-- Economy Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="economyDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-chart-line me-1"></i> Economy
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="economy.html">Economy</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-africa">Eco Africa</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-agriculture">Eco Agriculture</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-innovation">Eco Innovation</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Finance Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="financeDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-coins me-1"></i> Finance
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="finance.html">Finance Market</a></li>
+                                <li><a class="dropdown-item" href="finance.html#budget">National Budget</a></li>
+                                <li><a class="dropdown-item" href="finance.html#banking">Banking Projects</a></li>
+                                <li><a class="dropdown-item" href="finance.html#statistics">Daily Statistics</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Articles Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="articlesDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-newspaper me-1"></i> Articles
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#articles">Articles</a></li>
+                                <li><a class="dropdown-item" href="#newsletter">Newsletter</a></li>
+                                <li><a class="dropdown-item" href="#blog">Blog</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-bullhorn me-1"></i> Actuality</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breaking News Ticker -->
+    <div class="breaking-news">
+        <div class="container d-flex align-items-center">
+            <span><i class="fas fa-bolt me-2"></i>LATEST ARTICLES</span>
+            <div class="marquee-container w-100">
+                <div class="marquee">
+                    New article: Economic recovery strategies for African nations | Exclusive interview with Finance Minister | Subscribe to our newsletter for weekly insights | Share your thoughts on our blog platform
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Articles Section -->
+        <section id="articles" aria-labelledby="featured-articles" class="mb-5">
+            <h2 class="section-header" id="featured-articles">Featured Articles</h2>
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                    <article class="card news-card">
+                        <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80" class="card-img-top" alt="Economic analysis">
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">Economy</span>
+                            <h3 class="card-title">Economic Recovery Strategies for African Nations Post-Pandemic</h3>
+                            <div class="article-meta">
+                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="Author" class="author-avatar">
+                                <div>
+                                    <div>By Dr. Samuel Njoh</div>
+                                    <div>June 15, 2023 • 8 min read</div>
+                                </div>
+                            </div>
+                            <p class="card-text">As African nations continue to navigate the post-pandemic economic landscape, strategic recovery plans are essential for sustainable growth. This article examines the most effective approaches being implemented across the continent.</p>
+                            <p class="card-text">From digital transformation initiatives to agricultural modernization programs, we explore how countries are rebuilding their economies with resilience and innovation at the core.</p>
+                            <div class="article-tags">
+                                <span class="tag">Economic Recovery</span>
+                                <span class="tag">Africa</span>
+                                <span class="tag">Post-Pandemic</span>
+                                <span class="tag">Development</span>
+                            </div>
+                            <div class="article-actions">
+                                <button class="action-btn"><i class="far fa-heart"></i> 243 Likes</button>
+                                <button class="action-btn"><i class="far fa-comment"></i> 47 Comments</button>
+                                <button class="action-btn"><i class="far fa-bookmark"></i> Save</button>
+                                <button class="action-btn"><i class="fas fa-share"></i> Share</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card news-card h-100">
+                        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80" class="card-img-top" alt="Agriculture technology">
+                        <div class="card-body">
+                            <span class="badge bg-success text-white mb-2">Agriculture</span>
+                            <h5 class="card-title">How Technology is Revolutionizing African Agriculture</h5>
+                            <div class="article-meta">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="Author" class="author-avatar">
+                                <div>
+                                    <div>By Amina Diallo</div>
+                                    <div>June 12, 2023</div>
+                                </div>
+                            </div>
+                            <p class="card-text">Digital solutions are transforming traditional farming practices across Africa, increasing yields and improving sustainability.</p>
+                            <div class="article-tags">
+                                <span class="tag">Agritech</span>
+                                <span class="tag">Innovation</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card news-card h-100 mt-4">
+                        <img src="https://images.unsplash.com/photo-1551135049-8a33b5883817?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80" class="card-img-top" alt="Renewable energy">
+                        <div class="card-body">
+                            <span class="badge bg-info text-white mb-2">Energy</span>
+                            <h5 class="card-title">The Future of Renewable Energy in Cameroon</h5>
+                            <div class="article-meta">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="Author" class="author-avatar">
+                                <div>
+                                    <div>By Pierre Mbarga</div>
+                                    <div>June 10, 2023</div>
+                                </div>
+                            </div>
+                            <p class="card-text">Exploring Cameroon's potential to become a leader in renewable energy production in Central Africa.</p>
+                            <div class="article-tags">
+                                <span class="tag">Energy</span>
+                                <span class="tag">Sustainability</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section id="newsletter" aria-labelledby="newsletter-signup" class="mb-5 newsletter-container">
+            <h2 class="section-header" id="newsletter-signup">Stay Informed with Our Newsletter</h2>
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="newsletter-form">
+                        <h4 class="text-center mb-4">Subscribe to our weekly newsletter</h4>
+                        <p class="text-center mb-4">Get the latest articles, analysis, and exclusive content delivered directly to your inbox every Friday.</p>
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" placeholder="Enter your email address">
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="termsCheck">
+                                    <label class="form-check-label" for="termsCheck">
+                                        I agree to receive the DFM Media newsletter and promotional emails
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-warning w-100">Subscribe Now</button>
+                        </form>
+                    </div>
+                    
+                    <div class="card news-card mt-4 newsletter-info-box">
+                        <div class="card-body">
+                            <h5 class="card-title">What to expect in our newsletter:</h5>
+                            <ul>
+                                <li>Weekly economic analysis and insights</li>
+                                <li>Exclusive interviews with industry leaders</li>
+                                <li>Early access to special reports</li>
+                                <li>Event invitations and webinar announcements</li>
+                                <li>Curated content from across Africa</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section id="blog" aria-labelledby="community-blog" class="mb-5">
+            <h2 class="section-header" id="community-blog">Community Blog</h2>
+            <p class="lead">Share your thoughts, reactions, and insights about current news and events.</p>
+            
+            <div class="card news-card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Share your perspective</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="blogTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="blogTitle" placeholder="Enter a title for your post">
+                        </div>
+                        <div class="form-group">
+                            <label for="blogContent" class="form-label">Your thoughts</label>
+                            <textarea class="form-control" id="blogContent" rows="5" placeholder="Share your impressions, reactions, and ideas for progress..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="blogTags" class="form-label">Tags (comma separated)</label>
+                            <input type="text" class="form-control" id="blogTags" placeholder="e.g., economy, agriculture, technology">
+                        </div>
+                        <button type="submit" class="btn btn-warning">Submit Post</button>
+                    </form>
+                </div>
+            </div>
+            
+            <h4 class="mt-5 mb-4">Recent Community Posts</h4>
+            
+            <div class="blog-post card news-card">
+                <div class="card-body">
+                    <div class="article-meta">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="author-avatar">
+                        <div>
+                            <div class="fw-bold">Emmanuel T.</div>
+                            <div>Posted on June 14, 2023</div>
+                        </div>
+                    </div>
+                    <h5 class="mt-3">The Importance of Supporting Local Businesses</h5>
+                    <div class="blog-content">
+                        <p>In these challenging economic times, I believe we need to focus more on supporting our local businesses and entrepreneurs. Too often, we prioritize imported goods over locally produced ones, which hurts our economy in the long run.</p>
+                        <p>I've started consciously choosing Cameroonian products whenever possible, and I encourage others to do the same. This small change can make a significant impact on our national economy.</p>
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">Local Business</span>
+                        <span class="tag">Economy</span>
+                        <span class="tag">Support</span>
+                    </div>
+                    <div class="article-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> 87 Likes</button>
+                        <button class="action-btn"><i class="far fa-comment"></i> 23 Comments</button>
+                    </div>
+                    
+                    <div class="comment-section mt-4">
+                        <h6>Comments</h6>
+                        
+                        <div class="comment">
+                            <div class="comment-header">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
+                                <div class="comment-meta">
+                                    <div class="comment-author">Marie L.</div>
+                                    <div class="comment-date">June 14, 2023</div>
+                                </div>
+                            </div>
+                            <p>I completely agree with you, Emmanuel. We need more awareness campaigns about the importance of buying local. Our choices directly impact our economy and create jobs for our people.</p>
+                            <div class="comment-actions">
+                                <button class="comment-action"><i class="far fa-heart"></i> Like (12)</button>
+                                <button class="comment-action"><i class="far fa-comment"></i> Reply</button>
+                            </div>
+                        </div>
+                        
+                        <div class="comment">
+                            <div class="comment-header">
+                                <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
+                                <div class="comment-meta">
+                                    <div class="comment-author">Paul B.</div>
+                                    <div class="comment-date">June 15, 2023</div>
+                                </div>
+                            </div>
+                            <p>While I support the idea, we also need to address the quality issues with some local products. If we want people to choose local, the products need to be competitive in both price and quality.</p>
+                            <div class="comment-actions">
+                                <button class="comment-action"><i class="far fa-heart"></i> Like (8)</button>
+                                <button class="comment-action"><i class="far fa-comment"></i> Reply</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <form>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="2" placeholder="Add a comment..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-warning">Post Comment</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="blog-post card news-card">
+                <div class="card-body">
+                    <div class="article-meta">
+                        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="author-avatar">
+                        <div>
+                            <div class="fw-bold">Chantal K.</div>
+                            <div>Posted on June 12, 2023</div>
+                        </div>
+                    </div>
+                    <h5 class="mt-3">Education Reform Needs in Cameroon</h5>
+                    <div class="blog-content">
+                        <p>After reading the article about economic recovery, I started thinking about how education plays a crucial role in our nation's development. We need to reform our educational system to focus more on practical skills and digital literacy.</p>
+                        <p>Too many graduates lack the skills needed in today's job market. We should incorporate more technology training, entrepreneurship education, and critical thinking development into our curriculum.</p>
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">Education</span>
+                        <span class="tag">Reform</span>
+                        <span class="tag">Development</span>
+                    </div>
+                    <div class="article-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> 104 Likes</button>
+                        <button class="action-btn"><i class="far fa-comment"></i> 31 Comments</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Radio Player Section -->
+        <section aria-labelledby="radio-player" class="my-5">
+            <h2 class="section-header" id="radio-player">Articles Discussion Live</h2>
+            <div class="card news-card text-center p-4">
+                <h3 class="mb-4">Now Playing: Discussion on Featured Articles</h3>
+                <div class="player-controls d-flex justify-content-center align-items-center">
+                    <button class="play-btn me-3" id="radioPlay">
+                        <i class="fas fa-play"></i>
+                        <span class="visually-hidden">Play radio</span>
+                    </button>
+                    <button class="play-btn me-3" id="radioStop">
+                        <i class="fas fa-stop"></i>
+                        <span class="visually-hidden">Stop radio</span>
+                    </button>
+                    <div class="ms-3">
+                        <span>Live: Reader reactions to this week's featured articles</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Live Radio Player Footer -->
+    <div class="live-player">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span>🎙️ Listen to DFM Articles Discussion Live</span>
+            <div>
+                <button class="play-btn me-2" id="footerPlay">
+                    <i class="fas fa-play"></i>
+                    <span class="visually-hidden">Play radio</span>
+                </button>
+                <button class="play-btn" id="footerStop">
+                    <i class="fas fa-stop"></i>
+                    <span class="visually-hidden">Stop radio</span>
+                </button>
+            </div>
+            <span>Live: Reader reactions to featured articles</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>DFM Media Articles</h5>
+                    <p>In-depth analysis, community insights, and informed perspectives.</p>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Connect With Us</h5>
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i><span class="visually-hidden">Facebook</span></a>
+                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i><span class="visually-hidden">WhatsApp</span></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i><span class="visually-hidden">LinkedIn</span></a>
+                        <a href="#" title="Phone"><i class="fas fa-phone"></i><span class="visually-hidden">Phone</span></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <address>
+                        DFM Media Articles Desk<br>
+                        Cameroon<br>
+                        <i class="fas fa-envelope me-2"></i> articles@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-2"></i> +237 6XX XXX XXX
+                    </address>
+                </div>
+            </div>
+            <hr class="my-4">
+            <p class="mb-0">&copy; 2025 DFM Media Articles – All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or respect OS preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        // Apply the saved theme
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+        } else {
+            body.removeAttribute('data-theme');
+        }
+        
+        // Toggle theme function
+        function toggleTheme() {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Add event listener to theme toggle button
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        // Audio controls functionality
+        const playButton = document.getElementById('playButton');
+        const stopButton = document.getElementById('stopButton');
+        const radioPlay = document.getElementById('radioPlay');
+        const radioStop = document.getElementById('radioStop');
+        const footerPlay = document.getElementById('footerPlay');
+        const footerStop = document.getElementById('footerStop');
+        
+        function playAudio() {
+            // In a real implementation, this would play the radio stream
+            console.log('Playing audio...');
+            showNotification('Articles Discussion is now playing', 'info');
+        }
+        
+        function stopAudio() {
+            // In a real implementation, this would stop the radio stream
+            console.log('Stopping audio...');
+            showNotification('Articles Discussion stopped', 'info');
+        }
+        
+        playButton.addEventListener('click', playAudio);
+        stopButton.addEventListener('click', stopAudio);
+        radioPlay.addEventListener('click', playAudio);
+        radioStop.addEventListener('click', stopAudio);
+        footerPlay.addEventListener('click', playAudio);
+        footerStop.addEventListener('click', stopAudio);
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '1050';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            // Add to body
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Form submission handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsletterForm = document.querySelector('.newsletter-form form');
+            const blogForm = document.querySelector('#blog form');
+            
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('Thank you for subscribing to our newsletter!', 'success');
+                    newsletterForm.reset();
+                });
+            }
+            
+            if (blogForm) {
+                blogForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('Your blog post has been submitted for review.', 'success');
+                    blogForm.reset();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

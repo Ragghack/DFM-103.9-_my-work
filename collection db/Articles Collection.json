@@ -1,0 +1,36 @@
+{
+  _id: ObjectId,
+  title: String,
+  slug: String,
+  content: String,
+  summary: String,
+  author: { type: ObjectId, ref: 'User' },
+  category: {
+    type: String,
+    enum: ['analysis', 'opinion', 'tutorial', 'newsletter']
+  },
+  tags: [String],
+  featuredImage: String,
+  status: {
+    type: String,
+    enum: ['draft', 'published', 'scheduled', 'archived'],
+    default: 'draft'
+  },
+  featured: Boolean,
+  allowComments: Boolean,
+  seo: {
+    metaTitle: String,
+    metaDescription: String,
+    keywords: [String]
+  },
+  scheduleDate: Date,
+  views: Number,
+  likes: Number,
+  comments: [{
+    user: { type: ObjectId, ref: 'User' },
+    content: String,
+    createdAt: Date
+  }],
+  createdAt: Date,
+  updatedAt: Date
+}

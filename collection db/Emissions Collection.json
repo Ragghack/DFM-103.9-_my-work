@@ -1,0 +1,34 @@
+{
+  _id: ObjectId,
+  title: String,
+  description: String,
+  type: {
+    type: String,
+    enum: ['debate', 'interview', 'news', 'music', 'special']
+  },
+  presenter: { type: ObjectId, ref: 'User' },
+  guests: [String],
+  studio: {
+    type: String,
+    enum: ['studio_a', 'studio_b', 'recording_room']
+  },
+  schedule: {
+    date: Date,
+    startTime: String,
+    endTime: String,
+    duration: Number // in minutes
+  },
+  status: {
+    type: String,
+    enum: ['draft', 'scheduled', 'live', 'completed'],
+    default: 'draft'
+  },
+  isRecurring: Boolean,
+  recurrencePattern: String, // weekly, monthly, etc.
+  replayUrl: String,
+  liveListeners: Number,
+  maxListeners: Number,
+  tags: [String],
+  createdAt: Date,
+  updatedAt: Date
+}
