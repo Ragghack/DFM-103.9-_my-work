@@ -64,8 +64,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
+// 404 handler (catch-all) - use middleware without a path pattern to avoid path-to-regexp issues
+app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
