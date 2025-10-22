@@ -1,0 +1,52 @@
+// comments collection
+{
+  _id: ObjectId,
+  content_type: { type: String, enum: ['episode', 'article', 'actuality'] },
+  content_id: ObjectId,
+  user_name: String,
+  user_email: String,
+  user_avatar: String,
+  comment: String,
+  status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+  likes: { type: Number, default: 0 },
+  replies: [
+    {
+      user_name: String,
+      user_email: String,
+      comment: String,
+      created_at: { type: Date, default: Date.now }
+    }
+  ],
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
+}
+
+// newsletter_subscribers collection
+{
+  _id: ObjectId,
+  email: { type: String, required: true, unique: true },
+  name: String,
+  status: { type: String, enum: ['active', 'unsubscribed'], default: 'active' },
+  subscription_date: { type: Date, default: Date.now },
+  preferences: {
+    economy: { type: Boolean, default: true },
+    finance: { type: Boolean, default: true },
+    agriculture: { type: Boolean, default: false },
+    technology: { type: Boolean, default: false }
+  }
+}
+
+// newsletter_campaigns collection
+{
+  _id: ObjectId,
+  subject: String,
+  content: String,
+  sent_to: Number, // number of subscribers
+  open_rate: Number,
+  click_rate: Number,
+  status: { type: String, enum: ['draft', 'scheduled', 'sent'], default: 'draft' },
+  scheduled_for: Date,
+  sent_at: Date,
+  created_by: ObjectId,
+  created_at: { type: Date, default: Date.now }
+}

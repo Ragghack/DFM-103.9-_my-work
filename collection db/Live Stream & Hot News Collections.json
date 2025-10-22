@@ -1,0 +1,43 @@
+// live_streams collection
+{
+  _id: ObjectId,
+  title: String,
+  description: String,
+  stream_url: String,
+  status: { type: String, enum: ['offline', 'live', 'scheduled'], default: 'offline' },
+  scheduled_sessions: [
+    {
+      title: String,
+      description: String,
+      scheduled_time: Date,
+      duration: Number
+    }
+  ],
+  settings: {
+    allow_comments: { type: Boolean, default: true },
+    record_stream: { type: Boolean, default: true },
+    is_public: { type: Boolean, default: true }
+  },
+  current_viewers: { type: Number, default: 0 },
+  total_views: { type: Number, default: 0 },
+  started_at: Date,
+  ended_at: Date,
+  created_by: ObjectId,
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
+}
+
+// hot_news collection
+{
+  _id: ObjectId,
+  title: { type: String, required: true },
+  content: String,
+  image_url: String,
+  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  priority: { type: String, enum: ['high', 'medium', 'low'], default: 'medium' },
+  expiry_date: Date,
+  clicks_count: { type: Number, default: 0 },
+  created_by: ObjectId,
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
+}

@@ -1,24 +1,23 @@
-const mongoose = require('mongoose');
+// In your main server file (app.js or server.js)
+const { connectDB } = require('./database');
 
-const connectDB = async () => {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) {
-    console.warn('MONGODB_URI not set. Skipping database connection (useful for local dev without DB).');
-    return null;
-  }
-
+// Connect to database when app starts
+async function startServer() {
   try {
-    const conn = await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+    const dbConnection = await connectDB();
+    
+    if (!dbConnection) {
+      console.log('Running in degraded mode without database');
+    }
+    
+    // Start your server
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on port ${process.env.PORT}`);
     });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-    return conn;
   } catch (error) {
-    console.error('Database connection error:', error);
-    // don't exit the process here; let the app handle degraded mode
-    return null;
+    console.error('Failed to start server:', error);
+    process.exit(1);
   }
-};
+}
 
-module.exports = connectDB;
+startServer();

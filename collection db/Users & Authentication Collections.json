@@ -1,0 +1,23 @@
+// users collection
+{
+  _id: ObjectId,
+  email: { type: String, required: true, unique: true },
+  password_hash: { type: String, required: true },
+  name: { type: String, required: true },
+  role: { type: String, enum: ['superadmin', 'admin', 'editor'], default: 'admin' },
+  avatar_url: String,
+  is_active: { type: Boolean, default: true },
+  last_login: Date,
+  permissions: [String], // ['manage_users', 'manage_content', 'manage_finance', etc.]
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
+}
+
+// sessions collection
+{
+  _id: ObjectId,
+  user_id: ObjectId,
+  token: String,
+  expires_at: Date,
+  created_at: { type: Date, default: Date.now }
+}

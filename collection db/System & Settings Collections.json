@@ -1,0 +1,49 @@
+// website_settings collection
+{
+  _id: ObjectId,
+  site_title: String,
+  site_description: String,
+  contact_email: String,
+  contact_phone: String,
+  primary_color: { type: String, default: '#D4AF37' },
+  logo_url: String,
+  favicon_url: String,
+  default_language: { type: String, default: 'en' },
+  theme: { type: String, enum: ['light', 'dark', 'auto'], default: 'light' },
+  social_links: {
+    facebook: String,
+    twitter: String,
+    linkedin: String,
+    youtube: String
+  },
+  updated_by: ObjectId,
+  updated_at: { type: Date, default: Date.now }
+}
+
+// homepage_content collection
+{
+  _id: ObjectId,
+  breaking_news_ticker: String,
+  featured_article_id: ObjectId,
+  quick_links: {
+    economy: String,
+    finance: String,
+    articles: String,
+    actuality: String
+  },
+  updated_by: ObjectId,
+  updated_at: { type: Date, default: Date.now }
+}
+
+// activity_logs collection
+{
+  _id: ObjectId,
+  user_id: ObjectId,
+  action: String, // 'created_episode', 'updated_settings', etc.
+  resource_type: String,
+  resource_id: ObjectId,
+  description: String,
+  ip_address: String,
+  user_agent: String,
+  created_at: { type: Date, default: Date.now }
+}

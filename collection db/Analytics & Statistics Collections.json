@@ -1,0 +1,23 @@
+// analytics_daily collection
+{
+  _id: ObjectId,
+  date: Date,
+  total_episodes: Number,
+  total_articles: Number,
+  total_subscribers: Number,
+  episode_plays: Number,
+  article_views: Number,
+  new_subscribers: Number,
+  created_at: { type: Date, default: Date.now }
+}
+
+// user_activities collection
+{
+  _id: ObjectId,
+  date: Date,
+  active_users: Number,
+  new_registrations: Number,
+  page_views: Number,
+  average_session_duration: Number, // in seconds
+  created_at: { type: Date, default: Date.now }
+}

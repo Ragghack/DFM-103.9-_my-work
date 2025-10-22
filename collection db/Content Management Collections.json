@@ -1,0 +1,67 @@
+// episodes collection
+{
+  _id: ObjectId,
+  title: { type: String, required: true },
+  description: String,
+  audio_url: { type: String, required: true },
+  thumbnail_url: String,
+  duration: String, // "45:32"
+  category: { type: String, enum: ['economy', 'finance', 'agriculture', 'interview', 'politics'] },
+  guests: [
+    {
+      name: String,
+      title: String,
+      avatar_url: String
+    }
+  ],
+  tags: [String],
+  is_featured: { type: Boolean, default: false },
+  status: { type: String, enum: ['draft', 'published', 'scheduled'], default: 'draft' },
+  publish_date: Date,
+  views_count: { type: Number, default: 0 },
+  likes_count: { type: Number, default: 0 },
+  created_by: ObjectId, // user_id
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
+}
+
+// actuality_programs collection
+{
+  _id: ObjectId,
+  title: { type: String, required: true },
+  description: String,
+  image_url: String,
+  category: { type: String, enum: ['economy', 'finance', 'agriculture', 'technology', 'business'] },
+  host: String,
+  schedule: String, // "Mon-Fri, 7:00 PM"
+  start_date: Date,
+  is_featured: { type: Boolean, default: false },
+  status: { type: String, enum: ['active', 'upcoming', 'inactive'], default: 'active' },
+  reminder_settings: {
+    email_reminders: { type: Boolean, default: false },
+    push_notifications: { type: Boolean, default: false }
+  },
+  created_by: ObjectId,
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
+}
+
+// articles collection
+{
+  _id: ObjectId,
+  title: { type: String, required: true },
+  content: String,
+  excerpt: String,
+  author: String,
+  author_id: ObjectId,
+  category: { type: String, enum: ['economy', 'finance', 'agriculture', 'energy', 'innovation'] },
+  image_url: String,
+  tags: [String],
+  status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft' },
+  publish_date: Date,
+  featured: { type: Boolean, default: false },
+  read_time: Number, // in minutes
+  views_count: { type: Number, default: 0 },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
+}

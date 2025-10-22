@@ -1,0 +1,41 @@
+// economic_indicators collection
+{
+  _id: ObjectId,
+  gdp_growth: Number,
+  industrial_growth: Number,
+  unemployment_rate: Number,
+  inflation_rate: Number,
+  period: String, // "Q2 2024", "June 2024"
+  year: Number,
+  quarter: Number,
+  source: String,
+  last_updated: { type: Date, default: Date.now },
+  updated_by: ObjectId
+}
+
+// financial_data collection
+{
+  _id: ObjectId,
+  stock_market_growth: Number,
+  interest_rate: Number,
+  credit_growth: Number,
+  period: String,
+  year: Number,
+  month: Number,
+  last_updated: { type: Date, default: Date.now },
+  updated_by: ObjectId
+}
+
+// exchange_rates collection
+{
+  _id: ObjectId,
+  base_currency: { type: String, default: 'XAF' },
+  rates: {
+    USD: Number,
+    EUR: Number,
+    GBP: Number,
+    CNY: Number
+  },
+  date: { type: Date, default: Date.now },
+  last_updated: { type: Date, default: Date.now }
+}
