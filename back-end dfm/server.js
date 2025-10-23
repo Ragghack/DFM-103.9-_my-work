@@ -3,7 +3,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+// load environment variables from dfm.env explicitly
+require('dotenv').config({ path: './dfm.env' });
 
 const connectDB = require('./config/database');
 
@@ -16,6 +17,8 @@ const financeRoutes = require('./routes/finance');
 const emissionRoutes = require('./routes/emissions');
 const mediaRoutes = require('./routes/media');
 const analyticsRoutes = require('./routes/analytics');
+const newsletterRoutes = require('./routes/newsletter');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 
@@ -45,7 +48,8 @@ app.use('/api/finance', financeRoutes);
 app.use('/api/emissions', emissionRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/analytics', analyticsRoutes);
-
+app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/users', usersRoutes)
 // Health check
 app.get('/health', (req, res) => {
   res.status(200).json({ 

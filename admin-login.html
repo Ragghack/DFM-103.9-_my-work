@@ -90,50 +90,56 @@
     </div>
 
     <script>
-        // Simple authentication (in production, use proper backend authentication)
-        const adminUsers = {
-            'superadmin@dfmmedia.cm': {
-                password: 'superadmin2024',
-                role: 'superadmin',
-                name: 'Super Administrator'
-            },
-            'admin@dfmmedia.cm': {
-                password: 'admin2024',
-                role: 'admin',
-                name: 'Administrator'
-            },
-            'editor@dfmmedia.cm': {
-                password: 'editor2024',
-                role: 'admin',
-                name: 'Content Editor'
+        // Real authentication: POST to backend /api/auth/login
+        async function apiLogin(email, password) {
+            try {
+                const res = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Login failed');
+                return data; // expects { token, user }
+            } catch (err) {
+                throw err;
             }
-        };
+        }
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const email = document.getElementById('email').value;
+
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            
-            if (adminUsers[email] && adminUsers[email].password === password) {
-                // Store user info in localStorage
-                localStorage.setItem('adminUser', JSON.stringify({
-                    email: email,
-                    name: adminUsers[email].name,
-                    role: adminUsers[email].role
-                }));
-                
+
+            try {
+                const { token, user } = await apiLogin(email, password);
+                // store token and user for admin frontend to use
+                try { localStorage.setItem('dfm_token', token); } catch (err) { /* ignore */ }
+                try { localStorage.setItem('adminUser', JSON.stringify(user)); } catch (err) { /* ignore */ }
+
                 // Redirect to admin dashboard
                 window.location.href = 'admin frontend.html';
-            } else {
-                alert('Invalid email or password!');
+            } catch (err) {
+                alert('Login error: ' + err.message);
             }
         });
 
-        // Check if already logged in
-        if (localStorage.getItem('adminUser')) {
-            window.location.href = 'admin frontend.html';
-        }
+        // If a token exists, optionally verify it by calling /api/auth/me and redirect
+        (async function checkExistingSession() {
+            const token = localStorage.getItem('dfm_token');
+            if (!token) return;
+            try {
+                const res = await fetch('/api/auth/me', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (!res.ok) return; // invalid token
+                // token valid -> go to admin
+                window.location.href = 'admin frontend.html';
+            } catch (err) {
+                // ignore and allow manual login
+            }
+        })();
     </script>
 </body>
 </html>
