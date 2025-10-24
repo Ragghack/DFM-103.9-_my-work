@@ -50,12 +50,27 @@
             background: #c19d2f;
             color: var(--primary-dark);
         }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .alert {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <!-- Error Alert -->
+                <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert" id="connectionAlert">
+                    <strong>Server Connection Issue:</strong> Cannot connect to backend server. Please ensure the backend is running on port 5000.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                
                 <div class="login-container">
                     <div class="login-header">
                         <h2>
@@ -78,7 +93,12 @@
                                 <input type="checkbox" class="form-check-input" id="rememberMe">
                                 <label class="form-check-label" for="rememberMe">Remember me</label>
                             </div>
-                            <button type="submit" class="btn btn-gold w-100 mb-3">Sign In</button>
+                            <button type="submit" class="btn btn-gold w-100 mb-3" id="loginBtn">
+                                <span class="login-text">Sign In</span>
+                                <span class="loading-spinner" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i> Signing in...
+                                </span>
+                            </button>
                             <div class="text-center">
                                 <small class="text-muted">Secure admin access only</small>
                             </div>
@@ -89,57 +109,156 @@
         </div>
     </div>
 
-    <script>
-        // Real authentication: POST to backend /api/auth/login
-        async function apiLogin(email, password) {
-            try {
-                const res = await fetch('http://localhost:5000/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.message || 'Login failed');
-                return data; // expects { token, user }
-            } catch (err) {
-                throw err;
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_BASE_URL = 'http://localhost:5000/api';
+
+    // Test backend connection on page load
+    async function testBackendConnection() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/health`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return res.ok;
+        } catch (err) {
+            console.error('Backend connection test failed:', err);
+            return false;
+        }
+    }
+
+    // Real authentication: POST to backend /api/auth/login
+    async function apiLogin(email, password) {
+        const url = `${API_BASE_URL}/auth/login`;
+        console.log('Login URL:', url); // Debug log
+        
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+            
+            console.log('Response status:', res.status); // Debug log
+            
+            if (!res.ok) {
+                let errorMessage = 'Login failed';
+                try {
+                    const errorData = await res.json();
+                    errorMessage = errorData.message || errorMessage;
+                } catch {
+                    errorMessage = `Server error: ${res.status} ${res.statusText}`;
+                }
+                throw new Error(errorMessage);
             }
+            
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            if (err.name === 'TypeError' || err.message.includes('Failed to fetch')) {
+                throw new Error('Cannot connect to server. Please check if the backend is running on port 5000.');
+            }
+            throw err;
+        }
+    }
+
+    // Safe redirect function that doesn't break promises
+    function safeRedirect(url) {
+        // Use setTimeout to break out of the promise chain
+        setTimeout(() => {
+            window.location.href = url;
+        }, 100);
+    }
+
+    // Safe session check
+    async function checkExistingSession() {
+        const token = localStorage.getItem('dfm_token');
+        if (!token) return false;
+        
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/me`, {
+                headers: { 
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (res.ok) {
+                return true;
+            } else {
+                localStorage.removeItem('dfm_token');
+                localStorage.removeItem('adminUser');
+                return false;
+            }
+        } catch (err) {
+            console.warn('Session check failed:', err);
+            localStorage.removeItem('dfm_token');
+            localStorage.removeItem('adminUser');
+            return false;
+        }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const loginBtn = document.getElementById('loginBtn');
+        const loginText = loginBtn.querySelector('.login-text');
+        const loadingSpinner = loginBtn.querySelector('.loading-spinner');
+
+        // Show loading state
+        loginBtn.disabled = true;
+        loginText.style.display = 'none';
+        loadingSpinner.style.display = 'inline';
+
+        try {
+            const { token, user } = await apiLogin(email, password);
+            
+            // Store token and user
+            try { 
+                localStorage.setItem('dfm_token', token); 
+                localStorage.setItem('adminUser', JSON.stringify(user)); 
+            } catch (err) { 
+                console.warn('LocalStorage not available:', err);
+            }
+
+            // Safe redirect
+            safeRedirect('admin frontend.html');
+        } catch (err) {
+            alert('Login error: ' + err.message);
+            console.error('Login error:', err);
+            
+            // Reset loading state
+            loginBtn.disabled = false;
+            loginText.style.display = 'inline';
+            loadingSpinner.style.display = 'none';
+        }
+    });
+
+    // Check backend connection on page load
+    window.addEventListener('load', async () => {
+        const isBackendConnected = await testBackendConnection();
+        if (!isBackendConnected) {
+            document.getElementById('connectionAlert').style.display = 'block';
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-
-            try {
-                const { token, user } = await apiLogin(email, password);
-                // store token and user for admin frontend to use
-                try { localStorage.setItem('dfm_token', token); } catch (err) { /* ignore */ }
-                try { localStorage.setItem('adminUser', JSON.stringify(user)); } catch (err) { /* ignore */ }
-
-                // Redirect to admin dashboard
-                window.location.href = 'admin frontend.html';
-            } catch (err) {
-                alert('Login error: ' + err.message);
+        // Check session after a brief delay to avoid race conditions
+        setTimeout(async () => {
+            const hasValidSession = await checkExistingSession();
+            if (hasValidSession) {
+                safeRedirect('admin frontend.html');
             }
-        });
+        }, 500);
+    });
 
-        // If a token exists, optionally verify it by calling /api/auth/me and redirect
-        (async function checkExistingSession() {
-            const token = localStorage.getItem('dfm_token');
-            if (!token) return;
-            try {
-                const res = await fetch('/api/auth/me', {
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                if (!res.ok) return; // invalid token
-                // token valid -> go to admin
-                window.location.href = 'admin frontend.html';
-            } catch (err) {
-                // ignore and allow manual login
-            }
-        })();
-    </script>
+    // Fix for Chrome extension WebSocket error
+    // Add this to prevent the Live Reload extension from causing issues
+    if (window.location.protocol === 'file:') {
+        console.warn('Running as local file - Live Reload extensions may cause issues');
+    }
+</script>
 </body>
 </html>

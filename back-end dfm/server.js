@@ -34,25 +34,16 @@ const allowedOrigins = [
 
 app.use(helmet());
 
-// Explicit CORS options to ensure preflight responses include the expected headers
+// Simplified CORS configuration
 const corsOptions = {
-  origin: function (origin, callback) {
-    // allow requests with no origin (like curl or server-to-server)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true);
-    }
-    return callback(new Error('Not allowed by CORS'), false);
-  },
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization','X-Requested-With','Accept'],
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   credentials: true,
   maxAge: 600
 };
 
 app.use(cors(corsOptions));
-// Ensure preflight (OPTIONS) requests are handled
-app.options('*', cors(corsOptions));
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -85,18 +76,17 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 404 Handler - PATHLESS (no '*')
+// 404 Handler
 app.use((req, res, next) => {
   res.status(404).json({ 
     message: `Route ${req.method} ${req.originalUrl} not found`
   });
 });
 
-// Error handling middleware - MUST BE LAST
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err.message);
   
-  // Handle CORS errors
   if (err.message.includes('CORS')) {
     return res.status(403).json({ 
       message: 'CORS policy blocked this request'
