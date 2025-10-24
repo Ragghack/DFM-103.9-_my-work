@@ -3,7 +3,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-// load environment variables from dfm.env explicitly
 require('dotenv').config({ path: './dfm.env' });
 
 const connectDB = require('./config/database');
@@ -26,16 +25,42 @@ const app = express();
 connectDB();
 
 // Middleware
+const allowedOrigins = [
+  'http://127.0.0.1:5500',
+  'http://localhost:3000',
+  'http://localhost:5500',
+  'http://localhost:5000'
+];
+
 app.use(helmet());
-app.use(cors());
+
+// Explicit CORS options to ensure preflight responses include the expected headers
+const corsOptions = {
+  origin: function (origin, callback) {
+    // allow requests with no origin (like curl or server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'), false);
+  },
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization','X-Requested-With','Accept'],
+  credentials: true,
+  maxAge: 600
+};
+
+app.use(cors(corsOptions));
+// Ensure preflight (OPTIONS) requests are handled
+app.options('*', cors(corsOptions));
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100
 });
 app.use(limiter);
 
@@ -49,7 +74,8 @@ app.use('/api/emissions', emissionRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/newsletter', newsletterRoutes);
-app.use('/api/users', usersRoutes)
+app.use('/api/users', usersRoutes);
+
 // Health check
 app.get('/health', (req, res) => {
   res.status(200).json({ 
@@ -59,24 +85,34 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? err.message : {}
+// 404 Handler - PATHLESS (no '*')
+app.use((req, res, next) => {
+  res.status(404).json({ 
+    message: `Route ${req.method} ${req.originalUrl} not found`
   });
 });
 
-// 404 handler (catch-all) - use middleware without a path pattern to avoid path-to-regexp issues
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+// Error handling middleware - MUST BE LAST
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  
+  // Handle CORS errors
+  if (err.message.includes('CORS')) {
+    return res.status(403).json({ 
+      message: 'CORS policy blocked this request'
+    });
+  }
+  
+  res.status(500).json({ 
+    message: 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { error: err.message })
+  });
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;
