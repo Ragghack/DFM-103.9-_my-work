@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dfm Media - Radio Station</title>
+    <title>DFM Media - Radio Station</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-dark: #1a1814;
-            --primary-accent: #D4AF37; /* Gold color */
+            --primary-accent: #D4AF37;
             --secondary-dark: #2d2b24;
-            --light-bg: #F8F5F0; /* Milky white */
+            --light-bg: #F8F5F0;
             --card-bg: #ffffff;
             --text-primary: #1a1814;
             --text-secondary: #333333;
@@ -22,12 +22,11 @@
             --box-text-color: #1a1814;
         }
         
-        /* Dark mode variables */
         [data-theme="dark"] {
             --light-bg: #121212;
             --card-bg: #1a1a1a;
-            --text-primary: #D4AF37; /* Gold headers */
-            --text-secondary: #ffffff; /* White minor text */
+            --text-primary: #D4AF37;
+            --text-secondary: #ffffff;
             --border-light: #333333;
             --glass-bg: rgba(26, 24, 20, 0.9);
             --glass-border: rgba(212, 175, 55, 0.1);
@@ -49,7 +48,6 @@
             line-height: 1.7;
         }
         
-        /* Theme Toggle Button */
         .theme-toggle {
             position: relative;
             width: 50px;
@@ -92,7 +90,6 @@
             padding-right: 4px;
         }
         
-        /* Enhanced Glassmorphism Effects */
         .glass {
             background: var(--glass-bg);
             -webkit-backdrop-filter: blur(20px);
@@ -100,7 +97,6 @@
             border: 1px solid var(--glass-border);
         }
         
-        /* Enhanced Header & Navigation */
         header { 
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
             color: white;
@@ -108,7 +104,6 @@
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
-        
         
         header .navbar-brand { 
             font-weight: 800;
@@ -157,7 +152,6 @@
             transform: translateY(-2px);
         }
         
-        /* Enhanced Breaking News with Animation */
         .breaking-news { 
             padding: 8px 0;
             overflow: hidden;
@@ -231,7 +225,6 @@
             100% { transform: translateX(-100%); }
         }
         
-        /* Enhanced Cards with Micro-interactions */
         .news-card { 
             border: none;
             border-radius: 20px;
@@ -299,7 +292,6 @@
             backdrop-filter: blur(10px);
         }
         
-        /* Quick links icon container */
         .quick-link-icon {
             width: 70px;
             height: 70px;
@@ -308,7 +300,6 @@
             justify-content: center;
         }
         
-        /* Enhanced Section Headers */
         .section-header {
             position: relative;
             margin-bottom: 30px;
@@ -329,7 +320,6 @@
             border-radius: 2px;
         }
         
-        /* Enhanced Live Player */
         .live-player { 
             background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
             color: var(--primary-accent);
@@ -402,7 +392,6 @@
             50% { transform: scale(1.1); }
         }
         
-        /* Enhanced Footer */
         footer { 
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
             color: var(--primary-accent);
@@ -421,7 +410,6 @@
             text-shadow: 0 0 16px #fff200, 0 0 4px var(--primary-accent);
         }
         
-        /* Search & Notification System */
         .search-container {
             position: relative;
             max-width: 400px;
@@ -439,7 +427,6 @@
             backdrop-filter: blur(10px);
         }
         
-        
         .search-input::placeholder {
             color: rgba(255,255,255,0.7);
         }
@@ -452,7 +439,6 @@
             color: rgba(255,255,255,0.7);
         }
         
-        /* Navigation dropdown styles */
         .dropdown-menu {
             background: var(--card-bg);
             border: 1px solid var(--primary-accent);
@@ -471,7 +457,6 @@
             background-color: rgba(212, 175, 55, 0.1);
         }
         
-        /* Audio controls in navbar */
         .audio-control {
             background: none;
             border: none;
@@ -481,7 +466,6 @@
             cursor: pointer;
         }
         
-        /* Featured Article Styles */
         .featured-article {
             border-radius: 20px;
             overflow: hidden;
@@ -518,7 +502,6 @@
             padding-left: 5px;
         }
         
-        /* Responsive adjustments */
         @media (max-width: 992px) {
             .section-header {
                 font-size: 1.8rem;
@@ -560,6 +543,13 @@
             .featured-article p {
                 font-size: 1rem !important;
             }
+        }
+
+        .loading-placeholder {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -656,8 +646,8 @@
         <div class="container d-flex align-items-center">
             <span><i class="fas fa-bolt me-2"></i>BREAKING NEWS</span>
             <div class="marquee-container w-100">
-                <div class="marquee">
-                    DFM Radio launches its news portal | Follow economy, politics and sports live | New tax reform announced for 2025 | World Cup preparations underway | Inflation down for the 3rd consecutive month
+                <div class="marquee" id="breaking-news-ticker">
+                    Loading breaking news...
                 </div>
             </div>
         </div>
@@ -670,13 +660,10 @@
             <div class="row g-4 align-items-stretch">
                 <!-- Featured Article -->
                 <div class="col-12 col-lg-8 d-flex">
-                    <article class="featured-article card glass shadow-lg border-0 rounded-4 overflow-hidden flex-fill d-flex flex-column justify-content-between h-100">
-                        <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80" class="w-100" alt="Economic charts showing positive growth" loading="lazy" style="max-height:340px; object-fit:cover;">
-                        <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1">
-                            <div class="card-overlay" style="top:24px;right:24px;">Featured</div>
-                            <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">Economy shows signs of recovery despite inflation</h2>
-                            <p class="mb-4 fs-5" style="color:var(--text-secondary);">Latest economic indicators show moderate but stable growth in the first quarter of 2025, driven by the services sector.</p>
-                            <a href="#" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-start" onclick="showPage('article-detail')" aria-label="Read the full article on economic recovery">Read more <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i></a>
+                    <article class="featured-article card glass shadow-lg border-0 rounded-4 overflow-hidden flex-fill d-flex flex-column justify-content-between h-100" id="featured-article-container">
+                        <div class="loading-placeholder">
+                            <div class="spinner-border text-warning"></div>
+                            <span class="ms-2">Loading featured content...</span>
                         </div>
                     </article>
                 </div>
@@ -685,12 +672,11 @@
                 <div class="col-12 col-lg-4 d-flex">
                     <section aria-labelledby="trending-news" class="w-100 d-flex flex-column justify-content-between">
                         <h5 class="section-header" id="trending-news">Nos Emissions</h5>
-                        <ul class="list-group trending-list flex-grow-1" role="list">
-                            <li class="list-group-item" role="listitem"><a href="emmsion.html">New economic developments in Europe</a></li>
-                            <li class="list-group-item" role="listitem"><a href="emmsion.html">National debate on pensions tonight at 8pm</a></li>
-                            <li class="list-group-item" role="listitem"><a href="emmsion.html">Tax reforms: what changes in 2025</a></li>
-                            <li class="list-group-item" role="listitem"><a href="emmsion.html">Education budget: historic increase</a></li>
-                            <li class="list-group-item" role="listitem"><a href="emmsion.html">Exclusive interview with the finance minister</a></li>
+                        <ul class="list-group trending-list flex-grow-1" role="list" id="trending-list">
+                            <li class="list-group-item">
+                                <div class="spinner-border spinner-border-sm text-warning me-2"></div>
+                                Loading programs...
+                            </li>
                         </ul>
                     </section>
                 </div>
@@ -700,39 +686,14 @@
         <!-- Current News Section -->
         <section aria-labelledby="current-news" class="my-5">
             <h2 class="section-header" id="current-news">Current News</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="current-news-container">
                 <div class="col d-flex">
-                    <article class="card news-card w-100 h-100 d-flex flex-column">
-                        <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="Economic growth charts">
-                        <div class="card-body d-flex flex-column flex-grow-1">
-                            <span class="badge bg-warning text-dark mb-2">Economy</span>
-                            <h5 class="card-title">Cameroon Economy Shows Growth</h5>
-                            <p class="card-text flex-grow-1">Latest reports indicate a 3.2% growth in Cameroon's economy this quarter, exceeding expectations.</p>
-                            <a href="economy.html" class="btn btn-sm btn-dark mt-auto">Read more</a>
+                    <div class="card news-card w-100 h-100 d-flex flex-column">
+                        <div class="card-body d-flex flex-column flex-grow-1 text-center loading-placeholder">
+                            <div class="spinner-border text-warning my-5"></div>
+                            <p class="text-muted">Loading current news...</p>
                         </div>
-                    </article>
-                </div>
-                <div class="col d-flex">
-                    <article class="card news-card w-100 h-100 d-flex flex-column">
-                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="Agricultural development">
-                        <div class="card-body d-flex flex-column flex-grow-1">
-                            <span class="badge bg-success text-white mb-2">Agriculture</span>
-                            <h5 class="card-title">New Farming Techniques Boost Yields</h5>
-                            <p class="card-text flex-grow-1">Local farmers are adopting innovative techniques that have increased crop yields by up to 40%.</p>
-                            <a href="economy.html#eco-agriculture" class="btn btn-sm btn-dark mt-auto">Read more</a>
-                        </div>
-                    </article>
-                </div>
-                <div class="col d-flex">
-                    <article class="card news-card w-100 h-100 d-flex flex-column">
-                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="Tech innovation">
-                        <div class="card-body d-flex flex-column flex-grow-1">
-                            <span class="badge bg-info text-white mb-2">Innovation</span>
-                            <h5 class="card-title">Tech Startups Flourish in Douala</h5>
-                            <p class="card-text flex-grow-1">The startup ecosystem in Douala is experiencing unprecedented growth with several new funding rounds.</p>
-                            <a href="economy.html#eco-innovation" class="btn btn-sm btn-dark mt-auto">Read more</a>
-                        </div>
-                    </article>
+                    </div>
                 </div>
             </div>
         </section>
@@ -740,7 +701,7 @@
         <!-- Quick Links Section -->
         <section aria-labelledby="quick-links" class="my-5">
             <h2 class="section-header" id="quick-links">Explore Our Content</h2>
-            <div class="row">
+            <div class="row quick-links" id="quick-links-container">
                 <div class="col-md-3 col-6 mb-4">
                     <a href="economy.html" class="card news-card text-center text-decoration-none">
                         <div class="card-body">
@@ -748,7 +709,7 @@
                                 <i class="fas fa-chart-line fa-2x text-dark"></i>
                             </div>
                             <h5 class="card-title">Economy</h5>
-                            <p class="card-text">Market trends and analysis</p>
+                            <p class="card-text">Loading description...</p>
                         </div>
                     </a>
                 </div>
@@ -759,7 +720,7 @@
                                 <i class="fas fa-coins fa-2x text-dark"></i>
                             </div>
                             <h5 class="card-title">Finance</h5>
-                            <p class="card-text">Banking and investment news</p>
+                            <p class="card-text">Loading description...</p>
                         </div>
                     </a>
                 </div>
@@ -770,7 +731,7 @@
                                 <i class="fas fa-newspaper fa-2x text-dark"></i>
                             </div>
                             <h5 class="card-title">Articles</h5>
-                            <p class="card-text">In-depth analysis and reports</p>
+                            <p class="card-text">Loading description...</p>
                         </div>
                     </a>
                 </div>
@@ -781,7 +742,7 @@
                                 <i class="fas fa-bullhorn fa-2x text-dark"></i>
                             </div>
                             <h5 class="card-title">Actuality</h5>
-                            <p class="card-text">Current events and programs</p>
+                            <p class="card-text">Loading description...</p>
                         </div>
                     </a>
                 </div>
@@ -792,80 +753,29 @@
         <section aria-labelledby="radio-player" class="my-5">
             <h2 class="section-header" id="radio-player">Live Radio</h2>
             <div class="card news-card text-center p-4">
-                <div class="row justify-content-center">
+                <div class="row justify-content-center" id="radio-programs-container">
                     <div class="col-6 col-md-3 mb-3">
                         <div class="card news-card text-center p-3">
-                            <h6 class="mb-2">Economic Debate</h6>
-                            <button class="play-btn" title="Play Economic Debate">
+                            <h6 class="mb-2">Loading...</h6>
+                            <button class="play-btn" title="Play program">
                                 <i class="fas fa-play"></i>
                             </button>
-                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Guest: Finance Minister</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="card news-card text-center p-3">
-                            <h6 class="mb-2">Market Update</h6>
-                            <button class="play-btn" title="Play Market Update">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Live: Stock Trends</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="card news-card text-center p-3">
-                            <h6 class="mb-2">Banking Hour</h6>
-                            <button class="play-btn" title="Play Banking Hour">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Live: Banking Projects</div>
+                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Loading program info</div>
                         </div>
                     </div>
                 </div>
+            </div>
         </section>
 
         <!-- Blog Comments Section -->
         <section aria-labelledby="blog-comments" class="my-5">
             <h2 class="section-header" id="blog-comments">From Our Blog</h2>
-            <div class="row">
+            <div class="row" id="blog-comments-container">
                 <div class="col-md-4 mb-4">
                     <div class="card news-card h-100">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning rounded-circle p-2 me-2">
-                                    <i class="fas fa-user text-dark"></i>
-                                </div>
-                                <h6 class="card-subtitle mb-0">John Doe</h6>
-                            </div>
-                            <p class="card-text">"The economic analysis provided by Dfm Media has been invaluable for my business decisions. Keep up the great work!"</p>
-                            <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card news-card h-100">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning rounded-circle p-2 me-2">
-                                    <i class="fas fa-user text-dark"></i>
-                                </div>
-                                <h6 class="card-subtitle mb-0">Marie Ngassa</h6>
-                            </div>
-                            <p class="card-text">"I appreciate the focus on African economic trends. It's refreshing to hear perspectives that are relevant to our context."</p>
-                            <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card news-card h-100">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning rounded-circle p-2 me-2">
-                                    <i class="fas fa-user text-dark"></i>
-                                </div>
-                                <h6 class="card-subtitle mb-0">Paul Biya</h6>
-                            </div>
-                            <p class="card-text">"The agricultural segment last week provided excellent insights into modern farming techniques. Very informative!"</p>
-                            <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
+                        <div class="card-body text-center loading-placeholder">
+                            <div class="spinner-border text-warning"></div>
+                            <p class="mt-2 text-muted">Loading blog comments...</p>
                         </div>
                     </div>
                 </div>
@@ -885,7 +795,7 @@
                     <i class="fas fa-stop"></i>
                 </button>
             </div>
-            <span>Live: Economic Debate - Guest: Finance Minister</span>
+            <span id="current-program">Loading current program...</span>
         </div>
     </div>
 
@@ -923,21 +833,363 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // API Configuration
+        const API_BASE = 'http://localhost:5000/api';
+
+        // Load all homepage data
+        async function loadHomepageData() {
+            try {
+                await Promise.all([
+                    loadBreakingNews(),
+                    loadFeaturedContent(),
+                    loadCurrentNews(),
+                    loadQuickLinks(),
+                    loadRadioPrograms(),
+                    loadBlogComments(),
+                    loadTrendingPrograms()
+                ]);
+            } catch (error) {
+                console.error('Error loading homepage data:', error);
+                showNotification('Failed to load some content. Please refresh the page.', 'warning');
+            }
+        }
+
+        // Load breaking news from admin settings
+        async function loadBreakingNews() {
+            try {
+                const response = await fetch(`${API_BASE}/homepage`);
+                const data = await response.json();
+                
+                if (data.homepage && data.homepage.breakingNews) {
+                    document.getElementById('breaking-news-ticker').textContent = data.homepage.breakingNews;
+                } else {
+                    document.getElementById('breaking-news-ticker').textContent = 'Stay tuned for the latest updates from DFM Media';
+                }
+            } catch (error) {
+                console.error('Error loading breaking news:', error);
+                document.getElementById('breaking-news-ticker').textContent = 'Stay tuned for the latest updates from DFM Media';
+            }
+        }
+
+        // Load featured article from admin settings
+        async function loadFeaturedContent() {
+            try {
+                const response = await fetch(`${API_BASE}/homepage`);
+                const data = await response.json();
+                const container = document.getElementById('featured-article-container');
+                
+                if (data.homepage && data.homepage.featuredArticleData) {
+                    const article = data.homepage.featuredArticleData;
+                    container.innerHTML = `
+                        <img src="${article.image_url || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80'}" 
+                             class="w-100" alt="${article.title}" loading="lazy" style="max-height:340px; object-fit:cover;">
+                        <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1">
+                            <div class="card-overlay" style="top:24px;right:24px;">Featured</div>
+                            <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">${article.title}</h2>
+                            <p class="mb-4 fs-5" style="color:var(--text-secondary);">${article.excerpt || article.content.substring(0, 200)}...</p>
+                            <a href="articles.html?id=${article._id || article.id}" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-start">
+                                Read more <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    // Fallback to latest article if no featured article set
+                    const articlesResponse = await fetch(`${API_BASE}/articles?limit=1`);
+                    const articlesData = await articlesResponse.json();
+                    
+                    if (articlesData.items && articlesData.items.length > 0) {
+                        const article = articlesData.items[0];
+                        container.innerHTML = `
+                            <img src="${article.image_url || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80'}" 
+                                 class="w-100" alt="${article.title}" loading="lazy" style="max-height:340px; object-fit:cover;">
+                            <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1">
+                                <div class="card-overlay" style="top:24px;right:24px;">Latest</div>
+                                <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">${article.title}</h2>
+                                <p class="mb-4 fs-5" style="color:var(--text-secondary);">${article.excerpt || article.content.substring(0, 200)}...</p>
+                                <a href="articles.html?id=${article._id || article.id}" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-start">
+                                    Read more <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = `
+                            <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1 text-center">
+                                <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">Welcome to DFM Media</h2>
+                                <p class="mb-4 fs-5" style="color:var(--text-secondary);">Your trusted source for economic, political and social news in Cameroon and Africa.</p>
+                                <a href="articles.html" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-center">
+                                    Explore Articles <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading featured content:', error);
+                document.getElementById('featured-article-container').innerHTML = `
+                    <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1 text-center">
+                        <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">Welcome to DFM Media</h2>
+                        <p class="mb-4 fs-5" style="color:var(--text-secondary);">Your trusted source for news and information.</p>
+                        <a href="articles.html" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-center">
+                            Explore Content <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        // Load current news from database
+        async function loadCurrentNews() {
+            try {
+                const response = await fetch(`${API_BASE}/news?limit=3&status=published`);
+                const data = await response.json();
+                const container = document.getElementById('current-news-container');
+                
+                if (data.items && data.items.length > 0) {
+                    container.innerHTML = data.items.map(news => `
+                        <div class="col d-flex">
+                            <article class="card news-card w-100 h-100 d-flex flex-column">
+                                <img src="${news.image_url || getDefaultImage(news.category)}" 
+                                     class="card-img-top" alt="${news.title}" loading="lazy" style="height: 250px; object-fit: cover;">
+                                <div class="card-body d-flex flex-column flex-grow-1">
+                                    <span class="badge ${getCategoryBadge(news.category)} mb-2">${formatCategory(news.category)}</span>
+                                    <h5 class="card-title">${news.title}</h5>
+                                    <p class="card-text flex-grow-1">${news.excerpt || news.content.substring(0, 120)}...</p>
+                                    <a href="actuality.html?id=${news._id || news.id}" class="btn btn-sm btn-dark mt-auto">Read more</a>
+                                </div>
+                            </article>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `
+                        <div class="col-12 text-center">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No current news available. Check back later for updates.
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading current news:', error);
+                document.getElementById('current-news-container').innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Unable to load current news. Please try again later.
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Load quick links from admin settings
+        async function loadQuickLinks() {
+            try {
+                const response = await fetch(`${API_BASE}/homepage`);
+                const data = await response.json();
+                
+                if (data.homepage && data.homepage.quickLinks) {
+                    const links = data.homepage.quickLinks;
+                    const container = document.getElementById('quick-links-container');
+                    
+                    container.innerHTML = `
+                        <div class="col-md-3 col-6 mb-4">
+                            <a href="economy.html" class="card news-card text-center text-decoration-none">
+                                <div class="card-body">
+                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                        <i class="fas fa-chart-line fa-2x text-dark"></i>
+                                    </div>
+                                    <h5 class="card-title">Economy</h5>
+                                    <p class="card-text">${links.economy}</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4">
+                            <a href="finance.html" class="card news-card text-center text-decoration-none">
+                                <div class="card-body">
+                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                        <i class="fas fa-coins fa-2x text-dark"></i>
+                                    </div>
+                                    <h5 class="card-title">Finance</h5>
+                                    <p class="card-text">${links.finance}</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4">
+                            <a href="articles.html" class="card news-card text-center text-decoration-none">
+                                <div class="card-body">
+                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                        <i class="fas fa-newspaper fa-2x text-dark"></i>
+                                    </div>
+                                    <h5 class="card-title">Articles</h5>
+                                    <p class="card-text">${links.articles}</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4">
+                            <a href="actuality.html" class="card news-card text-center text-decoration-none">
+                                <div class="card-body">
+                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
+                                        <i class="fas fa-bullhorn fa-2x text-dark"></i>
+                                    </div>
+                                    <h5 class="card-title">Actuality</h5>
+                                    <p class="card-text">${links.actuality}</p>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading quick links:', error);
+            }
+        }
+
+        // Load radio programs
+        async function loadRadioPrograms() {
+            try {
+                // This would typically come from your emissions API
+                const programs = [
+                    { title: "Economic Debate", description: "Guest: Finance Minister" },
+                    { title: "Market Update", description: "Live: Stock Trends" },
+                    { title: "Banking Hour", description: "Live: Banking Projects" }
+                ];
+                
+                const container = document.getElementById('radio-programs-container');
+                container.innerHTML = programs.map(program => `
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card news-card text-center p-3">
+                            <h6 class="mb-2">${program.title}</h6>
+                            <button class="play-btn" title="Play ${program.title}">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="mt-2 text-muted" style="font-size:0.95rem;">${program.description}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Update current program in footer
+                document.getElementById('current-program').textContent = `Live: ${programs[0].title} - ${programs[0].description}`;
+                
+            } catch (error) {
+                console.error('Error loading radio programs:', error);
+            }
+        }
+
+        // Load blog comments
+        async function loadBlogComments() {
+            try {
+                // This would typically come from your articles API with comments
+                const comments = [
+                    { 
+                        name: "John Doe", 
+                        comment: "The economic analysis provided by Dfm Media has been invaluable for my business decisions. Keep up the great work!",
+                        role: "Business Owner"
+                    },
+                    { 
+                        name: "Marie Ngassa", 
+                        comment: "I appreciate the focus on African economic trends. It's refreshing to hear perspectives that are relevant to our context.",
+                        role: "Economist"
+                    },
+                    { 
+                        name: "Paul Biya", 
+                        comment: "The agricultural segment last week provided excellent insights into modern farming techniques. Very informative!",
+                        role: "Farmer"
+                    }
+                ];
+                
+                const container = document.getElementById('blog-comments-container');
+                container.innerHTML = comments.map(comment => `
+                    <div class="col-md-4 mb-4">
+                        <div class="card news-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-warning rounded-circle p-2 me-2">
+                                        <i class="fas fa-user text-dark"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="card-subtitle mb-0">${comment.name}</h6>
+                                        <small class="text-muted">${comment.role}</small>
+                                    </div>
+                                </div>
+                                <p class="card-text">"${comment.comment}"</p>
+                                <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading blog comments:', error);
+            }
+        }
+
+        // Load trending programs
+        async function loadTrendingPrograms() {
+            try {
+                // This would typically come from your emissions API
+                const programs = [
+                    "New economic developments in Europe",
+                    "National debate on pensions tonight at 8pm",
+                    "Tax reforms: what changes in 2025",
+                    "Education budget: historic increase",
+                    "Exclusive interview with the finance minister"
+                ];
+                
+                const container = document.getElementById('trending-list');
+                container.innerHTML = programs.map(program => `
+                    <li class="list-group-item" role="listitem">
+                        <a href="emmsion.html">${program}</a>
+                    </li>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading trending programs:', error);
+            }
+        }
+
+        // Helper functions
+        function getDefaultImage(category) {
+            const images = {
+                'economy': 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
+                'agriculture': 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
+                'innovation': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
+                'finance': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80'
+            };
+            return images[category] || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80';
+        }
+
+        function getCategoryBadge(category) {
+            const badges = {
+                'economy': 'bg-warning text-dark',
+                'agriculture': 'bg-success text-white', 
+                'innovation': 'bg-info text-white',
+                'finance': 'bg-primary text-white'
+            };
+            return badges[category] || 'bg-secondary text-white';
+        }
+
+        function formatCategory(category) {
+            const formatted = {
+                'economy': 'Economy',
+                'agriculture': 'Agriculture',
+                'innovation': 'Innovation',
+                'finance': 'Finance'
+            };
+            return formatted[category] || category;
+        }
+
         // Theme toggle functionality
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         
-        // Check for saved theme preference or respect OS preference
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         
-        // Apply the saved theme
         if (savedTheme === 'dark') {
             body.setAttribute('data-theme', 'dark');
         } else {
             body.removeAttribute('data-theme');
         }
         
-        // Toggle theme function
         function toggleTheme() {
             if (body.getAttribute('data-theme') === 'dark') {
                 body.removeAttribute('data-theme');
@@ -948,39 +1200,29 @@
             }
         }
         
-        // Add event listener to theme toggle button
         themeToggle.addEventListener('click', toggleTheme);
         
         // Audio controls functionality
         const playButton = document.getElementById('playButton');
         const stopButton = document.getElementById('stopButton');
-        const radioPlay = document.getElementById('radioPlay');
-        const radioStop = document.getElementById('radioStop');
         const footerPlay = document.getElementById('footerPlay');
         const footerStop = document.getElementById('footerStop');
         
         function playAudio() {
-            // In a real implementation, this would play the radio stream
-            console.log('Playing audio...');
             showNotification('Radio is now playing', 'info');
         }
         
         function stopAudio() {
-            // In a real implementation, this would stop the radio stream
-            console.log('Stopping audio...');
             showNotification('Radio stopped', 'info');
         }
         
         playButton.addEventListener('click', playAudio);
         stopButton.addEventListener('click', stopAudio);
-        radioPlay.addEventListener('click', playAudio);
-        radioStop.addEventListener('click', stopAudio);
         footerPlay.addEventListener('click', playAudio);
         footerStop.addEventListener('click', stopAudio);
         
         // Show notification function
         function showNotification(message, type = 'info') {
-            // Create notification element
             const notification = document.createElement('div');
             notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
             notification.style.top = '20px';
@@ -992,23 +1234,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
             
-            // Add to body
             document.body.appendChild(notification);
             
-            // Auto remove after 3 seconds
             setTimeout(() => {
                 notification.remove();
             }, 3000);
         }
         
-        // Simulated financial data (in a real implementation, this would come from Google API)
-        function updateFinancialData() {
-            // This would fetch real data from an API
-            console.log('Updating financial data...');
-        }
-        
-        // Update financial data on page load
-        document.addEventListener('DOMContentLoaded', updateFinancialData);
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHomepageData();
+        });
+
+        // Refresh content every 5 minutes
+        setInterval(loadHomepageData, 300000);
     </script>
 </body>
 </html>

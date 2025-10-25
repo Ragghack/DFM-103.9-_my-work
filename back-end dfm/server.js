@@ -18,6 +18,7 @@ const mediaRoutes = require('./routes/media');
 const analyticsRoutes = require('./routes/analytics');
 const newsletterRoutes = require('./routes/newsletter');
 const usersRoutes = require('./routes/users');
+const homepageRoutes = require('./routes/homepage'); // ADD THIS LINE
 
 const app = express();
 
@@ -66,6 +67,7 @@ app.use('/api/media', mediaRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/homepage', homepageRoutes); // ADD THIS LINE
 
 // Health check
 app.get('/health', (req, res) => {
