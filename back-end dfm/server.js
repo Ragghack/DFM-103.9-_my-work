@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const path = require('path'); // ADD THIS LINE
 require('dotenv').config({ path: './dfm.env' });
 
 const connectDB = require('./config/database');
@@ -18,7 +19,7 @@ const mediaRoutes = require('./routes/media');
 const analyticsRoutes = require('./routes/analytics');
 const newsletterRoutes = require('./routes/newsletter');
 const usersRoutes = require('./routes/users');
-const homepageRoutes = require('./routes/homepage'); // ADD THIS LINE
+const homepageRoutes = require('./routes/homepage');
 
 const app = express();
 
@@ -56,7 +57,33 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Routes
+// ==================== STATIC FILE SERVING ====================
+// Serve static assets from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve admin frontend and other HTML files from parent directory
+app.use(express.static(path.join(__dirname, '..')));
+
+// Specific route for admin panel
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'admin frontend.html'));
+});
+
+// Default route - serve admin frontend
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'admin frontend.html'));
+});
+
+// Routes for other frontend pages
+app.get('/economy', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'economy.html'));
+});
+
+app.get('/finance', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'finance.html'));
+});
+
+// ==================== API ROUTES ====================
 app.use('/api/auth', authRoutes);
 app.use('/api/articles', articleRoutes);
 app.use('/api/news', newsRoutes);
@@ -67,7 +94,7 @@ app.use('/api/media', mediaRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/users', usersRoutes);
-app.use('/api/homepage', homepageRoutes); // ADD THIS LINE
+app.use('/api/homepage', homepageRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -105,6 +132,10 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Admin Panel: http://localhost:${PORT}/admin`);
+  console.log(`Economy Page: http://localhost:${PORT}/economy`);
+  console.log(`Finance Page: http://localhost:${PORT}/finance`);
+  console.log(`API Health: http://localhost:${PORT}/health`);
 });
 
 module.exports = app;
