@@ -461,7 +461,7 @@
         
         .economy-summary-admin {
             background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
-            color: white;
+            color: rgb(255, 255, 64);
             padding: 25px;
             border-radius: 15px;
             margin-bottom: 25px;
@@ -842,20 +842,26 @@
 
                         <!-- Articles List -->
                         <div class="table-container">
-                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">All Articles</h5>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control me-2" id="search-articles" placeholder="Search articles...">
-                                    <select class="form-select" id="filter-articles-category" style="width: auto;">
-                                        <option value="">All Categories</option>
-                                        <option value="economy">Economy</option>
-                                        <option value="finance">Finance</option>
-                                        <option value="agriculture">Agriculture</option>
-                                        <option value="energy">Energy</option>
-                                        <option value="innovation">Innovation</option>
-                                    </select>
-                                </div>
-                            </div>
+<div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">All Articles</h5>
+    <div class="d-flex">
+        <button class="btn btn-sm btn-outline-warning me-2" id="debug-articles-btn" title="Debug API">
+            <i class="fas fa-bug me-1"></i>Debug
+        </button>
+        <button class="btn btn-sm btn-outline-success me-2" id="test-create-article" title="Create Test Article">
+            <i class="fas fa-vial me-1"></i>Test Create
+        </button>
+        <input type="text" class="form-control me-2" id="search-articles" placeholder="Search articles...">
+        <select class="form-select" id="filter-articles-category" style="width: auto;">
+            <option value="">All Categories</option>
+            <option value="economy">Economy</option>
+            <option value="finance">Finance</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="energy">Energy</option>
+            <option value="innovation">Innovation</option>
+        </select>
+    </div>
+</div>
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">
                                     <thead>
@@ -1451,6 +1457,7 @@
                             </div>
                         </div>
                     </div>
+                    
 
                   <!-- ==================== ECONOMY SECTION ==================== -->
 <div class="content-section" id="economy-section">
@@ -2183,8 +2190,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-       // ==================== CONFIGURATION ====================
+  <script>
+// ==================== CONFIGURATION ====================
 const API_BASE = 'http://localhost:5000/api';
 let currentUser = null;
 let currentEditingId = null;
@@ -2220,13 +2227,16 @@ function getAuthHeaders() {
         'Authorization': token ? `Bearer ${token}` : ''
     };
 }
-
 async function apiCall(endpoint, options = {}) {
     try {
+        console.log(`API Call: ${endpoint}`, options);
+        
         const response = await fetch(`${API_BASE}${endpoint}`, {
             headers: getAuthHeaders(),
             ...options
         });
+        
+        console.log(`API Response Status: ${response.status} for ${endpoint}`);
         
         if (response.status === 401) {
             localStorage.removeItem('dfm_token');
@@ -2236,18 +2246,32 @@ async function apiCall(endpoint, options = {}) {
         }
         
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+                console.error('API Error details:', errorData);
+            } catch (e) {
+                // If response is not JSON, use status text
+                errorMessage = response.statusText || errorMessage;
+            }
+            throw new Error(errorMessage);
         }
         
-        return await response.json();
+        const data = await response.json();
+        console.log(`API Success: ${endpoint}`, data);
+        return data;
+        
     } catch (error) {
-        console.error('API call failed:', error);
-        showToast(error.message, 'danger');
+        console.error('API call failed:', {
+            endpoint,
+            error: error.message,
+            stack: error.stack
+        });
+        showToast(`API Error: ${error.message}`, 'danger');
         throw error;
     }
 }
-
 function setLoading(element, isLoading) {
     if (isLoading) {
         element.classList.add('loading');
@@ -2365,10 +2389,11 @@ async function loadRecentContent() {
         const tbody = document.getElementById('recent-content-body');
         tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading...</td></tr>';
         
-        const [articlesData, newsData, economyData] = await Promise.all([
+        const [articlesData, newsData, economyData, financeData] = await Promise.all([
             apiCall('/articles?limit=5'),
             apiCall('/news?limit=5'),
-            apiCall('/economy/admin/articles?limit=5')
+            apiCall('/economy/admin/articles?limit=5'),
+            apiCall('/finance/articles?limit=5')
         ]);
         
         const recentItems = [
@@ -2386,6 +2411,11 @@ async function loadRecentContent() {
                 ...item,
                 type: 'economy',
                 date: item.createdAt
+            })),
+            ...(financeData?.items || []).map(item => ({
+                ...item,
+                type: 'finance',
+                date: item.createdAt
             }))
         ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
         
@@ -2397,7 +2427,7 @@ async function loadRecentContent() {
         tbody.innerHTML = recentItems.map(item => `
             <tr>
                 <td>${item.title || 'Untitled'}</td>
-                <td><span class="badge bg-${item.type === 'article' ? 'primary' : item.type === 'news' ? 'success' : 'warning'}">${item.type}</span></td>
+                <td><span class="badge bg-${item.type === 'article' ? 'primary' : item.type === 'news' ? 'success' : item.type === 'economy' ? 'warning' : 'info'}">${item.type}</span></td>
                 <td>${item.category || item.section || '-'}</td>
                 <td>${new Date(item.date).toLocaleDateString()}</td>
                 <td><span class="badge bg-${item.status === 'published' ? 'success' : 'warning'}">${item.status}</span></td>
@@ -2418,50 +2448,182 @@ async function loadRecentContent() {
 async function loadArticles(page = 1, search = '', category = '') {
     try {
         const tbody = document.getElementById('articles-table-body');
+        if (!tbody) {
+            console.error('Articles table body not found');
+            return;
+        }
+        
         tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading articles...</td></tr>';
         
+        // Build API endpoint with query parameters
         let endpoint = `/articles?page=${page}&limit=10`;
         if (search) endpoint += `&search=${encodeURIComponent(search)}`;
         if (category) endpoint += `&category=${category}`;
         
-        const data = await apiCall(endpoint);
+        console.log('Loading articles from:', endpoint);
         
-        if (!data || !data.items || data.items.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No articles found</td></tr>';
+        const data = await apiCall(endpoint);
+        console.log('Articles API response:', data);
+        
+        // Handle different response structures
+        const articles = data?.articles || data?.items || [];
+        const total = data?.pagination?.total || data?.total || 0;
+        const currentPage = data?.pagination?.page || page;
+        
+        if (!articles || articles.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fas fa-newspaper fa-2x mb-3 d-block"></i>
+                        No articles found
+                        ${search || category ? 
+                            `<div class="mt-2">
+                                <small>Try changing your search or filter criteria</small>
+                            </div>` : 
+                            `<div class="mt-2">
+                                <button class="btn btn-sm btn-gold" onclick="showArticleForm()">
+                                    <i class="fas fa-plus me-1"></i>Create Your First Article
+                                </button>
+                            </div>`
+                        }
+                    </td>
+                </tr>
+            `;
             return;
         }
         
-        tbody.innerHTML = data.items.map(article => `
-            <tr>
-                <td><input type="checkbox" class="form-check-input article-checkbox" value="${article._id || article.id}"></td>
-                <td>
-                    ${article.image_url ? 
-                        `<img src="${article.image_url}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${article.title}">` : 
-                        '<i class="fas fa-image text-muted"></i>'
-                    }
-                </td>
-                <td>${article.title}</td>
-                <td><span class="badge bg-secondary">${article.category}</span></td>
-                <td>${article.author || 'Unknown'}</td>
-                <td>${new Date(article.createdAt || article.publish_date).toLocaleDateString()}</td>
-                <td><span class="badge bg-${article.status === 'published' ? 'success' : 'warning'}">${article.status}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editArticle('${article._id || article.id}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteArticle('${article._id || article.id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+        // Render articles table
+        tbody.innerHTML = articles.map(article => {
+            const articleId = article._id || article.id;
+            const imageUrl = article.image_url || article.image;
+            const authorName = article.author?.name || article.author || 'Unknown';
+            const publishDate = article.createdAt || article.publish_date || article.date;
+            const status = article.status || 'draft';
+            
+            return `
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input article-checkbox" value="${articleId}">
+                    </td>
+                    <td>
+                        ${imageUrl ? 
+                            `<img src="${imageUrl}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${article.title}" onerror="this.style.display='none'">` : 
+                            '<i class="fas fa-image text-muted" title="No image"></i>'
+                        }
+                    </td>
+                    <td>
+                        <div class="fw-bold">${article.title || 'Untitled'}</div>
+                        ${article.excerpt ? `<small class="text-muted">${article.excerpt.substring(0, 60)}...</small>` : ''}
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">${article.category || 'Uncategorized'}</span>
+                        ${article.featured ? '<span class="badge bg-warning ms-1">Featured</span>' : ''}
+                    </td>
+                    <td>${authorName}</td>
+                    <td>
+                        <small>${new Date(publishDate).toLocaleDateString()}</small>
+                        <br>
+                        <small class="text-muted">${new Date(publishDate).toLocaleTimeString()}</small>
+                    </td>
+                    <td>
+                        <span class="badge bg-${status === 'published' ? 'success' : status === 'draft' ? 'warning' : 'secondary'}">
+                            ${status.charAt(0).toUpperCase() + status.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="editArticle('${articleId}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-outline-info" onclick="previewArticle('${articleId}')" title="Preview">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="deleteArticle('${articleId}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
         
-        updatePagination('articles-pagination', data.total, data.page, data.limit, loadArticles);
+        // Update pagination
+        updatePagination('articles-pagination', total, currentPage, 10, loadArticles);
+        
     } catch (error) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-4">Failed to load articles</td></tr>';
+        console.error('Error loading articles:', error);
+        const tbody = document.getElementById('articles-table-body');
+        if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center text-danger py-4">
+                        <i class="fas fa-exclamation-triangle fa-2x mb-3 d-block"></i>
+                        Failed to load articles
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary" onclick="loadArticles()">
+                                <i class="fas fa-redo me-1"></i>Try Again
+                            </button>
+                        </div>
+                        <small class="d-block mt-2">Error: ${error.message}</small>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+}
+// Debug function to test the articles API
+async function debugArticlesAPI() {
+    try {
+        console.log('=== DEBUG: Testing Articles API ===');
+        
+        // Test the API endpoint directly
+        const response = await fetch(`${API_BASE}/articles?limit=5`);
+        console.log('API Response status:', response.status);
+        console.log('API Response headers:', response.headers);
+        
+        const data = await response.json();
+        console.log('API Response data structure:', data);
+        console.log('Articles array:', data.articles || data.items);
+        
+        if (data.articles) {
+            console.log('First article sample:', data.articles[0]);
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('Debug - Articles API test failed:', error);
+        return null;
     }
 }
 
+// Function to manually test article creation
+async function testCreateArticle() {
+    try {
+        const testArticle = {
+            title: 'Test Article ' + new Date().toLocaleTimeString(),
+            content: 'This is a test article content for debugging purposes.',
+            excerpt: 'Test article excerpt for debugging',
+            category: 'economy',
+            status: 'draft',
+            featured: false
+        };
+        
+        const response = await apiCall('/articles', {
+            method: 'POST',
+            body: JSON.stringify(testArticle)
+        });
+        
+        console.log('Test article creation response:', response);
+        showToast('Test article created successfully!', 'success');
+        
+        // Reload articles to see the new one
+        await loadArticles();
+        
+    } catch (error) {
+        console.error('Test article creation failed:', error);
+        showToast('Test article creation failed: ' + error.message, 'danger');
+    }
+}
 function showArticleForm(article = null) {
     const formSection = document.getElementById('article-form-section');
     const formTitle = document.getElementById('article-form-title');
@@ -2552,7 +2714,6 @@ async function deleteArticle(id) {
 }
 
 // ==================== ECONOMY MANAGEMENT FUNCTIONS ====================
-
 async function loadEconomyArticles(page = 1, section = '') {
   try {
     const tbody = document.getElementById('economy-articles-table-body');
@@ -2606,7 +2767,6 @@ async function loadEconomyArticles(page = 1, section = '') {
     }
   }
 }
-
 
 async function loadEconomicIndicators() {
   try {
@@ -2727,20 +2887,6 @@ async function deleteEconomyArticle(id) {
   }
 }
 
-
-async function deleteEconomyArticle(id) {
-  if (!confirm('Are you sure you want to delete this economy article?')) return;
-  
-  try {
-    await apiCall(`/economy/articles/${id}`, { method: 'DELETE' });
-    showToast('Economy article deleted successfully!', 'success');
-    await loadEconomyArticles();
-  } catch (error) {
-    console.error('Error deleting economy article:', error);
-    showToast('Failed to delete economy article', 'danger');
-  }
-}
-
 function showEconomyArticleForm(article = null) {
   const formSection = document.getElementById('economy-article-form-section');
   const formTitle = document.getElementById('economy-article-form-title');
@@ -2779,130 +2925,410 @@ function showEconomyArticleForm(article = null) {
 window.editEconomyArticle = editEconomyArticle;
 window.deleteEconomyArticle = deleteEconomyArticle;
 
-// Fetch and display real economy data
-async function loadEconomyData() {
-  try {
-    // Load economic indicators
-    const indicatorsResponse = await fetch('/api/economy/indicators');
-    const indicatorsData = await indicatorsResponse.json();
-    
-    if (indicatorsData) {
-      updateEconomicIndicators(indicatorsData);
+// ==================== ENHANCED FINANCE MANAGEMENT ====================
+class FinanceAdminManager {
+    constructor() {
+        this.currentEditingId = null;
     }
-    
-    // Load economy articles for each section
-    const sections = ['economy', 'eco-africa', 'eco-agriculture', 'eco-innovation'];
-    
-    for (const section of sections) {
-      await loadSectionArticles(section);
-      await loadSectionStats(section);
-    }
-    
-  } catch (error) {
-    console.error('Error loading economy data:', error);
-    // Fallback to default content if API fails
-  }
-}
 
-function updateEconomicIndicators(data) {
-  const indicators = document.querySelectorAll('.stat-value');
-  if (indicators.length >= 4 && data) {
-    indicators[0].textContent = `${data.gdp_growth}%`;
-    indicators[1].textContent = `${data.industrial_growth}%`;
-    indicators[2].textContent = `${data.unemployment_rate}%`;
-    indicators[3].textContent = `${data.inflation_rate}%`;
-  }
-}
-
-async function loadSectionArticles(section) {
-  try {
-    const response = await fetch(`/api/economy/articles?section=${section}&limit=4`);
-    const data = await response.json();
-    
-    if (data && data.items) {
-      updateSectionContent(section, data.items);
-    }
-  } catch (error) {
-    console.error(`Error loading ${section} articles:`, error);
-  }
-}
-
-async function loadSectionStats(section) {
-  try {
-    const response = await fetch(`/api/economy/section-stats/${section}`);
-    const data = await response.json();
-    
-    if (data) {
-      updateSectionStats(section, data);
-    }
-  } catch (error) {
-    console.error(`Error loading ${section} stats:`, error);
-  }
-}
-
-function updateSectionContent(section, articles) {
-  const contentElement = document.getElementById(`${section}-content`);
-  if (!contentElement) return;
-  
-  const articlesContainer = contentElement.querySelector('.row');
-  if (!articlesContainer) return;
-  
-  // Clear existing placeholder content but keep the first row structure
-  const firstRow = articlesContainer.querySelector('.row');
-  if (firstRow) {
-    firstRow.innerHTML = ''; // Clear but keep container
-  }
-  
-  articles.forEach((article, index) => {
-    if (index < 2) { // Only show 2 articles per row
-      const articleHTML = `
-        <div class="col-md-6">
-          <div class="card news-card h-100">
-            ${article.image_url ? 
-              `<img src="${article.image_url}" class="card-img-top" alt="${article.image_alt || article.title}">` : 
-              `<img src="https://images.unsplash.com/photo-1588690154757-badf4644190f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="${article.title}">`
+    async loadFinanceAdminData() {
+        try {
+            const [overviewResponse, budgetResponse] = await Promise.all([
+                apiCall('/finance/overview'),
+                apiCall('/finance/budget/active')
+            ]);
+            
+            if (overviewResponse) {
+                this.updateFinanceStatsForm(overviewResponse.financialData);
+                this.updateExternalDataPreview(overviewResponse.externalData);
             }
-            <div class="card-body">
-              <h5 class="card-title">${article.title}</h5>
-              <p class="card-text">${article.excerpt || article.content.substring(0, 150)}...</p>
-              <a href="/economy-article.html?slug=${article.slug || article._id}" class="btn btn-sm btn-dark">Read more</a>
-            </div>
-          </div>
-        </div>
-      `;
-      
-      if (firstRow) {
-        firstRow.innerHTML += articleHTML;
-      }
+            if (budgetResponse?.budgetData) {
+                this.updateBudgetForm(budgetResponse.budgetData);
+            }
+            
+            await this.loadBankProjects();
+            await this.loadFinanceArticles();
+            
+        } catch (error) {
+            console.error('Error loading finance admin data:', error);
+        }
     }
-  });
+
+    updateFinanceStatsForm(data) {
+        if (data.stock_market_growth) {
+            document.getElementById('update-stock-growth').value = data.stock_market_growth;
+        }
+        if (data.interest_rate) {
+            document.getElementById('update-interest-rate').value = data.interest_rate;
+        }
+        if (data.usd_xaf) {
+            document.getElementById('update-usd-xaf').value = data.usd_xaf;
+        }
+        if (data.credit_growth) {
+            document.getElementById('update-credit-growth').value = data.credit_growth;
+        }
+    }
+
+    updateExternalDataPreview(externalData) {
+        // Show preview of external data that will be fetched automatically
+        const previewContainer = document.getElementById('external-data-preview');
+        if (previewContainer && externalData) {
+            previewContainer.innerHTML = `
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-sync-alt me-2"></i>External Data Sources</h6>
+                    <p class="mb-1">Currency Rates: ${externalData.currencyRates?.length || 0} currencies</p>
+                    <p class="mb-1">Market Trends: ${Object.keys(externalData.marketTrends || {}).length} sectors</p>
+                    <p class="mb-0">Last fetched: ${new Date(externalData.lastExternalFetch).toLocaleString()}</p>
+                </div>
+            `;
+        }
+    }
+
+    updateBudgetForm(budgetData) {
+        document.getElementById('budget-total').value = budgetData.total_budget || '';
+        document.getElementById('budget-education').value = budgetData.education_allocation || '';
+        document.getElementById('budget-healthcare').value = budgetData.healthcare_allocation || '';
+        document.getElementById('budget-infrastructure').value = budgetData.infrastructure_allocation || '';
+        
+        // Set expiration date if exists
+        if (budgetData.expires_at) {
+            document.getElementById('budget-expires').value = budgetData.expires_at.split('T')[0];
+        }
+    }
+
+    async saveFinanceStats(formData) {
+        try {
+            const payload = {
+                stock_market_growth: parseFloat(document.getElementById('update-stock-growth').value),
+                interest_rate: parseFloat(document.getElementById('update-interest-rate').value),
+                usd_xaf: parseFloat(document.getElementById('update-usd-xaf').value),
+                credit_growth: parseFloat(document.getElementById('update-credit-growth').value)
+            };
+            
+            await apiCall('/finance/stats', {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+            
+            showToast('Financial statistics updated successfully!', 'success');
+        } catch (error) {
+            console.error('Error saving finance stats:', error);
+            showToast('Failed to update financial statistics', 'danger');
+        }
+    }
+
+    async saveBudgetData(formData) {
+        try {
+            const payload = {
+                total_budget: document.getElementById('budget-total').value,
+                education_allocation: parseInt(document.getElementById('budget-education').value),
+                healthcare_allocation: parseInt(document.getElementById('budget-healthcare').value),
+                infrastructure_allocation: parseInt(document.getElementById('budget-infrastructure').value),
+                revenue_sources: {
+                    tax_revenue: parseInt(document.getElementById('revenue-tax').value),
+                    oil_gas: parseInt(document.getElementById('revenue-oil').value),
+                    grants_aid: parseInt(document.getElementById('revenue-grants').value),
+                    other_sources: parseInt(document.getElementById('revenue-other').value)
+                }
+            };
+
+            // Add expiration if set
+            const expiresAt = document.getElementById('budget-expires').value;
+            if (expiresAt) {
+                payload.expires_at = expiresAt;
+            }
+            
+            await apiCall('/finance/budget', {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+            
+            showToast('Budget data updated successfully!', 'success');
+        } catch (error) {
+            console.error('Error saving budget data:', error);
+            showToast('Failed to update budget data', 'danger');
+        }
+    }
+
+    async loadBankProjects() {
+        try {
+            const response = await apiCall('/finance/bank-projects?limit=50');
+            if (response?.items) {
+                this.updateBankProjectsTable(response.items);
+            }
+        } catch (error) {
+            console.error('Error loading bank projects:', error);
+        }
+    }
+
+    async loadFinanceArticles() {
+        try {
+            const response = await apiCall('/finance/articles?limit=50');
+            if (response?.items) {
+                this.updateFinanceArticlesTable(response.items);
+            }
+        } catch (error) {
+            console.error('Error loading finance articles:', error);
+        }
+    }
+
+    updateBankProjectsTable(projects) {
+        const tbody = document.getElementById('bank-projects-table-body');
+        if (!tbody) return;
+
+        tbody.innerHTML = projects.map(project => `
+            <tr>
+                <td><input type="checkbox" class="form-check-input project-checkbox" value="${project._id}"></td>
+                <td>
+                    ${project.image_url ? 
+                        `<img src="${project.image_url}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${project.title}">` : 
+                        '<i class="fas fa-image text-muted"></i>'
+                    }
+                </td>
+                <td>${project.title}</td>
+                <td>${project.bank_name}</td>
+                <td>${project.amount || 'N/A'}</td>
+                <td><span class="badge bg-${this.getStatusBadge(project.status)}">${project.status}</span></td>
+                <td>${new Date(project.createdAt).toLocaleDateString()}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="financeAdmin.editBankProject('${project._id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="financeAdmin.deleteBankProject('${project._id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    getStatusBadge(status) {
+        const statusMap = {
+            'planned': 'secondary',
+            'active': 'success',
+            'completed': 'primary',
+            'cancelled': 'danger'
+        };
+        return statusMap[status] || 'secondary';
+    }
+
+    async createBankProject(formData) {
+        try {
+            let imageUrl = null;
+            const imageFile = document.getElementById('project-image').files[0];
+            if (imageFile) {
+                imageUrl = await uploadImage(imageFile);
+            }
+
+            const payload = {
+                title: document.getElementById('project-title').value,
+                description: document.getElementById('project-description').value,
+                bank_name: document.getElementById('project-bank').value,
+                amount: document.getElementById('project-amount').value,
+                duration: document.getElementById('project-duration').value,
+                status: document.getElementById('project-status').value,
+                image_url: imageUrl
+            };
+
+            await apiCall('/finance/bank-projects', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+
+            showToast('Bank project created successfully!', 'success');
+            this.hideProjectForm();
+            await this.loadBankProjects();
+        } catch (error) {
+            console.error('Error creating bank project:', error);
+            showToast('Failed to create bank project', 'danger');
+        }
+    }
+
+    showProjectForm(project = null) {
+        const formSection = document.getElementById('bank-project-form-section');
+        const formTitle = document.getElementById('project-form-title');
+        
+        if (project) {
+            formTitle.textContent = 'Edit Bank Project';
+            document.getElementById('project-title').value = project.title || '';
+            document.getElementById('project-description').value = project.description || '';
+            document.getElementById('project-bank').value = project.bank_name || '';
+            document.getElementById('project-amount').value = project.amount || '';
+            document.getElementById('project-duration').value = project.duration || '';
+            document.getElementById('project-status').value = project.status || 'planned';
+            this.currentEditingId = project._id;
+        } else {
+            formTitle.textContent = 'Add New Bank Project';
+            document.getElementById('bank-project-form').reset();
+            this.currentEditingId = null;
+        }
+        
+        formSection.style.display = 'block';
+        formSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    hideProjectForm() {
+        document.getElementById('bank-project-form-section').style.display = 'none';
+    }
+
+    async editBankProject(id) {
+        try {
+            const response = await apiCall(`/finance/bank-projects/${id}`);
+            if (response.project) {
+                this.showProjectForm(response.project);
+            }
+        } catch (error) {
+            console.error('Error loading bank project for edit:', error);
+            showToast('Failed to load bank project', 'danger');
+        }
+    }
+
+    async deleteBankProject(id) {
+        if (!confirm('Are you sure you want to delete this bank project?')) return;
+        
+        try {
+            await apiCall(`/finance/bank-projects/${id}`, { method: 'DELETE' });
+            showToast('Bank project deleted successfully!', 'success');
+            await this.loadBankProjects();
+        } catch (error) {
+            console.error('Error deleting bank project:', error);
+            showToast('Failed to delete bank project', 'danger');
+        }
+    }
+
+    updateFinanceArticlesTable(articles) {
+        const tbody = document.getElementById('finance-articles-table-body');
+        if (!tbody) return;
+
+        tbody.innerHTML = articles.map(article => `
+            <tr>
+                <td><input type="checkbox" class="form-check-input finance-article-checkbox" value="${article._id}"></td>
+                <td>
+                    ${article.image_url ? 
+                        `<img src="${article.image_url}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${article.title}">` : 
+                        '<i class="fas fa-image text-muted"></i>'
+                    }
+                </td>
+                <td>${article.title}</td>
+                <td><span class="badge bg-secondary">${article.category}</span></td>
+                <td>${article.author || 'Unknown'}</td>
+                <td>${new Date(article.createdAt).toLocaleDateString()}</td>
+                <td><span class="badge bg-${article.status === 'published' ? 'success' : 'warning'}">${article.status}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="financeAdmin.editFinanceArticle('${article._id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="financeAdmin.deleteFinanceArticle('${article._id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async saveFinanceArticle(formData) {
+        try {
+            const saveBtn = document.getElementById('save-finance-article');
+            setLoading(saveBtn, true);
+            
+            let imageUrl = null;
+            const imageFile = document.getElementById('finance-article-image').files[0];
+            if (imageFile) {
+                imageUrl = await uploadImage(imageFile);
+            }
+            
+            const payload = {
+                title: document.getElementById('finance-article-title').value,
+                content: document.getElementById('finance-article-content').value,
+                category: document.getElementById('finance-article-category').value,
+                image_url: imageUrl
+            };
+            
+            let response;
+            if (this.currentEditingId) {
+                response = await apiCall(`/finance/articles/${this.currentEditingId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                response = await apiCall('/finance/articles', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+            }
+            
+            showToast(`Finance article ${this.currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
+            this.hideFinanceArticleForm();
+            await this.loadFinanceArticles();
+            
+        } catch (error) {
+            console.error('Error saving finance article:', error);
+            showToast('Failed to save finance article', 'danger');
+        } finally {
+            setLoading(document.getElementById('save-finance-article'), false);
+        }
+    }
+
+    showFinanceArticleForm(article = null) {
+        const formSection = document.getElementById('finance-article-form-section');
+        const formTitle = document.getElementById('finance-article-form-title');
+        
+        if (article) {
+            formTitle.textContent = 'Edit Finance Article';
+            document.getElementById('finance-article-title').value = article.title || '';
+            document.getElementById('finance-article-content').value = article.content || '';
+            document.getElementById('finance-article-category').value = article.category || '';
+            this.currentEditingId = article._id;
+            
+            // Set image preview if exists
+            if (article.image_url) {
+                const preview = document.getElementById('finance-article-image-preview');
+                preview.style.display = 'block';
+                document.getElementById('finance-article-preview-img').src = article.image_url;
+            }
+        } else {
+            formTitle.textContent = 'Add New Finance Article';
+            document.getElementById('finance-article-form').reset();
+            this.currentEditingId = null;
+            document.getElementById('finance-article-image-preview').style.display = 'none';
+        }
+        
+        formSection.style.display = 'block';
+        formSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    hideFinanceArticleForm() {
+        document.getElementById('finance-article-form-section').style.display = 'none';
+    }
+
+    async editFinanceArticle(id) {
+        try {
+            const response = await apiCall(`/finance/articles/${id}`);
+            if (response.article) {
+                this.showFinanceArticleForm(response.article);
+            }
+        } catch (error) {
+            console.error('Error loading finance article for edit:', error);
+            showToast('Failed to load finance article', 'danger');
+        }
+    }
+
+    async deleteFinanceArticle(id) {
+        if (!confirm('Are you sure you want to delete this finance article?')) return;
+        
+        try {
+            await apiCall(`/finance/articles/${id}`, { method: 'DELETE' });
+            showToast('Finance article deleted successfully!', 'success');
+            await this.loadFinanceArticles();
+        } catch (error) {
+            console.error('Error deleting finance article:', error);
+            showToast('Failed to delete finance article', 'danger');
+        }
+    }
 }
 
-function updateSectionStats(section, stats) {
-  const contentElement = document.getElementById(`${section}-content`);
-  if (!contentElement) return;
-  
-  const statsGrid = contentElement.querySelector('.stats-grid');
-  if (!statsGrid) return;
-  
-  // Update stats based on section
-  const statBoxes = statsGrid.querySelectorAll('.stat-box');
-  const statKeys = Object.keys(stats);
-  
-  statBoxes.forEach((box, index) => {
-    if (index < statKeys.length) {
-      const valueElement = box.querySelector('.stat-value');
-      if (valueElement) {
-        valueElement.textContent = stats[statKeys[index]];
-      }
-    }
-  });
-}
-
-
-
-
-
+// Initialize finance admin manager
+const financeAdmin = new FinanceAdminManager();
 
 // ==================== HOMEPAGE MANAGEMENT ====================
 let allArticles = [];
@@ -3078,6 +3504,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupImagePreview('program-image', 'program-image-preview');
     setupImagePreview('economy-article-image', 'economy-article-image-preview');
     setupImagePreview('finance-article-image', 'finance-article-image-preview');
+    setupImagePreview('project-image', 'project-image-preview');
     
     // Navigation
     document.querySelectorAll('.sidebar .nav-link').forEach(link => {
@@ -3092,6 +3519,9 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
             
             showSection(sectionId);
+            // Add these event listeners in your DOMContentLoaded function
+document.getElementById('debug-articles-btn')?.addEventListener('click', debugArticlesAPI);
+document.getElementById('test-create-article')?.addEventListener('click', testCreateArticle);
         });
     });
     
@@ -3184,8 +3614,152 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup section statistics event listeners
     setupSectionStatsEventListeners();
-    // ==================== SECTION STATISTICS MANAGEMENT ====================
 
+    // ==================== FINANCE MANAGEMENT EVENT LISTENERS ====================
+    // Finance stats form
+    document.getElementById('finance-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        financeAdmin.saveFinanceStats(new FormData(this));
+    });
+
+    // Budget form
+    document.getElementById('budget-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        financeAdmin.saveBudgetData(new FormData(this));
+    });
+
+    // Bank project form
+    document.getElementById('bank-project-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        financeAdmin.createBankProject(new FormData(this));
+    });
+
+    // Finance article form
+    document.getElementById('finance-article-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        financeAdmin.saveFinanceArticle(new FormData(this));
+    });
+
+    // Add bank project button
+    document.getElementById('add-bank-project-btn')?.addEventListener('click', function() {
+        financeAdmin.showProjectForm();
+    });
+
+    // Add finance article button
+    document.getElementById('add-finance-article-btn')?.addEventListener('click', function() {
+        financeAdmin.showFinanceArticleForm();
+    });
+
+    // Cancel buttons
+    document.getElementById('cancel-project')?.addEventListener('click', function() {
+        financeAdmin.hideProjectForm();
+    });
+
+    document.getElementById('cancel-finance-article')?.addEventListener('click', function() {
+        financeAdmin.hideFinanceArticleForm();
+    });
+
+    // Currency rates form
+    document.getElementById('exchange-rates-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveCurrencyRates(new FormData(this));
+    });
+
+    // ==================== HOMEPAGE MANAGEMENT ====================
+    document.getElementById('update-ticker').addEventListener('click', async function() {
+        try {
+            const breakingNews = document.getElementById('ticker-content').value;
+            if (!breakingNews.trim()) {
+                showToast('Please enter breaking news content', 'warning');
+                return;
+            }
+            
+            await apiCall('/homepage/breaking-news', {
+                method: 'PUT',
+                body: JSON.stringify({ breakingNews })
+            });
+            showToast('Breaking news updated successfully!', 'success');
+        } catch (error) {
+            console.error('Error updating ticker:', error);
+            showToast('Failed to update breaking news', 'danger');
+        }
+    });
+
+    document.getElementById('featured-article-select').addEventListener('change', function() {
+        updateFeaturedArticlePreview(this.value);
+    });
+
+    document.getElementById('set-featured').addEventListener('click', async function() {
+        try {
+            const featuredArticleId = document.getElementById('featured-article-select').value;
+            if (!featuredArticleId) {
+                showToast('Please select an article', 'warning');
+                return;
+            }
+            
+            await apiCall('/homepage/featured-article', {
+                method: 'PUT',
+                body: JSON.stringify({ featuredArticle: featuredArticleId })
+            });
+            showToast('Featured article updated successfully!', 'success');
+        } catch (error) {
+            console.error('Error setting featured article:', error);
+            showToast('Failed to update featured article', 'danger');
+        }
+    });
+
+    document.getElementById('update-quick-links').addEventListener('click', async function() {
+        try {
+            const quickLinks = {
+                economy: document.getElementById('economy-link').value,
+                finance: document.getElementById('finance-link').value,
+                articles: document.getElementById('articles-link').value,
+                actuality: document.getElementById('actuality-link').value
+            };
+            
+            // Validate quick links
+            if (!quickLinks.economy.trim() || !quickLinks.finance.trim() || 
+                !quickLinks.articles.trim() || !quickLinks.actuality.trim()) {
+                showToast('Please fill all quick link descriptions', 'warning');
+                return;
+            }
+            
+            await apiCall('/homepage/quick-links', {
+                method: 'PUT',
+                body: JSON.stringify({ quickLinks })
+            });
+            showToast('Quick links updated successfully!', 'success');
+        } catch (error) {
+            console.error('Error updating quick links:', error);
+            showToast('Failed to update quick links', 'danger');
+        }
+    });
+
+    document.getElementById('refresh-homepage').addEventListener('click', loadHomepageData);
+    
+    // Dashboard refresh
+    document.getElementById('refresh-dashboard').addEventListener('click', loadDashboardStats);
+    document.getElementById('refresh-recent').addEventListener('click', loadRecentContent);
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('admin-theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
+    // Initialize form sections as hidden
+    const formSections = [
+        'article-form-section', 'live-stream-section', 'hot-news-section', 
+        'actuality-form', 'episode-form', 'economy-article-form-section',
+        'bank-project-form-section', 'finance-article-form-section'
+    ];
+    formSections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) element.style.display = 'none';
+    });
+});
+
+// ==================== SECTION STATISTICS MANAGEMENT ====================
 async function loadSectionStats() {
     try {
         const sections = ['eco-africa', 'eco-agriculture', 'eco-innovation'];
@@ -3329,96 +3903,6 @@ function setupSectionStatsEventListeners() {
         });
     });
 }
-    
-    // ==================== HOMEPAGE MANAGEMENT ====================
-    document.getElementById('update-ticker').addEventListener('click', async function() {
-        try {
-            const breakingNews = document.getElementById('ticker-content').value;
-            if (!breakingNews.trim()) {
-                showToast('Please enter breaking news content', 'warning');
-                return;
-            }
-            
-            await apiCall('/homepage/breaking-news', {
-                method: 'PUT',
-                body: JSON.stringify({ breakingNews })
-            });
-            showToast('Breaking news updated successfully!', 'success');
-        } catch (error) {
-            console.error('Error updating ticker:', error);
-            showToast('Failed to update breaking news', 'danger');
-        }
-    });
-
-    document.getElementById('featured-article-select').addEventListener('change', function() {
-        updateFeaturedArticlePreview(this.value);
-    });
-
-    document.getElementById('set-featured').addEventListener('click', async function() {
-        try {
-            const featuredArticleId = document.getElementById('featured-article-select').value;
-            if (!featuredArticleId) {
-                showToast('Please select an article', 'warning');
-                return;
-            }
-            
-            await apiCall('/homepage/featured-article', {
-                method: 'PUT',
-                body: JSON.stringify({ featuredArticle: featuredArticleId })
-            });
-            showToast('Featured article updated successfully!', 'success');
-        } catch (error) {
-            console.error('Error setting featured article:', error);
-            showToast('Failed to update featured article', 'danger');
-        }
-    });
-
-    document.getElementById('update-quick-links').addEventListener('click', async function() {
-        try {
-            const quickLinks = {
-                economy: document.getElementById('economy-link').value,
-                finance: document.getElementById('finance-link').value,
-                articles: document.getElementById('articles-link').value,
-                actuality: document.getElementById('actuality-link').value
-            };
-            
-            // Validate quick links
-            if (!quickLinks.economy.trim() || !quickLinks.finance.trim() || 
-                !quickLinks.articles.trim() || !quickLinks.actuality.trim()) {
-                showToast('Please fill all quick link descriptions', 'warning');
-                return;
-            }
-            
-            await apiCall('/homepage/quick-links', {
-                method: 'PUT',
-                body: JSON.stringify({ quickLinks })
-            });
-            showToast('Quick links updated successfully!', 'success');
-        } catch (error) {
-            console.error('Error updating quick links:', error);
-            showToast('Failed to update quick links', 'danger');
-        }
-    });
-
-    document.getElementById('refresh-homepage').addEventListener('click', loadHomepageData);
-    
-    // Dashboard refresh
-    document.getElementById('refresh-dashboard').addEventListener('click', loadDashboardStats);
-    document.getElementById('refresh-recent').addEventListener('click', loadRecentContent);
-    
-    // Load saved theme
-    const savedTheme = localStorage.getItem('admin-theme');
-    if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    }
-
-    // Initialize form sections as hidden
-    const formSections = ['article-form-section', 'live-stream-section', 'hot-news-section', 'actuality-form', 'episode-form', 'economy-article-form-section'];
-    formSections.forEach(section => {
-        const element = document.getElementById(section);
-        if (element) element.style.display = 'none';
-    });
-});
 
 // ==================== SECTION MANAGEMENT ====================
 function showSection(sectionId) {
@@ -3435,15 +3919,17 @@ function showSection(sectionId) {
         
         // Load section-specific data
         switch(sectionId) {
-            case 'economy':
-            loadEconomicIndicators();
-            loadEconomyArticles();
-            break;
             case 'dashboard':
                 loadDashboardStats();
                 break;
             case 'articles':
-                loadArticles();
+                console.log('Loading articles section...');
+                // Add a small delay to ensure DOM is ready
+                setTimeout(() => {
+                    loadArticles();
+                    // Debug the API
+                    debugArticlesAPI();
+                }, 100);
                 break;
             case 'emission':
                 // loadEmissions();
@@ -3456,7 +3942,7 @@ function showSection(sectionId) {
                 loadEconomyArticles();
                 break;
             case 'finance':
-                // loadFinanceData();
+                financeAdmin.loadFinanceAdminData();
                 break;
             case 'homepage':
                 loadHomepageData();
@@ -3473,7 +3959,6 @@ function showSection(sectionId) {
     // Close mobile menu on section change
     document.querySelector('.sidebar').classList.remove('mobile-open');
 }
-
 // ==================== UTILITY FUNCTIONS ====================
 function debounce(func, wait) {
     let timeout;
@@ -3508,6 +3993,9 @@ window.viewItem = viewItem;
 window.editEconomyArticle = editEconomyArticle;
 window.deleteEconomyArticle = deleteEconomyArticle;
 
+// Make finance admin methods globally available
+window.financeAdmin = financeAdmin;
+
 // Initialize sections when page loads
 setTimeout(() => {
     const activeSection = document.querySelector('.content-section.active');
@@ -3515,7 +4003,7 @@ setTimeout(() => {
         loadArticles();
     }
 }, 100);
-    </script>
+</script>
     <!-- Add this before the closing </body> tag in economy.html -->
 <script src="/js/economy-frontend.js"></script>
 </body>

@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* KEEPING YOUR EXACT CSS STYLES */
         :root {
             --primary-dark: #1a1814;
-            --primary-accent: #D4AF37; /* Gold color */
+            --primary-accent: #D4AF37;
             --secondary-dark: #2d2b24;
-            --light-bg: #F8F5F0; /* Milky white */
+            --light-bg: #F8F5F0;
             --card-bg: #ffffff;
             --text-primary: #1a1814;
             --text-secondary: #333333;
@@ -22,12 +23,11 @@
             --box-text-color: #1a1814;
         }
         
-        /* Dark mode variables */
         [data-theme="dark"] {
             --light-bg: #121212;
             --card-bg: #1a1a1a;
-            --text-primary: #D4AF37; /* Gold headers */
-            --text-secondary: #ffffff; /* White minor text */
+            --text-primary: #D4AF37;
+            --text-secondary: #ffffff;
             --border-light: #333333;
             --glass-bg: rgba(26, 24, 20, 0.9);
             --glass-border: rgba(212, 175, 55, 0.1);
@@ -45,8 +45,6 @@
             line-height: 1.7;
         }
         
-        
-        /* Theme Toggle Button */
         .theme-toggle {
             position: relative;
             width: 50px;
@@ -89,7 +87,6 @@
             padding-right: 4px;
         }
         
-        /* Enhanced Glassmorphism Effects */
         .glass {
             background: var(--glass-bg);
             -webkit-backdrop-filter: blur(20px);
@@ -97,7 +94,6 @@
             border: 1px solid var(--glass-border);
         }
         
-        /* Enhanced Header & Navigation */
         header { 
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
             color: white;
@@ -105,7 +101,6 @@
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
-        
         
         header .navbar-brand { 
             font-weight: 800;
@@ -153,7 +148,7 @@
             color: var(--primary-dark) !important;
             transform: translateY(-2px);
         }
-        /* Enhanced Breaking News with Animation */
+        
         .breaking-news { 
             padding: 8px 0;
             overflow: hidden;
@@ -171,22 +166,6 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-        
-        .breaking-news::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 3s linear infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
         }
         
         .breaking-news span {
@@ -227,7 +206,6 @@
             100% { transform: translateX(-100%); }
         }
         
-        /* Enhanced Cards with Micro-interactions */
         .news-card { 
             border: none; 
             border-radius: 20px;
@@ -292,11 +270,10 @@
             font-size: 0.8rem;
             font-weight: 700;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            -webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
         
-        /* Enhanced Section Headers */
         .section-header {
             position: relative;
             margin-bottom: 40px;
@@ -317,7 +294,6 @@
             border-radius: 2px;
         }
         
-        /* Enhanced Live Player */
         .live-player { 
             background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
             color: var(--primary-accent);
@@ -327,23 +303,6 @@
             font-size: 1.1rem;
             box-shadow: 0 -8px 32px rgba(0,0,0,0.2);
             position: relative;
-        }
-        
-        .live-player::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-accent), #f8e14d, var(--primary-accent));
-            background-size: 200% 100%;
-            animation: gradientMove 3s linear infinite;
-        }
-        
-        @keyframes gradientMove {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
         }
         
         .play-btn {
@@ -362,36 +321,11 @@
             position: relative;
         }
         
-        .play-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary-accent), #fff);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
         .play-btn:hover {
             transform: scale(1.1);
             box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
         }
         
-        .play-btn:hover::before {
-            opacity: 1;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        /* Enhanced Footer */
         footer { 
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
             color: var(--primary-accent);
@@ -406,7 +340,7 @@
             padding: 10px;
             border-radius: 50%;
             background: rgba(212, 175, 55, 0.1);
-            -webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
         
@@ -416,7 +350,6 @@
             transform: translateY(-5px) scale(1.1);
         }
         
-        /* Search & Notification System */
         .search-container {
             position: relative;
             max-width: 400px;
@@ -431,7 +364,7 @@
             background: rgba(255,255,255,0.1);
             color: white;
             font-size: 0.95rem;
-            -webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
         
@@ -447,7 +380,6 @@
             color: rgba(255,255,255,0.7);
         }
         
-        /* Navigation dropdown styles */
         .dropdown-menu {
             background: var(--card-bg);
             border: 1px solid var(--primary-accent);
@@ -466,7 +398,6 @@
             background-color: rgba(212, 175, 55, 0.1);
         }
         
-        /* Audio controls in navbar */
         .audio-control {
             background: none;
             border: none;
@@ -476,7 +407,6 @@
             cursor: pointer;
         }
         
-        /* Articles specific styles */
         .article-meta {
             display: flex;
             align-items: center;
@@ -606,7 +536,6 @@
             border-radius: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             margin-bottom: 30px;
-            /* Adjusted to shift left */
             margin-left: -40px;
             width: calc(100% + 80px);
             position: relative;
@@ -638,12 +567,10 @@
             line-height: 1.8;
         }
         
-        /* NEW: Adjusted newsletter container */
         .newsletter-container {
             position: relative;
         }
         
-        /* NEW: Info box positioning */
         .newsletter-info-box {
             margin-top: 30px;
             margin-left: 40px;
@@ -652,7 +579,6 @@
             z-index: 1;
         }
         
-        /* Responsive adjustments */
         @media (max-width: 768px) {
             .navbar-nav .nav-link {
                 margin: 4px 0;
@@ -675,7 +601,6 @@
                 margin-bottom: 10px;
             }
             
-            /* Responsive adjustments for newsletter */
             .newsletter-form {
                 margin-left: 0;
                 width: 100%;
@@ -686,45 +611,124 @@
                 width: 100%;
             }
         }
+
+        /* NEW: Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1055;
+        }
+        
+        .toast {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* NEW: Loading states */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            border: 0.25em solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spinner-border 0.75s linear infinite;
+        }
+
+        @keyframes spinner-border {
+            to { transform: rotate(360deg); }
+        }
+        /* Add this to your CSS to ensure inputs are accessible */
+#blogTitle, #blogCategory, #blogContent {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Remove any potential overlays */
+.form-control:disabled {
+    background-color: var(--light-bg) !important;
+    opacity: 1 !important;
+}
+/* Fix any potential overlay issues */
+.card.news-card {
+    position: relative;
+    overflow: visible !important;
+}
+
+.card.news-card::before,
+.card.news-card::after {
+    pointer-events: none !important;
+}
+
+/* Ensure form elements are clickable */
+.form-control, .form-select, .form-check-input {
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+/* Remove any disabled states */
+#blogTitle:disabled, #blogCategory:disabled, #blogContent:disabled {
+    background-color: var(--card-bg) !important;
+    opacity: 1 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Force enable all inputs */
+input, select, textarea {
+    background-color: var(--card-bg) !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-light) !important;
+}
     </style>
 </head>
 <body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
     <!-- Header -->
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <!-- Logo and station name -->
                 <a class="navbar-brand" href="index.html">
                     <i class="fas fa-microphone-alt me-2"></i>DFM MEDIA
                 </a>
                 
-                <!-- Search Container -->
                 <div class="search-container d-none d-lg-block">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="search" class="search-input" placeholder="Search articles...">
+                    <input type="search" class="search-input" placeholder="Search articles..." id="searchInput">
                 </div>
                 
                 <div class="d-flex align-items-center">
-                    <!-- Theme Toggle Button -->
                     <div class="theme-toggle" id="themeToggle">
                         <i class="fas fa-sun"></i>
                         <i class="fas fa-moon"></i>
                         <div class="theme-toggle-handle"></div>
                     </div>
                     
-                    <!-- Audio Controls -->
-                    <button class="audio-control" id="playButton">
-                        <i class="fas fa-play"></i>
-                        <span class="visually-hidden">Play audio</span>
-                    </button>
-                    <button class="audio-control" id="stopButton">
-                        <i class="fas fa-stop"></i>
-                        <span class="visually-hidden">Stop audio</span>
-                    </button>
+                    <!-- User Auth Status -->
+                    <div class="dropdown ms-3">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-2"></i><span id="userStatus">Account</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="loginBtn">Login</a></li>
+                            <li><a class="dropdown-item" href="#" id="registerBtn">Register</a></li>
+                        </ul>
+                    </div>
                     
                     <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span class="navbar-toggler-icon"></span>
-                        <span class="visually-hidden">Toggle navigation</span>
                     </button>
                 </div>
                 
@@ -733,7 +737,6 @@
                         <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="emmsion.html"><i class="fas fa-broadcast-tower me-1"></i> Emission</a></li>
                         
-                        <!-- Economy Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="economyDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-chart-line me-1"></i> Economy
@@ -746,7 +749,6 @@
                             </ul>
                         </li>
                         
-                        <!-- Finance Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="financeDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-coins me-1"></i> Finance
@@ -759,7 +761,6 @@
                             </ul>
                         </li>
                         
-                        <!-- Articles Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle active" href="#" id="articlesDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-newspaper me-1"></i> Articles
@@ -767,7 +768,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#articles">Articles</a></li>
                                 <li><a class="dropdown-item" href="#newsletter">Newsletter</a></li>
-                                <li><a class="dropdown-item" href="#blog">Blog</a></li>
+                                <li><a class="dropdown-item" href="#blog">Community Blog</a></li>
                             </ul>
                         </li>
                         
@@ -783,8 +784,8 @@
         <div class="container d-flex align-items-center">
             <span><i class="fas fa-bolt me-2"></i>LATEST ARTICLES</span>
             <div class="marquee-container w-100">
-                <div class="marquee">
-                    New article: Economic recovery strategies for African nations | Exclusive interview with Finance Minister | Subscribe to our newsletter for weekly insights | Share your thoughts on our blog platform
+                <div class="marquee" id="breakingNewsTicker">
+                    Loading latest articles...
                 </div>
             </div>
         </div>
@@ -793,76 +794,22 @@
     <!-- Main Content -->
     <main class="container my-5">
         <!-- Articles Section -->
-        <section id="articles" aria-labelledby="featured-articles" class="mb-5">
-            <h2 class="section-header" id="featured-articles">Featured Articles</h2>
+        <section id="articles" class="mb-5">
+            <h2 class="section-header">Featured Articles</h2>
             <div class="row">
                 <div class="col-md-8 mb-4">
-                    <article class="card news-card">
-                        <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80" class="card-img-top" alt="Economic analysis">
-                        <div class="card-body">
-                            <span class="badge bg-warning text-dark mb-2">Economy</span>
-                            <h3 class="card-title">Economic Recovery Strategies for African Nations Post-Pandemic</h3>
-                            <div class="article-meta">
-                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="Author" class="author-avatar">
-                                <div>
-                                    <div>By Dr. Samuel Njoh</div>
-                                    <div>June 15, 2023 • 8 min read</div>
-                                </div>
-                            </div>
-                            <p class="card-text">As African nations continue to navigate the post-pandemic economic landscape, strategic recovery plans are essential for sustainable growth. This article examines the most effective approaches being implemented across the continent.</p>
-                            <p class="card-text">From digital transformation initiatives to agricultural modernization programs, we explore how countries are rebuilding their economies with resilience and innovation at the core.</p>
-                            <div class="article-tags">
-                                <span class="tag">Economic Recovery</span>
-                                <span class="tag">Africa</span>
-                                <span class="tag">Post-Pandemic</span>
-                                <span class="tag">Development</span>
-                            </div>
-                            <div class="article-actions">
-                                <button class="action-btn"><i class="far fa-heart"></i> 243 Likes</button>
-                                <button class="action-btn"><i class="far fa-comment"></i> 47 Comments</button>
-                                <button class="action-btn"><i class="far fa-bookmark"></i> Save</button>
-                                <button class="action-btn"><i class="fas fa-share"></i> Share</button>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card news-card h-100">
-                        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80" class="card-img-top" alt="Agriculture technology">
-                        <div class="card-body">
-                            <span class="badge bg-success text-white mb-2">Agriculture</span>
-                            <h5 class="card-title">How Technology is Revolutionizing African Agriculture</h5>
-                            <div class="article-meta">
-                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="Author" class="author-avatar">
-                                <div>
-                                    <div>By Amina Diallo</div>
-                                    <div>June 12, 2023</div>
-                                </div>
-                            </div>
-                            <p class="card-text">Digital solutions are transforming traditional farming practices across Africa, increasing yields and improving sustainability.</p>
-                            <div class="article-tags">
-                                <span class="tag">Agritech</span>
-                                <span class="tag">Innovation</span>
-                            </div>
+                    <div id="featured-article-container">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading featured article...</p>
                         </div>
                     </div>
-                    <div class="card news-card h-100 mt-4">
-                        <img src="https://images.unsplash.com/photo-1551135049-8a33b5883817?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80" class="card-img-top" alt="Renewable energy">
-                        <div class="card-body">
-                            <span class="badge bg-info text-white mb-2">Energy</span>
-                            <h5 class="card-title">The Future of Renewable Energy in Cameroon</h5>
-                            <div class="article-meta">
-                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="Author" class="author-avatar">
-                                <div>
-                                    <div>By Pierre Mbarga</div>
-                                    <div>June 10, 2023</div>
-                                </div>
-                            </div>
-                            <p class="card-text">Exploring Cameroon's potential to become a leader in renewable energy production in Central Africa.</p>
-                            <div class="article-tags">
-                                <span class="tag">Energy</span>
-                                <span class="tag">Sustainability</span>
-                            </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div id="side-articles-container">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading articles...</p>
                         </div>
                     </div>
                 </div>
@@ -870,41 +817,43 @@
         </section>
 
         <!-- Newsletter Section -->
-        <section id="newsletter" aria-labelledby="newsletter-signup" class="mb-5 newsletter-container">
-            <h2 class="section-header" id="newsletter-signup">Stay Informed with Our Newsletter</h2>
+        <section id="newsletter" class="mb-5 newsletter-container">
+            <h2 class="section-header">Stay Informed with Our Newsletter</h2>
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="newsletter-form">
                         <h4 class="text-center mb-4">Subscribe to our weekly newsletter</h4>
                         <p class="text-center mb-4">Get the latest articles, analysis, and exclusive content delivered directly to your inbox every Friday.</p>
-                        <form>
+                        <form id="newsletterForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="firstName" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name">
+                                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="lastName" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name">
+                                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter your email address">
+                                <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
                             </div>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="termsCheck">
+                                    <input class="form-check-input" type="checkbox" id="termsCheck" required>
                                     <label class="form-check-label" for="termsCheck">
                                         I agree to receive the DFM Media newsletter and promotional emails
                                     </label>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-warning w-100">Subscribe Now</button>
+                            <button type="submit" class="btn btn-warning w-100">
+                                <i class="fas fa-envelope me-2"></i>Subscribe Now
+                            </button>
                         </form>
                     </div>
                     
@@ -925,168 +874,61 @@
         </section>
 
         <!-- Blog Section -->
-        <section id="blog" aria-labelledby="community-blog" class="mb-5">
-            <h2 class="section-header" id="community-blog">Community Blog</h2>
-            <p class="lead">Share your thoughts, reactions, and insights about current news and events.</p>
-            
-            <div class="card news-card mb-4">
-                <div class="card-body">
-                    <h4 class="card-title">Share your perspective</h4>
-                    <form>
-                        <div class="form-group">
-                            <label for="blogTitle" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="blogTitle" placeholder="Enter a title for your post">
-                        </div>
-                        <div class="form-group">
-                            <label for="blogContent" class="form-label">Your thoughts</label>
-                            <textarea class="form-control" id="blogContent" rows="5" placeholder="Share your impressions, reactions, and ideas for progress..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="blogTags" class="form-label">Tags (comma separated)</label>
-                            <input type="text" class="form-control" id="blogTags" placeholder="e.g., economy, agriculture, technology">
-                        </div>
-                        <button type="submit" class="btn btn-warning">Submit Post</button>
-                    </form>
+   <section id="blog" class="mb-5">
+    <h2 class="section-header">Community Blog</h2>
+    <p class="lead">Share your thoughts, reactions, and insights about current news and events.</p>
+    
+    <div class="card news-card mb-4">
+        <div class="card-body">
+            <h4 class="card-title">Share your perspective</h4>
+            <form id="communityPostForm" onsubmit="return testFormSubmission(event)">
+                <div class="form-group">
+                    <label for="blogTitle" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="blogTitle" placeholder="Enter a title for your post" 
+                           style="background: white; color: black; border: 2px solid #D4AF37;">
                 </div>
-            </div>
-            
-            <h4 class="mt-5 mb-4">Recent Community Posts</h4>
-            
-            <div class="blog-post card news-card">
-                <div class="card-body">
-                    <div class="article-meta">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="author-avatar">
-                        <div>
-                            <div class="fw-bold">Emmanuel T.</div>
-                            <div>Posted on June 14, 2023</div>
-                        </div>
-                    </div>
-                    <h5 class="mt-3">The Importance of Supporting Local Businesses</h5>
-                    <div class="blog-content">
-                        <p>In these challenging economic times, I believe we need to focus more on supporting our local businesses and entrepreneurs. Too often, we prioritize imported goods over locally produced ones, which hurts our economy in the long run.</p>
-                        <p>I've started consciously choosing Cameroonian products whenever possible, and I encourage others to do the same. This small change can make a significant impact on our national economy.</p>
-                    </div>
-                    <div class="article-tags">
-                        <span class="tag">Local Business</span>
-                        <span class="tag">Economy</span>
-                        <span class="tag">Support</span>
-                    </div>
-                    <div class="article-actions">
-                        <button class="action-btn"><i class="far fa-heart"></i> 87 Likes</button>
-                        <button class="action-btn"><i class="far fa-comment"></i> 23 Comments</button>
-                    </div>
-                    
-                    <div class="comment-section mt-4">
-                        <h6>Comments</h6>
-                        
-                        <div class="comment">
-                            <div class="comment-header">
-                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
-                                <div class="comment-meta">
-                                    <div class="comment-author">Marie L.</div>
-                                    <div class="comment-date">June 14, 2023</div>
-                                </div>
-                            </div>
-                            <p>I completely agree with you, Emmanuel. We need more awareness campaigns about the importance of buying local. Our choices directly impact our economy and create jobs for our people.</p>
-                            <div class="comment-actions">
-                                <button class="comment-action"><i class="far fa-heart"></i> Like (12)</button>
-                                <button class="comment-action"><i class="far fa-comment"></i> Reply</button>
-                            </div>
-                        </div>
-                        
-                        <div class="comment">
-                            <div class="comment-header">
-                                <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
-                                <div class="comment-meta">
-                                    <div class="comment-author">Paul B.</div>
-                                    <div class="comment-date">June 15, 2023</div>
-                                </div>
-                            </div>
-                            <p>While I support the idea, we also need to address the quality issues with some local products. If we want people to choose local, the products need to be competitive in both price and quality.</p>
-                            <div class="comment-actions">
-                                <button class="comment-action"><i class="far fa-heart"></i> Like (8)</button>
-                                <button class="comment-action"><i class="far fa-comment"></i> Reply</button>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-3">
-                            <form>
-                                <div class="form-group">
-                                    <textarea class="form-control" rows="2" placeholder="Add a comment..."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-sm btn-warning">Post Comment</button>
-                            </form>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="blogCategory" class="form-label">Category</label>
+                    <select class="form-select" id="blogCategory" 
+                            style="background: white; color: black; border: 2px solid #D4AF37;">
+                        <option value="">Select Category</option>
+                        <option value="opinion">Opinion</option>
+                        <option value="experience">Personal Experience</option>
+                        <option value="suggestion">Suggestion</option>
+                        <option value="story">Story</option>
+                    </select>
                 </div>
-            </div>
-            
-            <div class="blog-post card news-card">
-                <div class="card-body">
-                    <div class="article-meta">
-                        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="author-avatar">
-                        <div>
-                            <div class="fw-bold">Chantal K.</div>
-                            <div>Posted on June 12, 2023</div>
-                        </div>
-                    </div>
-                    <h5 class="mt-3">Education Reform Needs in Cameroon</h5>
-                    <div class="blog-content">
-                        <p>After reading the article about economic recovery, I started thinking about how education plays a crucial role in our nation's development. We need to reform our educational system to focus more on practical skills and digital literacy.</p>
-                        <p>Too many graduates lack the skills needed in today's job market. We should incorporate more technology training, entrepreneurship education, and critical thinking development into our curriculum.</p>
-                    </div>
-                    <div class="article-tags">
-                        <span class="tag">Education</span>
-                        <span class="tag">Reform</span>
-                        <span class="tag">Development</span>
-                    </div>
-                    <div class="article-actions">
-                        <button class="action-btn"><i class="far fa-heart"></i> 104 Likes</button>
-                        <button class="action-btn"><i class="far fa-comment"></i> 31 Comments</button>
-                    </div>
+                <div class="form-group">
+                    <label for="blogContent" class="form-label">Your thoughts</label>
+                    <textarea class="form-control" id="blogContent" rows="5" 
+                              placeholder="Share your impressions, reactions, and ideas for progress..."
+                              style="background: white; color: black; border: 2px solid #D4AF37;"></textarea>
                 </div>
-            </div>
-        </section>
-
-        <!-- Radio Player Section -->
-        <section aria-labelledby="radio-player" class="my-5">
-            <h2 class="section-header" id="radio-player">Articles Discussion Live</h2>
-            <div class="card news-card text-center p-4">
-                <h3 class="mb-4">Now Playing: Discussion on Featured Articles</h3>
-                <div class="player-controls d-flex justify-content-center align-items-center">
-                    <button class="play-btn me-3" id="radioPlay">
-                        <i class="fas fa-play"></i>
-                        <span class="visually-hidden">Play radio</span>
-                    </button>
-                    <button class="play-btn me-3" id="radioStop">
-                        <i class="fas fa-stop"></i>
-                        <span class="visually-hidden">Stop radio</span>
-                    </button>
-                    <div class="ms-3">
-                        <span>Live: Reader reactions to this week's featured articles</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Live Radio Player Footer -->
-    <div class="live-player">
-        <div class="container d-flex justify-content-between align-items-center">
-            <span>🎙️ Listen to DFM Articles Discussion Live</span>
-            <div>
-                <button class="play-btn me-2" id="footerPlay">
-                    <i class="fas fa-play"></i>
-                    <span class="visually-hidden">Play radio</span>
+                <button type="submit" class="btn btn-warning" id="submitBtn">
+                    <i class="fas fa-paper-plane me-2"></i>Submit Post
                 </button>
-                <button class="play-btn" id="footerStop">
-                    <i class="fas fa-stop"></i>
-                    <span class="visually-hidden">Stop radio</span>
+                <button type="button" class="btn btn-outline-secondary ms-2" onclick="clearForm()">
+                    <i class="fas fa-times me-2"></i>Clear
                 </button>
+            </form>
+            
+            <!-- Debug info -->
+            <div id="formDebug" class="mt-3 p-2 bg-light rounded small" style="display: none;">
+                <strong>Debug Info:</strong>
+                <div id="debugContent"></div>
             </div>
-            <span>Live: Reader reactions to featured articles</span>
         </div>
     </div>
+    
+    <h4 class="mt-5 mb-4">Recent Community Posts</h4>
+    <div id="community-posts-container">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading community posts...</p>
+        </div>
+    </div>
+</section>
+    </main>
 
     <!-- Footer -->
     <footer class="text-center p-4">
@@ -1099,10 +941,10 @@
                 <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Connect With Us</h5>
                     <div class="social-icons">
-                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i><span class="visually-hidden">Facebook</span></a>
-                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i><span class="visually-hidden">WhatsApp</span></a>
-                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i><span class="visually-hidden">LinkedIn</span></a>
-                        <a href="#" title="Phone"><i class="fas fa-phone"></i><span class="visually-hidden">Phone</span></a>
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="Phone"><i class="fas fa-phone"></i></a>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -1120,107 +962,743 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ==================== CONFIGURATION ====================
+    const API_BASE = 'http://localhost:5000/api';
+    let authToken = localStorage.getItem('dfm_token');
+    let currentUser = JSON.parse(localStorage.getItem('dfm_user') || 'null');
+
+    // ==================== UTILITY FUNCTIONS ====================
+    function showToast(message, type = 'info') {
+        const toastContainer = document.querySelector('.toast-container');
+        const toastId = 'toast-' + Date.now();
         
-        // Check for saved theme preference or respect OS preference
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-bg-${type} border-0`;
+        toast.id = toastId;
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        
+        toastContainer.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 4000);
+    }
+
+    async function apiCall(endpoint, options = {}) {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+                ...options.headers
+            };
+
+            const config = {
+                headers,
+                ...options
+            };
+
+            // Remove headers from body if it's FormData
+            if (options.body instanceof FormData) {
+                delete config.headers['Content-Type'];
+            }
+
+            const response = await fetch(`${API_BASE}${endpoint}`, config);
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('API call failed:', error);
+            showToast(error.message || 'Failed to load data. Please try again.', 'danger');
+            throw error;
+        }
+    }
+
+    function formatDate(dateString) {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+    function updateAuthUI() {
+        const userStatus = document.getElementById('userStatus');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const userDropdown = document.querySelector('.dropdown-menu');
+
+        if (currentUser) {
+            userStatus.textContent = currentUser.name || 'My Account';
+            
+            // Update dropdown for logged-in users
+            userDropdown.innerHTML = `
+                <li><a class="dropdown-item" href="#" id="profileBtn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                <li><a class="dropdown-item" href="#" id="savedArticlesBtn"><i class="fas fa-bookmark me-2"></i>Saved Articles</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            `;
+        } else {
+            userStatus.textContent = 'Account';
+            userDropdown.innerHTML = `
+                <li><a class="dropdown-item" href="#" id="loginBtn"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                <li><a class="dropdown-item" href="#" id="registerBtn"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+            `;
+        }
+    }
+
+    // ==================== AUTHENTICATION FUNCTIONS ====================
+    async function handleLogin(email, password) {
+        try {
+            const response = await apiCall('/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.success) {
+                authToken = response.token;
+                currentUser = response.user;
+                
+                localStorage.setItem('dfm_token', authToken);
+                localStorage.setItem('dfm_user', JSON.stringify(currentUser));
+                
+                updateAuthUI();
+                showToast('Login successful!', 'success');
+                return true;
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            return false;
+        }
+    }
+
+    async function handleLogout() {
+        authToken = null;
+        currentUser = null;
+        localStorage.removeItem('dfm_token');
+        localStorage.removeItem('dfm_user');
+        updateAuthUI();
+        showToast('Logged out successfully', 'info');
+    }
+
+    // ==================== ARTICLE FUNCTIONS ====================
+    async function loadFeaturedArticles() {
+        try {
+            // Load featured articles
+            const articlesData = await apiCall('/articles?featured=true&limit=3');
+            
+            if (articlesData.articles && articlesData.articles.length > 0) {
+                // Featured article (first one)
+                const featuredArticle = articlesData.articles[0];
+                document.getElementById('featured-article-container').innerHTML = createArticleHTML(featuredArticle, true);
+                
+                // Side articles (rest)
+                const sideArticles = articlesData.articles.slice(1);
+                document.getElementById('side-articles-container').innerHTML = sideArticles.map(article => 
+                    createArticleHTML(article, false)
+                ).join('');
+            } else {
+                document.getElementById('featured-article-container').innerHTML = `
+                    <div class="alert alert-info">
+                        <p>No featured articles available at the moment.</p>
+                    </div>
+                `;
+            }
+            
+            // Load breaking news ticker
+            const allArticles = await apiCall('/articles?limit=5');
+            if (allArticles.articles && allArticles.articles.length > 0) {
+                const tickerContent = allArticles.articles.map(article => article.title).join(' | ');
+                document.getElementById('breakingNewsTicker').textContent = tickerContent;
+            }
+            
+        } catch (error) {
+            document.getElementById('featured-article-container').innerHTML = `
+                <div class="alert alert-warning">
+                    <p>Unable to load articles. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+
+    function createArticleHTML(article, isFeatured) {
+        const imageUrl = article.image_url || 'https://via.placeholder.com/400x200/1a1814/D4AF37?text=DFM+Media';
+        const authorAvatar = article.author?.avatar || 'https://via.placeholder.com/40x40/1a1814/D4AF37?text=U';
+        const isLiked = currentUser && article.likes?.includes(currentUser.id);
+        const isSaved = currentUser && currentUser.savedArticles?.includes(article._id);
+        
+        if (isFeatured) {
+            return `
+                <article class="card news-card" data-article-id="${article._id}">
+                    <img src="${imageUrl}" class="card-img-top" alt="${article.title}" onerror="this.src='https://via.placeholder.com/400x200/1a1814/D4AF37?text=DFM+Media'">
+                    <div class="card-body">
+                        <span class="badge bg-warning text-dark mb-2">${article.category}</span>
+                        <h3 class="card-title">${article.title}</h3>
+                        <div class="article-meta">
+                            <img src="${authorAvatar}" alt="Author" class="author-avatar" onerror="this.src='https://via.placeholder.com/40x40/1a1814/D4AF37?text=U'">
+                            <div>
+                                <div>By ${article.author?.name || 'DFM Media'}</div>
+                                <div>${formatDate(article.createdAt)} • ${Math.ceil(article.content.length / 200)} min read</div>
+                            </div>
+                        </div>
+                        <p class="card-text">${article.excerpt || article.content.substring(0, 200)}...</p>
+                        <div class="article-tags">
+                            ${(article.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="article-actions">
+                            <button class="action-btn like-btn" onclick="handleLike('${article._id}', this)" ${!currentUser ? 'disabled' : ''}>
+                                <i class="${isLiked ? 'fas fa-heart text-danger' : 'far fa-heart'}"></i> 
+                                <span class="like-count">${article.likes?.length || 0}</span>
+                            </button>
+                            <button class="action-btn" onclick="viewArticle('${article._id}')">
+                                <i class="far fa-comment"></i> 
+                                <span class="comment-count">${article.comments?.length || 0}</span>
+                            </button>
+                            <button class="action-btn save-btn" onclick="handleSave('${article._id}', this)" ${!currentUser ? 'disabled' : ''}>
+                                <i class="${isSaved ? 'fas fa-bookmark text-warning' : 'far fa-bookmark'}"></i> Save
+                            </button>
+                            <button class="action-btn" onclick="shareArticle('${article._id}')">
+                                <i class="fas fa-share"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+        } else {
+            return `
+                <div class="card news-card h-100 mb-4" data-article-id="${article._id}">
+                    <img src="${imageUrl}" class="card-img-top" alt="${article.title}" onerror="this.src='https://via.placeholder.com/300x150/1a1814/D4AF37?text=DFM+Media'">
+                    <div class="card-body">
+                        <span class="badge bg-success text-white mb-2">${article.category}</span>
+                        <h5 class="card-title">${article.title}</h5>
+                        <div class="article-meta">
+                            <img src="${authorAvatar}" alt="Author" class="author-avatar" onerror="this.src='https://via.placeholder.com/40x40/1a1814/D4AF37?text=U'">
+                            <div>
+                                <div>By ${article.author?.name || 'DFM Media'}</div>
+                                <div>${formatDate(article.createdAt)}</div>
+                            </div>
+                        </div>
+                        <p class="card-text">${article.excerpt || article.content.substring(0, 100)}...</p>
+                        <div class="article-tags">
+                            ${(article.tags || []).slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="article-actions mt-3">
+                            <button class="action-btn like-btn" onclick="handleLike('${article._id}', this)" ${!currentUser ? 'disabled' : ''}>
+                                <i class="${isLiked ? 'fas fa-heart text-danger' : 'far fa-heart'}"></i> 
+                                <span class="like-count">${article.likes?.length || 0}</span>
+                            </button>
+                            <button class="action-btn" onclick="viewArticle('${article._id}')">
+                                Read More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    async function handleLike(articleId, button) {
+        if (!authToken) {
+            showToast('Please login to like articles', 'warning');
+            return;
+        }
+
+        try {
+            const response = await apiCall(`/articles/${articleId}/like`, {
+                method: 'POST'
+            });
+
+            const likeCount = button.querySelector('.like-count');
+            const icon = button.querySelector('i');
+            
+            if (response.liked) {
+                likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                icon.className = 'fas fa-heart text-danger';
+                showToast('Article liked!', 'success');
+            } else {
+                likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                icon.className = 'far fa-heart';
+                showToast('Like removed', 'info');
+            }
+        } catch (error) {
+            console.error('Error liking article:', error);
+        }
+    }
+
+    async function handleSave(articleId, button) {
+        if (!authToken) {
+            showToast('Please login to save articles', 'warning');
+            return;
+        }
+
+        try {
+            const response = await apiCall(`/articles/${articleId}/save`, {
+                method: 'POST'
+            });
+
+            const icon = button.querySelector('i');
+            
+            if (response.saved) {
+                icon.className = 'fas fa-bookmark text-warning';
+                showToast('Article saved!', 'success');
+            } else {
+                icon.className = 'far fa-bookmark';
+                showToast('Article removed from saved', 'info');
+            }
+        } catch (error) {
+            console.error('Error saving article:', error);
+        }
+    }
+
+    async function shareArticle(articleId) {
+        try {
+            await apiCall(`/articles/${articleId}/share`, {
+                method: 'POST'
+            });
+
+            const shareUrl = `${window.location.origin}/article.html?id=${articleId}`;
+            
+            if (navigator.share) {
+                await navigator.share({
+                    title: document.title,
+                    url: shareUrl
+                });
+            } else {
+                await navigator.clipboard.writeText(shareUrl);
+                showToast('Link copied to clipboard!', 'success');
+            }
+        } catch (error) {
+            console.error('Error sharing article:', error);
+        }
+    }
+
+    function viewArticle(articleId) {
+        window.location.href = `article.html?id=${articleId}`;
+    }
+
+    // ==================== NEWSLETTER FUNCTIONS ====================
+    async function subscribeNewsletter(event) {
+        event.preventDefault();
+        
+        try {
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value
+            };
+
+            const response = await apiCall('/newsletter/subscribe', {
+                method: 'POST',
+                body: JSON.stringify({ email: formData.email })
+            });
+
+            if (response.success) {
+                document.getElementById('newsletterForm').reset();
+                showToast('Successfully subscribed to newsletter!', 'success');
+            }
+            
+        } catch (error) {
+            console.error('Error subscribing to newsletter:', error);
+        }
+    }
+
+    // ==================== COMMUNITY BLOG FUNCTIONS ====================
+    async function loadCommunityPosts() {
+        try {
+            const data = await apiCall('/community?limit=5&status=approved');
+            
+            if (data.posts && data.posts.length > 0) {
+                document.getElementById('community-posts-container').innerHTML = data.posts.map(post => {
+                    const isLiked = currentUser && post.likes?.includes(currentUser.id);
+                    return `
+                        <div class="blog-post card news-card" data-post-id="${post._id}">
+                            <div class="card-body">
+                                <div class="article-meta">
+                                    <img src="${post.author?.avatar || 'https://via.placeholder.com/40x40/1a1814/D4AF37?text=U'}" 
+                                         alt="User" class="author-avatar" onerror="this.src='https://via.placeholder.com/40x40/1a1814/D4AF37?text=U'">
+                                    <div>
+                                        <div class="fw-bold">${post.author?.name || 'Anonymous'}</div>
+                                        <div>Posted on ${formatDate(post.createdAt)}</div>
+                                    </div>
+                                </div>
+                                <h5 class="mt-3">${post.title}</h5>
+                                <div class="blog-content">
+                                    <p>${post.content}</p>
+                                </div>
+                                <div class="article-tags">
+                                    <span class="tag">${post.category}</span>
+                                </div>
+                                <div class="article-actions">
+                                    <button class="action-btn" onclick="handlePostLike('${post._id}', this)" ${!currentUser ? 'disabled' : ''}>
+                                        <i class="${isLiked ? 'fas fa-heart text-danger' : 'far fa-heart'}"></i> 
+                                        <span class="like-count">${post.likes?.length || 0}</span>
+                                    </button>
+                                    <button class="action-btn" onclick="viewPostComments('${post._id}')">
+                                        <i class="far fa-comment"></i> Comment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                document.getElementById('community-posts-container').innerHTML = `
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-comments fa-3x mb-3"></i>
+                        <p>No community posts yet. Be the first to share your thoughts!</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            document.getElementById('community-posts-container').innerHTML = `
+                <div class="alert alert-warning">
+                    Unable to load community posts. Please try again later.
+                </div>
+            `;
+        }
+    }
+
+    async function handlePostLike(postId, button) {
+        if (!authToken) {
+            showToast('Please login to like posts', 'warning');
+            return;
+        }
+
+        try {
+            const response = await apiCall(`/community/${postId}/like`, {
+                method: 'POST'
+            });
+
+            const likeCount = button.querySelector('.like-count');
+            const icon = button.querySelector('i');
+            
+            if (response.liked) {
+                likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                icon.className = 'fas fa-heart text-danger';
+                showToast('Post liked!', 'success');
+            } else {
+                likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                icon.className = 'far fa-heart';
+                showToast('Like removed', 'info');
+            }
+        } catch (error) {
+            console.error('Error liking post:', error);
+        }
+    }
+
+    async function submitCommunityPost(event) {
+        event.preventDefault();
+        
+        if (!authToken) {
+            showToast('Please login to submit posts', 'warning');
+            return;
+        }
+
+        try {
+            const formData = {
+                title: document.getElementById('blogTitle').value,
+                content: document.getElementById('blogContent').value,
+                category: document.getElementById('blogCategory').value
+            };
+
+            const response = await apiCall('/community', {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            });
+
+            if (response.success) {
+                document.getElementById('communityPostForm').reset();
+                showToast('Post submitted for approval!', 'success');
+                
+                // Reload community posts
+                await loadCommunityPosts();
+            }
+            
+        } catch (error) {
+            console.error('Error submitting community post:', error);
+        }
+    }
+
+    function viewPostComments(postId) {
+        showToast('Opening post comments...', 'info');
+    }
+
+    // ==================== THEME MANAGEMENT ====================
+    function initTheme() {
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         
-        // Apply the saved theme
         if (savedTheme === 'dark') {
-            body.setAttribute('data-theme', 'dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
         } else {
-            body.removeAttribute('data-theme');
+            document.documentElement.removeAttribute('data-theme');
         }
         
-        // Toggle theme function
-        function toggleTheme() {
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
                 localStorage.setItem('theme', 'light');
             } else {
-                body.setAttribute('data-theme', 'dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('theme', 'dark');
             }
-        }
-        
-        // Add event listener to theme toggle button
-        themeToggle.addEventListener('click', toggleTheme);
-        
-        // Audio controls functionality
-        const playButton = document.getElementById('playButton');
-        const stopButton = document.getElementById('stopButton');
-        const radioPlay = document.getElementById('radioPlay');
-        const radioStop = document.getElementById('radioStop');
-        const footerPlay = document.getElementById('footerPlay');
-        const footerStop = document.getElementById('footerStop');
-        
-        function playAudio() {
-            // In a real implementation, this would play the radio stream
-            console.log('Playing audio...');
-            showNotification('Articles Discussion is now playing', 'info');
-        }
-        
-        function stopAudio() {
-            // In a real implementation, this would stop the radio stream
-            console.log('Stopping audio...');
-            showNotification('Articles Discussion stopped', 'info');
-        }
-        
-        playButton.addEventListener('click', playAudio);
-        stopButton.addEventListener('click', stopAudio);
-        radioPlay.addEventListener('click', playAudio);
-        radioStop.addEventListener('click', stopAudio);
-        footerPlay.addEventListener('click', playAudio);
-        footerStop.addEventListener('click', stopAudio);
-        
-        // Show notification function
-        function showNotification(message, type = 'info') {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-            notification.style.top = '20px';
-            notification.style.right = '20px';
-            notification.style.zIndex = '1050';
-            notification.style.minWidth = '300px';
-            notification.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            
-            // Add to body
-            document.body.appendChild(notification);
-            
-            // Auto remove after 3 seconds
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        // Form submission handling
-        document.addEventListener('DOMContentLoaded', function() {
-            const newsletterForm = document.querySelector('.newsletter-form form');
-            const blogForm = document.querySelector('#blog form');
-            
-            if (newsletterForm) {
-                newsletterForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    showNotification('Thank you for subscribing to our newsletter!', 'success');
-                    newsletterForm.reset();
-                });
+        });
+    }
+
+    // ==================== SEARCH FUNCTIONALITY ====================
+    async function handleSearch(searchTerm) {
+        if (searchTerm.length > 2) {
+            try {
+                const data = await apiCall(`/articles?search=${encodeURIComponent(searchTerm)}`);
+                
+                if (data.articles && data.articles.length > 0) {
+                    // Update the articles section with search results
+                    document.getElementById('featured-article-container').innerHTML = `
+                        <h4 class="mb-4">Search Results for "${searchTerm}"</h4>
+                        ${data.articles.map(article => createArticleHTML(article, false)).join('')}
+                    `;
+                    document.getElementById('side-articles-container').innerHTML = '';
+                } else {
+                    document.getElementById('featured-article-container').innerHTML = `
+                        <div class="alert alert-info">
+                            <p>No articles found for "${searchTerm}"</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Search error:', error);
             }
-            
-            if (blogForm) {
-                blogForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    showNotification('Your blog post has been submitted for review.', 'success');
-                    blogForm.reset();
-                });
+        } else if (searchTerm.length === 0) {
+            // Reset to featured articles when search is cleared
+            loadFeaturedArticles();
+        }
+    }
+
+    // ==================== INITIALIZATION ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize theme
+        initTheme();
+        
+        // Update auth UI
+        updateAuthUI();
+        
+        // Load data
+        loadFeaturedArticles();
+        loadCommunityPosts();
+        
+        // Event listeners
+        document.getElementById('newsletterForm').addEventListener('submit', subscribeNewsletter);
+        document.getElementById('communityPostForm').addEventListener('submit', submitCommunityPost);
+        
+        // Search functionality with debounce
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                handleSearch(e.target.value.trim());
+            }, 500);
+        });
+        function debugCommunityForm() {
+    const titleInput = document.getElementById('blogTitle');
+    const categorySelect = document.getElementById('blogCategory');
+    const contentTextarea = document.getElementById('blogContent');
+    const form = document.getElementById('communityPostForm');
+
+    console.log('Community Form Elements:', {
+        titleInput: titleInput,
+        categorySelect: categorySelect, 
+        contentTextarea: contentTextarea,
+        form: form
+    });
+
+    // Check if elements exist
+    if (!titleInput || !categorySelect || !contentTextarea) {
+        console.error('Community form elements not found!');
+        showToast('Community form not loaded properly', 'danger');
+        return;
+    }
+
+    // Check if inputs are disabled
+    console.log('Input states:', {
+        titleDisabled: titleInput.disabled,
+        categoryDisabled: categorySelect.disabled,
+        contentDisabled: contentTextarea.disabled
+    });
+
+    // Force enable all inputs
+    titleInput.disabled = false;
+    categorySelect.disabled = false;
+    contentTextarea.disabled = false;
+
+    // Add event listeners to test interaction
+    titleInput.addEventListener('focus', () => console.log('Title focused'));
+    titleInput.addEventListener('input', () => console.log('Title typing:', titleInput.value));
+    
+    contentTextarea.addEventListener('focus', () => console.log('Content focused'));
+    contentTextarea.addEventListener('input', () => console.log('Content typing:', contentTextarea.value));
+
+    // Test click events
+    titleInput.addEventListener('click', (e) => {
+        console.log('Title clicked', e);
+        e.stopPropagation();
+    });
+
+    // Make sure form isn't submitting prematurely
+    form.addEventListener('submit', (e) => {
+        console.log('Form submit attempted');
+        e.preventDefault();
+        console.log('Form data:', {
+            title: titleInput.value,
+            category: categorySelect.value,
+            content: contentTextarea.value
+        });
+    });
+
+    console.log('Community form debugging enabled');
+}
+
+        // Auth event delegation (for dynamically updated dropdown)
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'loginBtn' || e.target.closest('#loginBtn')) {
+                e.preventDefault();
+                showLoginModal();
+            } else if (e.target.id === 'registerBtn' || e.target.closest('#registerBtn')) {
+                e.preventDefault();
+                showRegisterModal();
+            } else if (e.target.id === 'logoutBtn' || e.target.closest('#logoutBtn')) {
+                e.preventDefault();
+                handleLogout();
+            } else if (e.target.id === 'savedArticlesBtn' || e.target.closest('#savedArticlesBtn')) {
+                e.preventDefault();
+                showToast('Saved articles feature coming soon!', 'info');
             }
         });
-    </script>
+    });
+
+    // ==================== MODAL FUNCTIONS ====================
+    function showLoginModal() {
+        const modalHTML = `
+            <div class="modal fade" id="authModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Login to DFM Media</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning w-100">Login</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Remove existing modal if any
+        const existingModal = document.getElementById('authModal');
+        if (existingModal) existingModal.remove();
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        const modal = new bootstrap.Modal(document.getElementById('authModal'));
+        modal.show();
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const success = await handleLogin(email, password);
+            if (success) {
+                modal.hide();
+            }
+        });
+    }
+
+    function showRegisterModal() {
+        showToast('Registration functionality coming soon!', 'info');
+    }
+
+    // Global functions
+    window.handleLike = handleLike;
+    window.handleSave = handleSave;
+    window.shareArticle = shareArticle;
+    window.viewArticle = viewArticle;
+    window.handlePostLike = handlePostLike;
+    window.viewPostComments = viewPostComments;
+    // Test form submission
+function testFormSubmission(event) {
+    event.preventDefault();
+    
+    const title = document.getElementById('blogTitle').value;
+    const category = document.getElementById('blogCategory').value;
+    const content = document.getElementById('blogContent').value;
+    
+    console.log('Form submission test:', { title, category, content });
+    
+    // Show debug info
+    const debugDiv = document.getElementById('formDebug');
+    const debugContent = document.getElementById('debugContent');
+    
+    debugContent.innerHTML = `
+        <div>Title: "${title}"</div>
+        <div>Category: "${category}"</div>
+        <div>Content length: ${content.length} characters</div>
+        <div>All inputs working: ${title !== '' && category !== '' && content !== ''}</div>
+    `;
+    debugDiv.style.display = 'block';
+    
+    showToast('Form is working! Check console for details.', 'success');
+    return false;
+}
+
+// Clear form function
+function clearForm() {
+    document.getElementById('blogTitle').value = '';
+    document.getElementById('blogCategory').value = '';
+    document.getElementById('blogContent').value = '';
+    document.getElementById('formDebug').style.display = 'none';
+    showToast('Form cleared', 'info');
+}
+
+// Test direct input access
+function testInputAccess() {
+    const titleInput = document.getElementById('blogTitle');
+    const contentInput = document.getElementById('blogContent');
+    
+    // Try to focus and set values programmatically
+    titleInput.focus();
+    titleInput.value = 'Test title ' + Date.now();
+    
+    setTimeout(() => {
+        contentInput.focus();
+        contentInput.value = 'Test content ' + Date.now();
+        showToast('Programmatic input test completed', 'info');
+    }, 1000);
+}
+
+// Call this to test if you can programmatically interact with inputs
+// testInputAccess();
+</script>
 </body>
 </html>

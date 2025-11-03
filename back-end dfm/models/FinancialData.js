@@ -4,6 +4,7 @@ const FinancialDataSchema = new mongoose.Schema({
   stock_market_growth: Number,
   interest_rate: Number,
   credit_growth: Number,
+  usd_xaf: Number,
   period: String,
   year: Number,
   month: Number,

@@ -20,7 +20,7 @@ const analyticsRoutes = require('./routes/analytics');
 const newsletterRoutes = require('./routes/newsletter');
 const usersRoutes = require('./routes/users');
 const homepageRoutes = require('./routes/homepage');
-
+const communityRoutes = require('./routes/community');
 const app = express();
 
 // Connect to database
@@ -95,6 +95,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/homepage', homepageRoutes);
+app.use('/api/community', communityRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

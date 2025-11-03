@@ -1,76 +1,47 @@
+// routes/newsletter.js
 const express = require('express');
 const router = express.Router();
-const { auth, adminAuth } = require('../middleware/auth');
+const Newsletter = require('../models/Newsletter');
 
-// Mock data - replace with actual model
-let subscribers = [
-  { id: 1, email: 'subscriber1@example.com', subscribedAt: new Date(), status: 'active' },
-  { id: 2, email: 'subscriber2@example.com', subscribedAt: new Date(), status: 'active' }
-];
+// Subscribe to newsletter
+router.post('/subscribe', async (req, res) => {
+  try {
+    const { email } = req.body;
 
-// Public subscription
-router.post('/subscribe', (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ message: 'Email is required' });
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
+      });
+    }
 
-  const existing = subscribers.find(s => s.email === email);
-  if (existing) return res.status(400).json({ message: 'Already subscribed' });
+    // Check if already subscribed
+    const existingSubscriber = await Newsletter.findOne({ email: email.toLowerCase() });
+    if (existingSubscriber) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already subscribed'
+      });
+    }
 
-  const newSub = {
-    id: subscribers.length + 1,
-    email,
-    subscribedAt: new Date(),
-    status: 'active'
-  };
-  subscribers.push(newSub);
+    const subscriber = new Newsletter({
+      email: email.toLowerCase()
+    });
 
-  res.json({ message: 'Successfully subscribed', subscriber: newSub });
-});
+    await subscriber.save();
 
-router.post('/unsubscribe', (req, res) => {
-  const { email } = req.body;
-  subscribers = subscribers.filter(s => s.email !== email);
-  res.json({ message: 'Successfully unsubscribed' });
-});
-
-// Protected routes (admin)
-router.get('/subscribers', auth, adminAuth, (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + parseInt(limit);
-
-  const paginatedSubs = subscribers.slice(startIndex, endIndex);
-  res.json({
-    subscribers: paginatedSubs,
-    total: subscribers.length,
-    page: parseInt(page),
-    totalPages: Math.ceil(subscribers.length / limit)
-  });
-});
-
-router.get('/stats', auth, adminAuth, (req, res) => {
-  res.json({
-    totalSubscribers: subscribers.length,
-    activeSubscribers: subscribers.filter(s => s.status === 'active').length,
-    openRate: '72%',
-    clickRate: '34%'
-  });
-});
-
-router.post('/send', auth, adminAuth, (req, res) => {
-  const { subject, content } = req.body;
-  // In real app, integrate with email service like SendGrid, Mailchimp, etc.
-  res.json({ 
-    message: 'Newsletter sent successfully', 
-    recipients: subscribers.length,
-    subject 
-  });
-});
-
-router.delete('/subscribers/:id', auth, adminAuth, (req, res) => {
-  const { id } = req.params;
-  subscribers = subscribers.filter(s => s.id !== parseInt(id));
-  res.json({ message: 'Subscriber deleted' });
+    res.json({
+      success: true,
+      message: 'Successfully subscribed to newsletter'
+    });
+  } catch (error) {
+    console.error('Error subscribing to newsletter:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error subscribing to newsletter',
+      error: error.message
+    });
+  }
 });
 
 module.exports = router;
