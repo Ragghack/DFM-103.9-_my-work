@@ -120,6 +120,14 @@
             background-clip: text;
             text-fill-color: transparent;
         }
+
+        .Logo {
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding-left: 5px;
+            padding-right: 5px;
+        }
         
         .navbar-nav .nav-link {
             position: relative;
@@ -700,6 +708,7 @@
             <div class="container">
                 <!-- Logo and station name -->
                 <a class="navbar-brand" href="index.html">
+                    <img class="Logo" src="Logo.png" alt="DFM Media Logo" width="70" height="70" class="d-inline-block align-text-top me-2">
                     <i class="fas fa-microphone-alt me-2"></i>DFM MEDIA
                 </a>
                 
@@ -717,123 +726,13 @@
                         <div class="theme-toggle-handle"></div>
                     </div>
                     
-                    <button class="audio-control" id="playButton">
-  <i class="fas fa-play" aria-hidden="true"></i>
-  <span class="visually-hidden">Play</span>
-</button>
-<button class="audio-control" id="stopButton">
-  <i class="fas fa-stop" aria-hidden="true"></i>
-  <span class="visually-hidden">Stop</span>
-</button>
-
-<!-- script : lie les boutons au stream -->
-<script>
-(function(){
-  // URL du stream
-  const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
-
-  // éléments
-  const playBtn = document.getElementById("playButton");
-  const stopBtn  = document.getElementById("stopButton");
-  const playIcon = playBtn.querySelector("i");
-  const stopIcon = stopBtn.querySelector("i");
-  const playLabel = playBtn.querySelector(".visually-hidden");
-
-  // crée l'objet audio (ne pas ajouter d'élément <audio> visible si tu préfères)
-  const audio = new Audio(STREAM_URL);
-  audio.preload = "none"; // évite de charger automatiquement
-  audio.crossOrigin = "anonymous"; // utile si analyse future / visualiseur
-
-  // état
-  let isPlaying = false;
-
-  // helpers pour mettre à jour l'UI
-  function setPlayingUI() {
-    isPlaying = true;
-    // change icône play -> pause si tu veux
-    playIcon.classList.remove("fa-play");
-    playIcon.classList.add("fa-pause");
-    playBtn.setAttribute("aria-pressed", "true");
-    playLabel.textContent = "Pause";
-  }
-
-  function setStoppedUI() {
-    isPlaying = false;
-    playIcon.classList.remove("fa-pause");
-    playIcon.classList.add("fa-play");
-    playBtn.setAttribute("aria-pressed", "false");
-    playLabel.textContent = "Play";
-  }
-
-  // play / pause toggle
-  playBtn.addEventListener("click", async function (e) {
-    e.preventDefault();
-    try {
-      if (!isPlaying) {
-        // start
-        // certains navigateurs exigent un user gesture pour jouer, ici on est dans un click donc ok
-        await audio.play();
-        setPlayingUI();
-      } else {
-        // pause (ne pas "stop" complètement pour garder buffer)
-        audio.pause();
-        setStoppedUI();
-      }
-    } catch (err) {
-      console.error("Impossible de lancer le stream :", err);
-      alert("Impossible de lancer le stream. Vérifie la connexion ou la source.");
-    }
-  });
-
-  // stop complet — on met pause puis on remet à 0 (pour un flux live c'est surtout pause)
-  stopBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    try {
-      audio.pause();
-      // pour les flux live .currentTime n'a pas beaucoup d'effet, mais on réinitialise l'audio.
-      try { audio.currentTime = 0; } catch (_) {}
-      setStoppedUI();
-    } catch (err) {
-      console.error("Erreur lors de l'arrêt :", err);
-    }
-  });
-
-  // gestion d'erreurs
-  audio.addEventListener("error", function (ev) {
-    console.error("Erreur audio :", ev);
-    alert("Le lecteur a rencontré une erreur en chargeant le flux.");
-    setStoppedUI();
-  });
-
-  // si le flux coupe côté serveur
-  audio.addEventListener("ended", function () {
-    setStoppedUI();
-  });
-
-  // (option) si tu veux que le bouton devienne indéxable seulement quand prêt :
-  audio.addEventListener("canplay", function(){
-    // le flux est prêt à jouer
-  });
-
-  // accessibilité : touche espace/enter sur le bouton play
-  playBtn.addEventListener("keydown", function(e){
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
-      playBtn.click();
-    }
-  });
-  stopBtn.addEventListener("keydown", function(e){
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
-      stopBtn.click();
-    }
-  });
-
-  // Conseil : si tu veux démarrer/arrêter automatiquement quand l'utilisateur
-  // change de page ou ferme l'onglet :
-  window.addEventListener("pagehide", function(){ audio.pause(); setStoppedUI(); });
-})();
-</script>
+                    <!-- Audio Controls -->
+                    <button class="audio-control" id="playButton" title="Play radio">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="audio-control" id="stopButton" title="Stop radio">
+                        <i class="fas fa-stop"></i>
+                    </button>
                     
                     <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -1317,9 +1216,9 @@
                 <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Connect With Us</h5>
                     <div class="social-icons">
-                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" title="Phone"><i class="fas fa-phone"></i></a>
                     </div>
                 </div>
@@ -1329,7 +1228,7 @@
                         DFM Media<br>
                         Cameroon<br>
                         <i class="fas fa-envelope me-2"></i> contact@dfmmedia.cm<br>
-                        <i class="fas fa-phone me-2"></i> +237 6XX XXX XXX
+                        <i class="fas fa-phone me-2"></i> +237 650 155 155 <br>
                     </address>
                 </div>
             </div>
@@ -1337,70 +1236,6 @@
             <p class="mb-0">&copy; 2025 DFM Media – All rights reserved.</p>
         </div>
     </footer>
-    <script>
-(function(){
-  const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
-
-  const playBtn = document.getElementById("footerPlay");
-  const stopBtn = document.getElementById("footerStop");
-  const playIcon = playBtn?.querySelector("i");
-  const playLabel = playBtn?.querySelector(".visually-hidden");
-
-  const audio = new Audio(STREAM_URL);
-  audio.preload = "none";
-  audio.crossOrigin = "anonymous";
-
-  let isPlaying = false;
-
-  function setPlayingUI() {
-    isPlaying = true;
-    playIcon?.classList.replace("fa-play", "fa-pause");
-    playLabel.textContent = "Pause";
-  }
-
-  function setStoppedUI() {
-    isPlaying = false;
-    playIcon?.classList.replace("fa-pause", "fa-play");
-    playLabel.textContent = "Play";
-  }
-
-  playBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
-    try {
-      if (!isPlaying) {
-        await audio.play();
-        setPlayingUI();
-      } else {
-        audio.pause();
-        setStoppedUI();
-      }
-    } catch (err) {
-      console.error("Erreur de lecture :", err);
-      alert("Impossible de lire le flux audio. Vérifie la connexion.");
-    }
-  });
-
-  stopBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    audio.pause();
-    try { audio.currentTime = 0; } catch (_) {}
-    setStoppedUI();
-  });
-
-  audio.addEventListener("error", () => {
-    console.error("Erreur de flux");
-    setStoppedUI();
-  });
-
-  audio.addEventListener("ended", setStoppedUI);
-
-  window.addEventListener("pagehide", () => {
-    audio.pause();
-    setStoppedUI();
-  });
-})();
-</script>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>

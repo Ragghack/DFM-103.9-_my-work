@@ -112,6 +112,14 @@
             background-clip: text;
             text-fill-color: transparent;
         }
+
+        .Logo {
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding-left: 5px;
+            padding-right: 5px;
+        }
         
         .navbar-nav .nav-link {
             position: relative;
@@ -396,6 +404,8 @@
         
         .dropdown-item:hover {
             background-color: rgba(212, 175, 55, 0.1);
+            width: calc(100% - 10px);
+            height: calc(100% - 10px);
         }
         
         .audio-control {
@@ -701,6 +711,7 @@ input, select, textarea {
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="index.html">
+                    <img class="Logo" src="Logo.png" alt="DFM Media Logo" width="70" height="70" class="d-inline-block align-text-top me-2">
                     <i class="fas fa-microphone-alt me-2"></i>DFM MEDIA
                 </a>
                 
@@ -714,17 +725,6 @@ input, select, textarea {
                         <i class="fas fa-sun"></i>
                         <i class="fas fa-moon"></i>
                         <div class="theme-toggle-handle"></div>
-                    </div>
-                    
-                    <!-- User Auth Status -->
-                    <div class="dropdown ms-3">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="fas fa-user me-2"></i><span id="userStatus">Account</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" id="loginBtn">Login</a></li>
-                            <li><a class="dropdown-item" href="#" id="registerBtn">Register</a></li>
-                        </ul>
                     </div>
                     
                     <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -935,30 +935,43 @@ input, select, textarea {
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4 mb-md-0">
-                    <h5>DFM Media Articles</h5>
-                    <p>In-depth analysis, community insights, and informed perspectives.</p>
+                    <h5>DFM Media</h5>
+                    <p>Your reliable source for economic, political and social news.</p>
                 </div>
                 <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Connect With Us</h5>
                     <div class="social-icons">
-                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" title="Phone"><i class="fas fa-phone"></i></a>
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <h5>Contact</h5>
                     <address>
-                        DFM Media Articles Desk<br>
+                        DFM Media<br>
                         Cameroon<br>
-                        <i class="fas fa-envelope me-2"></i> articles@dfmmedia.cm<br>
-                        <i class="fas fa-phone me-2"></i> +237 6XX XXX XXX
+                        <i class="fas fa-envelope me-2"></i> contact@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-2"></i> +237 650 155 155
                     </address>
                 </div>
             </div>
+
+            <!-- User Auth Status -->
+                    <div class="dropdown ms-3">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-2"></i><span id="userStatus">Account</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="loginBtn">Login</a></li>
+                            <li><a class="dropdown-item" href="#" id="registerBtn">Register</a></li>
+                        </ul>
+                    </div>
+
             <hr class="my-4">
-            <p class="mb-0">&copy; 2025 DFM Media Articles – All rights reserved.</p>
+            <p class="mb-0">&copy; 2025 DFM Media – All rights reserved.</p>
         </div>
     </footer>
 

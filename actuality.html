@@ -117,6 +117,14 @@
             background-clip: text;
             text-fill-color: transparent;
         }
+
+        .Logo {
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding-left: 5px;
+            padding-right: 5px;
+        }
         
         .navbar-nav .nav-link {
             position: relative;
@@ -677,6 +685,7 @@
             <div class="container">
                 <!-- Logo and station name -->
                 <a class="navbar-brand" href="index.html">
+                    <img class="Logo" src="Logo.png" alt="DFM Media Logo" width="70" height="70" class="d-inline-block align-text-top me-2">
                     <i class="fas fa-microphone-alt me-2"></i>DFM MEDIA
                 </a>
                 
@@ -968,7 +977,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning rounded-circle p-3 me-3">
+                                <div class="bg-warning rounded-circle p-4 me-4">
                                     <i class="fas fa-calendar-alt fa-2x"></i>
                                 </div>
                                 <div>
@@ -981,7 +990,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning rounded-circle p-3 me-3">
+                                <div class="bg-warning rounded-circle p-4 me-4">
                                     <i class="fas fa-microphone fa-2x"></i>
                                 </div>
                                 <div>
@@ -1145,6 +1154,27 @@
                 <a href="#" class="btn btn-warning">View More Comments</a>
             </div>
         </section>
+
+        <!-- Radio Player Section -->
+        <section aria-labelledby="radio-player" class="my-5">
+            <h2 class="section-header" id="radio-player">Live Actuality Discussion</h2>
+            <div class="card news-card text-center p-4">
+                <h3 class="mb-4">Now Playing: Current Affairs Discussion</h3>
+                <div class="player-controls d-flex justify-content-center align-items-center">
+                    <button class="play-btn me-3" id="radioPlay">
+                        <i class="fas fa-play" aria-hidden="true"></i>
+                        <span class="visually-hidden">Play</span>
+                    </button>
+                    <button class="play-btn me-3" id="radioStop">
+                        <i class="fas fa-stop" aria-hidden="true"></i>
+                        <span class="visually-hidden">Stop</span>
+                    </button>
+                    <div class="ms-3">
+                        <span>Live: Analysis of current economic news and trends</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Live Radio Player Footer -->
@@ -1161,61 +1191,13 @@
                     <span class="visually-hidden">Stop</span>
                 </button>
             </div>
-            <span>Live: Current affairs and economic analysis</span>
-        </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="text-center p-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5>DFM Media Actuality</h5>
-                    <p>Stay updated with the latest news, programs, and economic developments.</p>
-                </div>
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5>Connect With Us</h5>
-                    <div class="social-icons">
-                        <a href="#" title="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i><span class="visually-hidden">Facebook</span></a>
-                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i><span class="visually-hidden">WhatsApp</span></a>
-                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i><span class="visually-hidden">LinkedIn</span></a>
-                        <a href="#" title="Phone"><i class="fas fa-phone" aria-hidden="true"></i><span class="visually-hidden">Phone</span></a>
-                    <style>
-                        .visually-hidden {
-        position: absolute !important;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-    }
-                    </style>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contact</h5>
-                    <address>
-                        DFM Media Actuality Desk<br>
-                        Cameroon<br>
-                        <i class="fas fa-envelope me-2"></i> actuality@dfmmedia.cm<br>
-                        <i class="fas fa-phone me-2"></i> +237 6XX XXX XXX
-                    </address>
-                </div>
-            </div>
-            <hr class="my-4">
-            <p class="mb-0">&copy; 2025 DFM Media Actuality – All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
+            <script>
 (function(){
   const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
 
-  const playBtn = document.getElementById("footerPlay");
-  const stopBtn = document.getElementById("footerStop");
+  const playBtn = document.getElementById("play-btn me-2");
+  const stopBtn = document.getElementById("play-btn");
   const playIcon = playBtn?.querySelector("i");
   const playLabel = playBtn?.querySelector(".visually-hidden");
 
@@ -1249,7 +1231,7 @@
       }
     } catch (err) {
       console.error("Erreur de lecture :", err);
-      alert("Impossible de lire le flux audio. Vérifie la connexion.");
+      alert("Impossible de lire le flux. Vérifie la connexion.");
     }
   });
 
@@ -1261,7 +1243,7 @@
   });
 
   audio.addEventListener("error", () => {
-    console.error("Erreur de flux");
+    console.error("Erreur audio");
     setStoppedUI();
   });
 
@@ -1274,6 +1256,54 @@
 })();
 </script>
 
+            <span>Live: Current affairs and economic analysis</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>DFM Media Actuality</h5>
+                    <p>Stay updated with the latest news, programs, and economic developments.</p>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Connect With Us</h5>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank"><i class="fab fa-facebook-f" aria-hidden="true"></i><span class="visually-hidden">Facebook</span></a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp" aria-hidden="true"></i><span class="visually-hidden">WhatsApp</span></a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz#" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in" aria-hidden="true"></i><span class="visually-hidden">LinkedIn</span></a>
+                        <a href="#" title="Phone"><i class="fas fa-phone" aria-hidden="true"></i><span class="visually-hidden">Phone</span></a>
+                    <style>
+                        .visually-hidden {
+        position: absolute !important;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+                    </style>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <address>
+                        DFM Media Actuality Desk<br>
+                        Cameroon<br>
+                        <i class="fas fa-envelope me-2"></i> actuality@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-2"></i> +237 650 155 155
+                    </address>
+                </div>
+            </div>
+            <hr class="my-4">
+            <p class="mb-0">&copy; 2025 DFM Media Actuality – All rights reserved.</p>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
