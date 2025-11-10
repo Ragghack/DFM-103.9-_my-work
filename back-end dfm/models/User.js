@@ -104,11 +104,7 @@ const UserSchema = new mongoose.Schema({
       delete ret.lockUntil;
       return ret;
     }
-  },
-   savedArticles: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Article'
-  }]
+  }
 });
 
 // Virtual for checking if account is locked

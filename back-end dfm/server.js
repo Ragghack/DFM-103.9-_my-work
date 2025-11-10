@@ -3,7 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-const path = require('path'); // ADD THIS LINE
+const path = require('path');
 require('dotenv').config({ path: './dfm.env' });
 
 const connectDB = require('./config/database');
@@ -29,8 +29,10 @@ connectDB();
 // Middleware
 const allowedOrigins = [
   'http://127.0.0.1:5500',
-  'http://localhost:3000', 
+  'http://127.0.0.1:5502',
+  'http://localhost:3000',
   'http://localhost:5500',
+  'http://localhost:5502',
   'http://localhost:5000'
 ];
 
@@ -82,6 +84,9 @@ app.get('/economy', (req, res) => {
 app.get('/finance', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'finance.html'));
 });
+app.get('/admin-login', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'admin-login.html'));
+});
 
 // ==================== API ROUTES ====================
 app.use('/api/auth', authRoutes);
@@ -129,7 +134,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000; // Hardcoded to only run on port 5000
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
