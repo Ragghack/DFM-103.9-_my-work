@@ -10,9 +10,9 @@
     <style>
         :root {
             --primary-dark: #1a1814;
-            --primary-accent: #D4AF37; /* Gold color */
+            --primary-accent: #D4AF37;
             --secondary-dark: #2d2b24;
-            --light-bg: #F8F5F0; /* Milky white */
+            --light-bg: #F8F5F0;
             --card-bg: #ffffff;
             --text-primary: #1a1814;
             --text-secondary: #333333;
@@ -22,12 +22,11 @@
             --box-text-color: #1a1814;
         }
         
-        /* Dark mode variables */
         [data-theme="dark"] {
             --light-bg: #121212;
             --card-bg: #1a1a1a;
-            --text-primary: #D4AF37; /* Gold headers */
-            --text-secondary: #ffffff; /* White minor text */
+            --text-primary: #D4AF37;
+            --text-secondary: #ffffff;
             --border-light: #333333;
             --glass-bg: rgba(26, 24, 20, 0.9);
             --glass-border: rgba(212, 175, 55, 0.1);
@@ -45,8 +44,6 @@
             line-height: 1.7;
         }
         
-       
-        /* Theme Toggle Button */
         .theme-toggle {
             position: relative;
             width: 50px;
@@ -89,23 +86,18 @@
             padding-right: 4px;
         }
         
-        /* Enhanced Glassmorphism Effects */
         .glass {
             background: var(--glass-bg);
-            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
         }
         
-        /* Enhanced Header & Navigation */
         header { 
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
             color: white;
             box-shadow: 0 4px 32px rgba(26, 24, 20, 0.3);
-            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
-        
         
         header .navbar-brand { 
             font-weight: 800;
@@ -115,7 +107,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-fill-color: transparent;
         }
 
         .Logo {
@@ -161,7 +152,7 @@
             color: var(--primary-dark) !important;
             transform: translateY(-2px);
         }
-        /* Enhanced Breaking News with Animation */
+        
         .breaking-news { 
             padding: 16px 0;
             overflow: hidden;
@@ -196,18 +187,15 @@
         
         .breaking-news span {
             flex-shrink: 0;
-            padding: 4px 12px;
+            padding: 8px 16px;
             font-size: 0.9rem;
             background: var(--primary-dark);
             color: var(--primary-accent);
-            padding: 8px 16px;
             border-radius: 20px;
             font-weight: 700;
             margin-right: 20px;
             display: inline-block;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 1;
         }
         
         .marquee-container {
@@ -220,8 +208,6 @@
             padding-left: 100%;
             animation: marquee 20s linear infinite;
             font-weight: 700;
-            position: relative;
-            z-index: 1;
             font-size: 0.85rem;
             white-space: nowrap;
             color: var(--primary-dark);
@@ -232,7 +218,6 @@
             100% { transform: translateX(-100%); }
         }
         
-        /* Enhanced Cards with Micro-interactions */
         .news-card { 
             border: none; 
             border-radius: 20px;
@@ -253,7 +238,6 @@
             border-radius: 20px;
             padding: 2px;
             background: linear-gradient(45deg, transparent, var(--primary-accent), transparent);
-            /* mask properties are not widely supported, fallback to opacity only */
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -276,13 +260,11 @@
         .news-card img { 
             height: 220px; 
             object-fit: cover;
-            filter: brightness(0.9) contrast(1.1);
-            transition: transform 0.5s ease, filter 0.5s ease;
+            transition: transform 0.5s ease;
         }
         
         .news-card:hover img {
             transform: scale(1.1);
-            filter: brightness(1) contrast(1.2);
         }
         
         .news-card .card-title { 
@@ -303,11 +285,9 @@
             font-size: 0.8rem;
             font-weight: 700;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
         
-        /* Enhanced Section Headers */
         .section-header {
             position: relative;
             margin-bottom: 40px;
@@ -328,7 +308,6 @@
             border-radius: 2px;
         }
         
-        /* Enhanced Live Player */
         .live-player { 
             background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
             color: var(--primary-accent);
@@ -370,38 +349,12 @@
             margin: 0 20px;
             font-size: 1.2rem;
             box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
-            position: relative;
-        }
-        
-        .play-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary-accent), #fff);
-            z-index: -1;
-            opacity: 0;
         }
         
         .play-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
         }
         
-        .play-btn:hover::before {
-            opacity: 1;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        /* Enhanced Footer */
         footer { 
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
             color: var(--primary-accent);
@@ -412,98 +365,13 @@
             color: var(--primary-accent) !important;
             font-size: 1.6rem;
             margin: 0 10px;
-            transition: color 0.3s, text-shadow 0.3s;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.7), 0 0 2px #fff;
+            transition: color 0.3s;
         }
+        
         .social-icons a:hover {
             color: #fff200 !important;
-            text-shadow: 0 0 16px #fff200, 0 0 4px var(--primary-accent);
         }
         
-        /* Search & Notification System */
-        .search-container {
-            position: relative;
-            max-width: 400px;
-            margin: 0 auto;
-            transition: all 0.3s ease;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 12px 20px 12px 50px;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 0.95rem;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        
-        .search-input:focus {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 0 0 2px var(--primary-accent);
-        }
-        
-        .search-input::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255,255,255,0.7);
-        }
-        
-        /* Navigation dropdown styles */
-        .dropdown-menu {
-            background: var(--card-bg);
-            border: 1px solid var(--primary-accent);
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            animation: dropdownFade 0.3s ease;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-        
-        @keyframes dropdownFade {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .dropdown-item {
-            color: var(--text-secondary);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin: 5px;
-            transition: all 0.2s ease;
-        }
-        
-        .dropdown-item:hover {
-            background-color: rgba(212, 175, 55, 0.1);
-            transform: translateX(5px);
-        }
-        
-        /* Audio controls in navbar */
-        .audio-control {
-            background: none;
-            border: none;
-            color: var(--primary-accent);
-            font-size: 1.5rem;
-            margin-left: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .audio-control:hover {
-            color: #fff;
-            transform: scale(1.1);
-        }
-        
-        /* Actuality specific styles */
         .program-card {
             border-radius: 15px;
             overflow: hidden;
@@ -517,11 +385,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
         
-        .program-card .card-img-top {
-            height: 180px;
-            object-fit: cover;
-        }
-        
         .program-time {
             background: var(--primary-accent);
             color: var(--primary-dark);
@@ -531,84 +394,6 @@
             font-weight: 600;
             display: inline-block;
             margin-bottom: 10px;
-        }
-        
-        .program-host {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-        
-        .program-description {
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-        
-        .hot-news-ticker {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hot-news-ticker::before {
-            content: 'HOT';
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: var(--primary-dark);
-            color: var(--primary-accent);
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 10px 15px;
-            border-radius: 50%;
-            transform: rotate(15deg);
-        }
-        
-        .comment-block {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
-        
-        .comment-user {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .comment-avatar {
-            width: 100%;
-            padding: 12px 20px 12px 50px;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 0.95rem;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            background: var(--light-bg);
-            padding: 15px;
-            border-radius: 12px;
-            position: relative;
-        }
-        
-        .comment-content::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 20px;
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 10px solid var(--light-bg);
         }
         
         .economy-summary {
@@ -626,36 +411,49 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
-        .economy-indicator:last-child {
-            border-bottom: none;
-        }
-        
         .indicator-value {
             font-weight: 700;
             color: var(--primary-accent);
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .navbar-nav .nav-link {
-                margin: 4px 0;
-                text-align: center;
-            }
-            
-            .search-container {
-                margin: 15px auto;
-            }
-            
-            .marquee {
-                animation: marquee 15s linear infinite;
-            }
-            
-            .program-card {
-                margin-bottom: 20px;
-            }
+        .hot-news-ticker {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
         }
         
-        /* Animation for cards */
+        .comment-block {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .visually-hidden {
+            position: absolute !important;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -670,12 +468,6 @@
         .animate-card {
             animation: fadeInUp 0.6s ease forwards;
         }
-        
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
     </style>
 </head>
 <body>
@@ -683,149 +475,34 @@
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <!-- Logo and station name -->
                 <a class="navbar-brand" href="index.html">
                     <img class="Logo" src="Logo.png" alt="DFM Media Logo" width="70" height="70" class="d-inline-block align-text-top me-2">
                     <i class="fas fa-microphone-alt me-2"></i>DFM MEDIA
                 </a>
                 
-                <!-- Search Container -->
                 <div class="search-container d-none d-lg-block">
                     <i class="fas fa-search search-icon"></i>
                     <input type="search" class="search-input" placeholder="Search news...">
                 </div>
                 
                 <div class="d-flex align-items-center">
-                    <!-- Theme Toggle Button -->
                     <div class="theme-toggle" id="themeToggle">
                         <i class="fas fa-sun"></i>
                         <i class="fas fa-moon"></i>
                         <div class="theme-toggle-handle"></div>
                     </div>
                     
-                    <!-- Audio Controls -->
                     <button class="audio-control" id="playButton">
-  <i class="fas fa-play" aria-hidden="true"></i>
-  <span class="visually-hidden">Play</span>
-</button>
-<button class="audio-control" id="stopButton">
-  <i class="fas fa-stop" aria-hidden="true"></i>
-  <span class="visually-hidden">Stop</span>
-</button>
-
-<!-- script : lie les boutons au stream -->
-<script>
-(function(){
-  // URL du stream
-  const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
-
-  // éléments
-  const playBtn = document.getElementById("playButton");
-  const stopBtn  = document.getElementById("stopButton");
-  const playIcon = playBtn.querySelector("i");
-  const stopIcon = stopBtn.querySelector("i");
-  const playLabel = playBtn.querySelector(".visually-hidden");
-
-  // crée l'objet audio (ne pas ajouter d'élément <audio> visible si tu préfères)
-  const audio = new Audio(STREAM_URL);
-  audio.preload = "none"; // évite de charger automatiquement
-  audio.crossOrigin = "anonymous"; // utile si analyse future / visualiseur
-
-  // état
-  let isPlaying = false;
-
-  // helpers pour mettre à jour l'UI
-  function setPlayingUI() {
-    isPlaying = true;
-    // change icône play -> pause si tu veux
-    playIcon.classList.remove("fa-play");
-    playIcon.classList.add("fa-pause");
-    playBtn.setAttribute("aria-pressed", "true");
-    playLabel.textContent = "Pause";
-  }
-
-  function setStoppedUI() {
-    isPlaying = false;
-    playIcon.classList.remove("fa-pause");
-    playIcon.classList.add("fa-play");
-    playBtn.setAttribute("aria-pressed", "false");
-    playLabel.textContent = "Play";
-  }
-
-  // play / pause toggle
-  playBtn.addEventListener("click", async function (e) {
-    e.preventDefault();
-    try {
-      if (!isPlaying) {
-        // start
-        // certains navigateurs exigent un user gesture pour jouer, ici on est dans un click donc ok
-        await audio.play();
-        setPlayingUI();
-      } else {
-        // pause (ne pas "stop" complètement pour garder buffer)
-        audio.pause();
-        setStoppedUI();
-      }
-    } catch (err) {
-      console.error("Impossible de lancer le stream :", err);
-      alert("Impossible de lancer le stream. Vérifie la connexion ou la source.");
-    }
-  });
-
-  // stop complet — on met pause puis on remet à 0 (pour un flux live c'est surtout pause)
-  stopBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    try {
-      audio.pause();
-      // pour les flux live .currentTime n'a pas beaucoup d'effet, mais on réinitialise l'audio.
-      try { audio.currentTime = 0; } catch (_) {}
-      setStoppedUI();
-    } catch (err) {
-      console.error("Erreur lors de l'arrêt :", err);
-    }
-  });
-
-  // gestion d'erreurs
-  audio.addEventListener("error", function (ev) {
-    console.error("Erreur audio :", ev);
-    alert("Le lecteur a rencontré une erreur en chargeant le flux.");
-    setStoppedUI();
-  });
-
-  // si le flux coupe côté serveur
-  audio.addEventListener("ended", function () {
-    setStoppedUI();
-  });
-
-  // (option) si tu veux que le bouton devienne indéxable seulement quand prêt :
-  audio.addEventListener("canplay", function(){
-    // le flux est prêt à jouer
-  });
-
-  // accessibilité : touche espace/enter sur le bouton play
-  playBtn.addEventListener("keydown", function(e){
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
-      playBtn.click();
-    }
-  });
-  stopBtn.addEventListener("keydown", function(e){
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
-      stopBtn.click();
-    }
-  });
-
-  // Conseil : si tu veux démarrer/arrêter automatiquement quand l'utilisateur
-  // change de page ou ferme l'onglet :
-  window.addEventListener("pagehide", function(){ audio.pause(); setStoppedUI(); });
-})();
-</script>
+                        <i class="fas fa-play"></i>
+                        <span class="visually-hidden">Play</span>
+                    </button>
+                    <button class="audio-control" id="stopButton">
+                        <i class="fas fa-stop"></i>
+                        <span class="visually-hidden">Stop</span>
+                    </button>
                     
                     <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span class="navbar-toggler-icon"></span>
-                        <span class="visually-hidden">Toggle navigation</span>
-                    </button>
                     </button>
                 </div>
                 
@@ -833,8 +510,6 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="emmsion.html"><i class="fas fa-broadcast-tower me-1"></i> Emission</a></li>
-                        
-                        <!-- Economy Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="economyDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-chart-line me-1"></i> Economy
@@ -846,8 +521,6 @@
                                 <li><a class="dropdown-item" href="#">Eco Innovation</a></li>
                             </ul>
                         </li>
-                        
-                        <!-- Finance Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="financeDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-coins me-1"></i> Finance
@@ -859,8 +532,6 @@
                                 <li><a class="dropdown-item" href="finance.html#statistics">Daily Statistics</a></li>
                             </ul>
                         </li>
-                        
-                        <!-- Articles Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="articlesDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-newspaper me-1"></i> Articles
@@ -871,7 +542,6 @@
                                 <li><a class="dropdown-item" href="articles.html#blog">Blog</a></li>
                             </ul>
                         </li>
-                        
                         <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-bullhorn me-1"></i> Actuality</a></li>
                     </ul>
                 </div>
@@ -884,8 +554,8 @@
         <div class="container d-flex align-items-center">
             <span><i class="fas fa-bolt me-2"></i>BREAKING NEWS</span>
             <div class="marquee-container w-100">
-                <div class="marquee">
-                    Central Bank announces new monetary policy measures | Stock market reaches all-time high | Government launches new infrastructure projects | Inflation rate drops to 2.3% | New economic partnership signed with EU
+                <div class="marquee" id="breakingNewsTicker">
+                    Loading breaking news...
                 </div>
             </div>
         </div>
@@ -896,41 +566,11 @@
         <!-- Our Channel Programs -->
         <section aria-labelledby="our-programs" class="mb-5">
             <h2 class="section-header" id="our-programs">Our Channel Programs</h2>
-            <div class="row">
-                <div class="col-md-4 mb-4 animate-card delay-1">
-                    <div class="card program-card">
-                        <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" class="card-img-top" alt="Economic Analysis">
-                        <div class="card-body">
-                            <span class="program-time">Mon-Fri, 7:00 PM</span>
-                            <h5 class="card-title">Economic Analysis</h5>
-                            <p class="program-host">Hosted by Dr. Samuel Njoh</p>
-                            <p class="program-description">Daily analysis of market trends, economic indicators, and financial news with expert insights.</p>
-                            <a href="#" class="btn btn-sm btn-warning">Set Reminder</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 animate-card delay-2">
-                    <div class="card program-card">
-                        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" class="card-img-top" alt="Business Focus">
-                        <div class="card-body">
-                            <span class="program-time">Tue & Thu, 8:00 PM</span>
-                            <h5 class="card-title">Business Focus</h5>
-                            <p class="program-host">Hosted by Amina Diallo</p>
-                            <p class="program-description">Interviews with business leaders, entrepreneurs, and innovators shaping Cameroon's economy.</p>
-                            <a href="#" class="btn btn-sm btn-warning">Set Reminder</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 animate-card delay-3">
-                    <div class="card program-card">
-                        <img src="https://images.unsplash.com/photo-1551135049-8a33b5883817?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" class="card-img-top" alt="Market Watch">
-                        <div class="card-body">
-                            <span class="program-time">Daily, 6:30 PM</span>
-                            <h5 class="card-title">Market Watch</h5>
-                            <p class="program-host">Hosted by Pierre Mbarga</p>
-                            <p class="program-description">Daily recap of stock market performance, currency exchange rates, and commodity prices.</p>
-                            <a href="#" class="btn btn-sm btn-warning">Set Reminder</a>
-                        </div>
+            <div class="row" id="programsContainer">
+                <!-- Programs will be loaded here by JavaScript -->
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading programs...</span>
                     </div>
                 </div>
             </div>
@@ -939,31 +579,11 @@
         <!-- Future Programs -->
         <section aria-labelledby="future-programs" class="mb-5">
             <h2 class="section-header" id="future-programs">Future Programs</h2>
-            <div class="row">
-                <div class="col-md-6 mb-4 animate-card delay-1">
-                    <div class="card news-card">
-                        <div class="card-body">
-                            <span class="badge bg-info mb-2">Starting Next Week</span>
-                            <h5 class="card-title">Tech Innovation Africa</h5>
-                            <p class="card-text">A new weekly program exploring technological innovations across Africa and their impact on economic development.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">Premieres: June 25, 2023</span>
-                                <a href="#" class="btn btn-sm btn-outline-warning">Learn More</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4 animate-card delay-2">
-                    <div class="card news-card">
-                        <div class="card-body">
-                            <span class="badge bg-info mb-2">Coming Soon</span>
-                            <h5 class="card-title">Agricultural Revolution</h5>
-                            <p class="card-text">A documentary series exploring modern agricultural techniques and their potential to transform Africa's food security.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">Premieres: July 10, 2023</span>
-                                <a href="#" class="btn btn-sm btn-outline-warning">Learn More</a>
-                            </div>
-                        </div>
+            <div class="row" id="futureProgramsContainer">
+                <!-- Future programs will be loaded here by JavaScript -->
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading future programs...</span>
                     </div>
                 </div>
             </div>
@@ -972,35 +592,11 @@
         <!-- Upcoming Programs -->
         <section aria-labelledby="upcoming-programs" class="mb-5">
             <h2 class="section-header" id="upcoming-programs">Upcoming Programs</h2>
-            <div class="card news-card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning rounded-circle p-4 me-4">
-                                    <i class="fas fa-calendar-alt fa-2x"></i>
-                                </div>
-                                <div>
-                                    <h5 class="mb-0">Special Economic Forum</h5>
-                                    <p class="mb-0">June 20, 2023 | 3:00 PM</p>
-                                </div>
-                            </div>
-                            <p>Live coverage of the annual economic forum featuring government officials, economists, and business leaders discussing Cameroon's economic future.</p>
-                            <a href="#" class="btn btn-warning">Add to Calendar</a>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning rounded-circle p-4 me-4">
-                                    <i class="fas fa-microphone fa-2x"></i>
-                                </div>
-                                <div>
-                                    <h5 class="mb-0">Interview with Finance Minister</h5>
-                                    <p class="mb-0">June 22, 2023 | 7:30 PM</p>
-                                </div>
-                            </div>
-                            <p>Exclusive interview with the Minister of Finance discussing new policies, budget allocation, and economic recovery plans.</p>
-                            <a href="#" class="btn btn-warning" onclick = "">Set Reminder</a>
-                        </div>
+            <div id="upcomingProgramsContainer">
+                <!-- Upcoming programs will be loaded here by JavaScript -->
+                <div class="text-center">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading upcoming programs...</span>
                     </div>
                 </div>
             </div>
@@ -1009,30 +605,12 @@
         <!-- Economy Activities Summary -->
         <section aria-labelledby="economy-summary" class="mb-5">
             <h2 class="section-header" id="economy-summary">Economy Activities Summary</h2>
-            <div class="economy-summary">
-                <h4 class="mb-4">This Week in Economy</h4>
-                <div class="economy-indicator">
-                    <span>Stock Market Performance</span>
-                    <span class="indicator-value">+3.2%</span>
-                </div>
-                <div class="economy-indicator">
-                    <span>Inflation Rate</span>
-                    <span class="indicator-value">2.3%</span>
-                </div>
-                <div class="economy-indicator">
-                    <span>Currency Stability (FCFA/USD)</span>
-                    <span class="indicator-value">582.50</span>
-                </div>
-                <div class="economy-indicator">
-                    <span>New Business Registrations</span>
-                    <span class="indicator-value">+15%</span>
-                </div>
-                <div class="economy-indicator">
-                    <span>Agricultural Production</span>
-                    <span class="indicator-value">+8%</span>
-                </div>
-                <div class="text-center mt-4">
-                    <a href="#" class="btn btn-outline-warning">View Detailed Report</a>
+            <div id="economySummaryContainer">
+                <!-- Economy summary will be loaded here by JavaScript -->
+                <div class="text-center">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading economy summary...</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1040,33 +618,11 @@
         <!-- Hot Current News -->
         <section aria-labelledby="hot-news" class="mb-5">
             <h2 class="section-header" id="hot-news">Hot Current News</h2>
-            <div class="hot-news-ticker">
-                <h4><i class="fas fa-fire me-2"></i>Central Bank Announces New Monetary Policy</h4>
-                <p>The Bank of Central African States has introduced new measures to stabilize the currency and control inflation. The policy changes include...</p>
-                <a href="#" class="text-white">Read Full Story <i class="fas fa-arrow-right ms-1"></i></a>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="card news-card">
-                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" class="card-img-top" alt="Tech Startups">
-                        <div class="card-body">
-                            <span class="badge bg-danger mb-2">Hot Topic</span>
-                            <h5 class="card-title">Tech Startups Secure $20M in Funding</h5>
-                            <p class="card-text">Cameroonian tech startups have raised significant funding in the last quarter, signaling growing investor confidence in the sector.</p>
-                            <a href="#" class="btn btn-sm btn-outline-warning">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="card news-card">
-                        <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" class="card-img-top" alt="Economic Growth">
-                        <div class="card-body">
-                            <span class="badge bg-danger mb-2">Hot Topic</span>
-                            <h5 class="card-title">Economic Growth Exceeds Projections</h5>
-                            <p class="card-text">Cameroon's economy grew by 4.2% in the last quarter, exceeding the projected 3.5% growth rate, according to latest reports.</p>
-                            <a href="#" class="btn btn-sm btn-outline-warning">Read More</a>
-                        </div>
+            <div id="hotNewsContainer">
+                <!-- Hot news will be loaded here by JavaScript -->
+                <div class="text-center">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading hot news...</span>
                     </div>
                 </div>
             </div>
@@ -1075,77 +631,11 @@
         <!-- Subscriber Comments -->
         <section aria-labelledby="subscriber-comments" class="mb-5">
             <h2 class="section-header" id="subscriber-comments">Subscriber Comments</h2>
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="comment-block">
-                        <div class="comment-user">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
-                            <div>
-                                <h6 class="mb-0">Emmanuel T.</h6>
-                                <small class="text-muted">Posted 2 hours ago</small>
-                            </div>
-                        </div>
-                        <div class="comment-content">
-                            <p>"The new monetary policy is exactly what our economy needs right now. I hope it helps stabilize prices and encourages more investment in productive sectors."</p>
-                        </div>
-                        <div class="d-flex justify-content-between mt-3">
-                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-thumbs-up me-1"></i> 24</button>
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="comment-block">
-                        <div class="comment-user">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
-                            <div>
-                                <h6 class="mb-0">Marie L.</h6>
-                                <small class="text-muted">Posted 5 hours ago</small>
-                            </div>
-                        </div>
-                        <div class="comment-content">
-                            <p>"I'm excited about the tech startup funding news! This shows that Cameroon is becoming a hub for innovation in Central Africa. More support for young entrepreneurs please!"</p>
-                        </div>
-                        <div class="d-flex justify-content-between mt-3">
-                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-thumbs-up me-1"></i> 31</button>
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="comment-block">
-                        <div class="comment-user">
-                            <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
-                            <div>
-                                <h6 class="mb-0">Paul B.</h6>
-                                <small class="text-muted">Posted 1 day ago</small>
-                            </div>
-                        </div>
-                        <div class="comment-content">
-                            <p>"While the economic growth is impressive, I'm concerned about whether this growth is inclusive. We need to ensure that rural communities are also benefiting from these developments."</p>
-                        </div>
-                        <div class="d-flex justify-content-between mt-3">
-                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-thumbs-up me-1"></i> 18</button>
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="comment-block">
-                        <div class="comment-user">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="User" class="comment-avatar">
-                            <div>
-                                <h6 class="mb-0">Amina D.</h6>
-                                <small class="text-muted">Posted 2 days ago</small>
-                            </div>
-                        </div>
-                        <div class="comment-content">
-                            <p>"The agricultural revolution program sounds promising. We need to modernize our farming techniques to improve food security and create more agribusiness opportunities."</p>
-                        </div>
-                        <div class="d-flex justify-content-between mt-3">
-                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-thumbs-up me-1"></i> 27</button>
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-reply me-1"></i> Reply</button>
-                        </div>
+            <div class="row" id="commentsContainer">
+                <!-- Comments will be loaded here by JavaScript -->
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading comments...</span>
                     </div>
                 </div>
             </div>
@@ -1162,15 +652,15 @@
                 <h3 class="mb-4">Now Playing: Current Affairs Discussion</h3>
                 <div class="player-controls d-flex justify-content-center align-items-center">
                     <button class="play-btn me-3" id="radioPlay">
-                        <i class="fas fa-play" aria-hidden="true"></i>
+                        <i class="fas fa-play"></i>
                         <span class="visually-hidden">Play</span>
                     </button>
                     <button class="play-btn me-3" id="radioStop">
-                        <i class="fas fa-stop" aria-hidden="true"></i>
+                        <i class="fas fa-stop"></i>
                         <span class="visually-hidden">Stop</span>
                     </button>
                     <div class="ms-3">
-                        <span>Live: Analysis of current economic news and trends</span>
+                        <span id="nowPlayingText">Live: Analysis of current economic news and trends</span>
                     </div>
                 </div>
             </div>
@@ -1183,79 +673,14 @@
             <span>🎙️ Listen to DFM Actuality Discussion Live</span>
             <div>
                 <button class="play-btn me-2" id="footerPlay">
-                    <i class="fas fa-play" aria-hidden="true"></i>
+                    <i class="fas fa-play"></i>
                     <span class="visually-hidden">Play</span>
                 </button>
                 <button class="play-btn" id="footerStop">
-                    <i class="fas fa-stop" aria-hidden="true"></i>
+                    <i class="fas fa-stop"></i>
                     <span class="visually-hidden">Stop</span>
                 </button>
             </div>
-
-            <script>
-(function(){
-  const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
-
-  const playBtn = document.getElementById("play-btn me-2");
-  const stopBtn = document.getElementById("play-btn");
-  const playIcon = playBtn?.querySelector("i");
-  const playLabel = playBtn?.querySelector(".visually-hidden");
-
-  const audio = new Audio(STREAM_URL);
-  audio.preload = "none";
-  audio.crossOrigin = "anonymous";
-
-  let isPlaying = false;
-
-  function setPlayingUI() {
-    isPlaying = true;
-    playIcon?.classList.replace("fa-play", "fa-pause");
-    playLabel.textContent = "Pause";
-  }
-
-  function setStoppedUI() {
-    isPlaying = false;
-    playIcon?.classList.replace("fa-pause", "fa-play");
-    playLabel.textContent = "Play";
-  }
-
-  playBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
-    try {
-      if (!isPlaying) {
-        await audio.play();
-        setPlayingUI();
-      } else {
-        audio.pause();
-        setStoppedUI();
-      }
-    } catch (err) {
-      console.error("Erreur de lecture :", err);
-      alert("Impossible de lire le flux. Vérifie la connexion.");
-    }
-  });
-
-  stopBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    audio.pause();
-    try { audio.currentTime = 0; } catch (_) {}
-    setStoppedUI();
-  });
-
-  audio.addEventListener("error", () => {
-    console.error("Erreur audio");
-    setStoppedUI();
-  });
-
-  audio.addEventListener("ended", setStoppedUI);
-
-  window.addEventListener("pagehide", () => {
-    audio.pause();
-    setStoppedUI();
-  });
-})();
-</script>
-
             <span>Live: Current affairs and economic analysis</span>
         </div>
     </div>
@@ -1271,23 +696,22 @@
                 <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Connect With Us</h5>
                     <div class="social-icons">
-                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank"><i class="fab fa-facebook-f" aria-hidden="true"></i><span class="visually-hidden">Facebook</span></a>
-                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp" aria-hidden="true"></i><span class="visually-hidden">WhatsApp</span></a>
-                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz#" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in" aria-hidden="true"></i><span class="visually-hidden">LinkedIn</span></a>
-                        <a href="#" title="Phone"><i class="fas fa-phone" aria-hidden="true"></i><span class="visually-hidden">Phone</span></a>
-                    <style>
-                        .visually-hidden {
-        position: absolute !important;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-    }
-                    </style>
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                            <span class="visually-hidden">Facebook</span>
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                            <span class="visually-hidden">WhatsApp</span>
+                        </a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz#" title="LinkedIn" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span class="visually-hidden">LinkedIn</span>
+                        </a>
+                        <a href="#" title="Phone">
+                            <i class="fas fa-phone"></i>
+                            <span class="visually-hidden">Phone</span>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -1306,19 +730,28 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
- // Add this script to your actuality.html page
+    
     <script>
-        // Theme Toggle
-        class ThemeManager {
+        // DFM Actuality Application
+        class DFMActualityApp {
             constructor() {
-                this.themeToggle = document.getElementById('themeToggle');
+                this.API_BASE = 'http://localhost:5000/api';
+                this.audioPlayer = null;
                 this.currentTheme = localStorage.getItem('theme') || 'light';
                 this.init();
             }
 
             init() {
+                this.initTheme();
+                this.initAudioPlayer();
+                this.loadAllData();
+                this.setupEventListeners();
+            }
+
+            // Theme Management
+            initTheme() {
                 this.applyTheme(this.currentTheme);
-                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
             }
 
             applyTheme(theme) {
@@ -1330,62 +763,61 @@
                 this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
                 this.applyTheme(this.currentTheme);
             }
-        }
 
-        // Audio Player
-        class AudioPlayer {
-            constructor() {
-                this.STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
-                this.audio = new Audio(this.STREAM_URL);
-                this.audio.preload = "none";
+            // Audio Player Management
+            initAudioPlayer() {
+                const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
+                this.audioPlayer = new Audio(STREAM_URL);
+                this.audioPlayer.preload = "none";
+                this.audioPlayer.crossOrigin = "anonymous";
                 this.isPlaying = false;
-                
-                this.initPlayers();
+
+                // Connect all play buttons
+                const playButtons = ['playButton', 'radioPlay', 'footerPlay'];
+                const stopButtons = ['stopButton', 'radioStop', 'footerStop'];
+
+                playButtons.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.addEventListener('click', () => this.togglePlayback());
+                });
+
+                stopButtons.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.addEventListener('click', () => this.stopPlayback());
+                });
+
+                this.audioPlayer.addEventListener('error', (e) => {
+                    console.error('Audio player error:', e);
+                    this.showNotification('Error playing stream. Please check your connection.', 'error');
+                    this.stopPlayback();
+                });
             }
 
-            initPlayers() {
-                // Header player
-                const headerPlay = document.getElementById('headerPlayButton');
-                if (headerPlay) {
-                    headerPlay.addEventListener('click', () => this.togglePlay());
-                }
-
-                // Footer players
-                const footerPlay = document.getElementById('footerPlayButton');
-                const footerStop = document.getElementById('footerStopButton');
-                
-                if (footerPlay) {
-                    footerPlay.addEventListener('click', () => this.togglePlay());
-                }
-                if (footerStop) {
-                    footerStop.addEventListener('click', () => this.stop());
-                }
-            }
-
-            async togglePlay() {
+            async togglePlayback() {
                 try {
                     if (!this.isPlaying) {
-                        await this.audio.play();
+                        await this.audioPlayer.play();
                         this.isPlaying = true;
-                        this.updateUI(true);
+                        this.updatePlaybackUI(true);
                     } else {
-                        this.audio.pause();
+                        this.audioPlayer.pause();
                         this.isPlaying = false;
-                        this.updateUI(false);
+                        this.updatePlaybackUI(false);
                     }
                 } catch (error) {
-                    console.error('Audio playback error:', error);
-                    alert('Unable to play stream. Please check your connection.');
+                    console.error('Playback error:', error);
+                    this.showNotification('Unable to play stream. Please check your connection.', 'error');
                 }
             }
 
-            stop() {
-                this.audio.pause();
+            stopPlayback() {
+                this.audioPlayer.pause();
+                this.audioPlayer.currentTime = 0;
                 this.isPlaying = false;
-                this.updateUI(false);
+                this.updatePlaybackUI(false);
             }
 
-            updateUI(playing) {
+            updatePlaybackUI(playing) {
                 const playIcons = document.querySelectorAll('.fa-play, .fa-pause');
                 playIcons.forEach(icon => {
                     if (playing) {
@@ -1395,21 +827,8 @@
                     }
                 });
             }
-        }
 
-        // Actuality Data Manager
-        class ActualityPageManager {
-            constructor() {
-                this.API_BASE = 'http://localhost:5000/api';
-                this.init();
-            }
-
-            init() {
-                this.loadAllData();
-                // Refresh data every 5 minutes
-                setInterval(() => this.loadAllData(), 300000);
-            }
-
+            // Data Loading
             async loadAllData() {
                 try {
                     await Promise.all([
@@ -1422,37 +841,36 @@
                         this.loadComments()
                     ]);
                 } catch (error) {
-                    console.error('Error loading actuality data:', error);
+                    console.error('Error loading data:', error);
+                    this.showNotification('Failed to load some content. Please refresh the page.', 'warning');
                 }
             }
 
             async fetchData(endpoint) {
                 try {
                     const response = await fetch(`${this.API_BASE}${endpoint}`);
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
                     return await response.json();
                 } catch (error) {
-                    console.error(`Fetch error for ${endpoint}:`, error);
+                    console.error(`API Error for ${endpoint}:`, error);
                     throw error;
                 }
             }
 
             async loadBreakingNews() {
                 try {
-                    // This would typically come from your API
-                    const breakingNews = [
-                        "Central Bank announces new monetary policy measures",
-                        "Stock market reaches all-time high",
-                        "Government launches new infrastructure projects",
-                        "Inflation rate drops to 2.3%",
-                        "New economic partnership signed with EU"
-                    ];
+                    // This would typically come from your hot-news endpoint
+                    const data = await this.fetchData('/actuality/hot-news');
+                    const newsItems = data.hotNews || [];
+                    const breakingNews = newsItems.slice(0, 3).map(item => item.title).join(' | ') || 
+                                        'Stay tuned for the latest news updates from DFM Media';
                     
-                    const content = breakingNews.join(' | ');
-                    document.getElementById('breakingNewsContent').textContent = content;
+                    document.getElementById('breakingNewsTicker').textContent = breakingNews;
                 } catch (error) {
-                    document.getElementById('breakingNewsContent').textContent = 
-                        "Stay tuned for the latest news updates";
+                    document.getElementById('breakingNewsTicker').textContent = 
+                        'Latest news and updates from DFM Media - Stay informed';
                 }
             }
 
@@ -1461,7 +879,7 @@
                     const data = await this.fetchData('/actuality/programs');
                     this.renderPrograms(data.programs || []);
                 } catch (error) {
-                    this.showError('programs-container', 'Failed to load programs');
+                    this.showError('programsContainer', 'Unable to load programs');
                 }
             }
 
@@ -1470,7 +888,7 @@
                     const data = await this.fetchData('/actuality/programs/upcoming');
                     this.renderUpcomingPrograms(data.programs || []);
                 } catch (error) {
-                    this.showError('upcoming-programs-container', 'Failed to load upcoming programs');
+                    this.showError('upcomingProgramsContainer', 'Unable to load upcoming programs');
                 }
             }
 
@@ -1479,7 +897,7 @@
                     const data = await this.fetchData('/actuality/programs/future');
                     this.renderFuturePrograms(data.programs || []);
                 } catch (error) {
-                    this.showError('future-programs-container', 'Failed to load future programs');
+                    this.showError('futureProgramsContainer', 'Unable to load future programs');
                 }
             }
 
@@ -1488,7 +906,7 @@
                     const data = await this.fetchData('/actuality/economy-summary');
                     this.renderEconomySummary(data.summary || {});
                 } catch (error) {
-                    this.showError('economy-summary-container', 'Failed to load economy summary');
+                    this.showError('economySummaryContainer', 'Unable to load economy summary');
                 }
             }
 
@@ -1497,7 +915,7 @@
                     const data = await this.fetchData('/actuality/hot-news');
                     this.renderHotNews(data.hotNews || []);
                 } catch (error) {
-                    this.showError('hot-news-container', 'Failed to load hot news');
+                    this.showError('hotNewsContainer', 'Unable to load hot news');
                 }
             }
 
@@ -1506,27 +924,28 @@
                     const data = await this.fetchData('/actuality/comments');
                     this.renderComments(data.comments || []);
                 } catch (error) {
-                    this.showError('comments-container', 'Failed to load comments');
+                    this.showError('commentsContainer', 'Unable to load comments');
                 }
             }
 
+            // Rendering Methods
             renderPrograms(programs) {
-                const container = document.getElementById('programs-container');
+                const container = document.getElementById('programsContainer');
                 if (!programs.length) {
-                    container.innerHTML = '<div class="col-12 text-center text-muted py-4">No programs available</div>';
+                    container.innerHTML = this.getNoDataMessage('No programs available at the moment');
                     return;
                 }
 
-                container.innerHTML = programs.map(program => `
-                    <div class="col-md-4 mb-4 animate-card">
+                container.innerHTML = programs.map((program, index) => `
+                    <div class="col-md-4 mb-4 animate-card" style="animation-delay: ${index * 0.1}s">
                         <div class="card program-card">
-                            <img src="${program.image || 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80'}" 
+                            <img src="${program.image || this.getDefaultImage('program')}" 
                                  class="card-img-top" alt="${program.title}" loading="lazy">
                             <div class="card-body">
-                                <span class="program-time">${program.schedule || 'Daily'}</span>
+                                <span class="program-time">${program.schedule || 'Check schedule'}</span>
                                 <h5 class="card-title">${program.title}</h5>
-                                <p class="program-host">Hosted by ${program.host || 'DFM Team'}</p>
-                                <p class="program-description">${program.description || 'Join us for insightful discussions.'}</p>
+                                <p class="program-host">${program.host ? `Hosted by ${program.host}` : 'DFM Media Team'}</p>
+                                <p class="program-description">${program.description || 'Join us for insightful discussions and analysis.'}</p>
                                 <a href="#" class="btn btn-sm btn-warning">Set Reminder</a>
                             </div>
                         </div>
@@ -1535,14 +954,14 @@
             }
 
             renderUpcomingPrograms(programs) {
-                const container = document.getElementById('upcoming-programs-container');
+                const container = document.getElementById('upcomingProgramsContainer');
                 if (!programs.length) {
-                    container.innerHTML = '<div class="text-center text-muted py-4">No upcoming programs scheduled</div>';
+                    container.innerHTML = this.getNoDataMessage('No upcoming programs scheduled');
                     return;
                 }
 
                 container.innerHTML = programs.map(program => `
-                    <div class="card news-card mb-3">
+                    <div class="card news-card mb-4">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
@@ -1552,12 +971,18 @@
                                         </div>
                                         <div>
                                             <h5 class="mb-0">${program.title}</h5>
-                                            <p class="mb-0">${this.formatDate(program.date)} | ${program.time}</p>
+                                            <p class="mb-0 text-muted">${this.formatDate(program.startDate)} | ${program.time || 'Time TBA'}</p>
                                         </div>
                                     </div>
-                                    <p>${program.description}</p>
+                                    <p class="mb-3">${program.description}</p>
                                     <a href="#" class="btn btn-warning">Add to Calendar</a>
                                 </div>
+                                ${program.speakers ? `
+                                <div class="col-md-6">
+                                    <h6>Featured Speakers:</h6>
+                                    <p class="text-muted">${program.speakers}</p>
+                                </div>
+                                ` : ''}
                             </div>
                         </div>
                     </div>
@@ -1565,21 +990,23 @@
             }
 
             renderFuturePrograms(programs) {
-                const container = document.getElementById('future-programs-container');
+                const container = document.getElementById('futureProgramsContainer');
                 if (!programs.length) {
-                    container.innerHTML = '<div class="text-center text-muted py-4">No future programs announced</div>';
+                    container.innerHTML = this.getNoDataMessage('No future programs announced');
                     return;
                 }
 
-                container.innerHTML = programs.map(program => `
-                    <div class="col-md-6 mb-4">
+                container.innerHTML = programs.map((program, index) => `
+                    <div class="col-md-6 mb-4 animate-card" style="animation-delay: ${index * 0.1}s">
                         <div class="card news-card">
                             <div class="card-body">
                                 <span class="badge bg-info mb-2">${program.status || 'Coming Soon'}</span>
                                 <h5 class="card-title">${program.title}</h5>
                                 <p class="card-text">${program.description}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-muted">${program.premiereDate ? `Premieres: ${this.formatDate(program.premiereDate)}` : 'Date TBA'}</span>
+                                    <small class="text-muted">
+                                        ${program.premiereDate ? `Premieres: ${this.formatDate(program.premiereDate)}` : 'Launching Soon'}
+                                    </small>
                                     <a href="#" class="btn btn-sm btn-outline-warning">Learn More</a>
                                 </div>
                             </div>
@@ -1589,16 +1016,16 @@
             }
 
             renderEconomySummary(summary) {
-                const container = document.getElementById('economy-summary-container');
-                const defaultSummary = {
-                    stockMarket: '+3.2%',
-                    inflation: '2.3%',
-                    currency: '582.50',
-                    businessRegistrations: '+15%',
-                    agriculture: '+8%'
+                const container = document.getElementById('economySummaryContainer');
+                const defaultData = {
+                    stockMarket: '+0.0%',
+                    inflation: '0.0%',
+                    currency: 'Loading...',
+                    businessRegistrations: '+0%',
+                    agriculture: '+0%'
                 };
 
-                const data = { ...defaultSummary, ...summary };
+                const data = { ...defaultData, ...summary };
 
                 container.innerHTML = `
                     <div class="economy-summary">
@@ -1631,9 +1058,9 @@
             }
 
             renderHotNews(hotNews) {
-                const container = document.getElementById('hot-news-container');
+                const container = document.getElementById('hotNewsContainer');
                 if (!hotNews.length) {
-                    container.innerHTML = '<div class="text-center text-muted py-4">No hot news available</div>';
+                    container.innerHTML = this.getNoDataMessage('No hot news available');
                     return;
                 }
 
@@ -1647,15 +1074,15 @@
                         <a href="#" class="text-white">Read Full Story <i class="fas fa-arrow-right ms-1"></i></a>
                     </div>
                     <div class="row mt-4">
-                        ${otherNews.map(news => `
-                            <div class="col-md-6 mb-4">
+                        ${otherNews.map((news, index) => `
+                            <div class="col-md-6 mb-4 animate-card" style="animation-delay: ${index * 0.2}s">
                                 <div class="card news-card">
-                                    <img src="${news.image || 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80'}" 
+                                    <img src="${news.image || this.getDefaultImage('news')}" 
                                          class="card-img-top" alt="${news.title}" loading="lazy">
                                     <div class="card-body">
                                         <span class="badge bg-danger mb-2">Hot Topic</span>
                                         <h5 class="card-title">${news.title}</h5>
-                                        <p class="card-text">${news.content.substring(0, 100)}...</p>
+                                        <p class="card-text">${news.content.substring(0, 120)}...</p>
                                         <a href="#" class="btn btn-sm btn-outline-warning">Read More</a>
                                     </div>
                                 </div>
@@ -1666,17 +1093,17 @@
             }
 
             renderComments(comments) {
-                const container = document.getElementById('comments-container');
+                const container = document.getElementById('commentsContainer');
                 if (!comments.length) {
-                    container.innerHTML = '<div class="col-12 text-center text-muted py-4">No comments available</div>';
+                    container.innerHTML = this.getNoDataMessage('No comments yet');
                     return;
                 }
 
-                container.innerHTML = comments.map(comment => `
-                    <div class="col-md-6 mb-4">
+                container.innerHTML = comments.map((comment, index) => `
+                    <div class="col-md-6 mb-4 animate-card" style="animation-delay: ${index * 0.1}s">
                         <div class="comment-block">
                             <div class="comment-user d-flex align-items-center">
-                                <img src="${comment.user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80'}" 
+                                <img src="${comment.user?.avatar || this.getDefaultAvatar()}" 
                                      alt="${comment.user?.name || 'User'}" class="comment-avatar" loading="lazy">
                                 <div>
                                     <h6 class="mb-0">${comment.user?.name || 'Anonymous'}</h6>
@@ -1684,8 +1111,12 @@
                                 </div>
                             </div>
                             <div class="comment-content mt-3">
-                                <p>"${comment.content}"</p>
-                                ${comment.articleTitle ? `<small class="text-muted">On: ${comment.articleTitle}</small>` : ''}
+                                <p class="mb-2">"${comment.content}"</p>
+                                ${comment.articleTitle ? `
+                                    <small class="text-muted">
+                                        <i class="fas fa-newspaper me-1"></i>On: ${comment.articleTitle}
+                                    </small>
+                                ` : ''}
                             </div>
                             <div class="d-flex justify-content-between mt-3">
                                 <button class="btn btn-sm btn-outline-primary">
@@ -1700,31 +1131,61 @@
                 `).join('');
             }
 
+            // Utility Methods
             formatDate(dateString) {
                 if (!dateString) return 'Date TBA';
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
+                try {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                } catch (error) {
+                    return 'Invalid Date';
+                }
             }
 
             formatTimeAgo(dateString) {
                 if (!dateString) return 'Recently';
-                const date = new Date(dateString);
-                const now = new Date();
-                const diffMs = now - date;
-                const diffMins = Math.floor(diffMs / 60000);
-                const diffHours = Math.floor(diffMs / 3600000);
-                const diffDays = Math.floor(diffMs / 86400000);
+                try {
+                    const date = new Date(dateString);
+                    const now = new Date();
+                    const diffMs = now - date;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+                    const diffDays = Math.floor(diffMs / 86400000);
 
-                if (diffMins < 1) return 'just now';
-                if (diffMins < 60) return `${diffMins} minutes ago`;
-                if (diffHours < 24) return `${diffHours} hours ago`;
-                if (diffDays < 7) return `${diffDays} days ago`;
-                
-                return this.formatDate(dateString);
+                    if (diffMins < 1) return 'just now';
+                    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+                    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+                    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+                    
+                    return this.formatDate(dateString);
+                } catch (error) {
+                    return 'Unknown time';
+                }
+            }
+
+            getDefaultImage(type) {
+                const images = {
+                    program: 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80',
+                    news: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80'
+                };
+                return images[type] || images.news;
+            }
+
+            getDefaultAvatar() {
+                return 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80';
+            }
+
+            getNoDataMessage(message) {
+                return `
+                    <div class="col-12 text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p class="mb-0">${message}</p>
+                    </div>
+                `;
             }
 
             showError(containerId, message) {
@@ -1738,13 +1199,42 @@
                     `;
                 }
             }
+
+            showNotification(message, type = 'info') {
+                // Simple notification implementation
+                console.log(`${type.toUpperCase()}: ${message}`);
+                // You can implement a proper notification system here
+            }
+
+            setupEventListeners() {
+                // Auto-refresh data every 5 minutes
+                setInterval(() => {
+                    this.loadAllData();
+                }, 300000);
+
+                // Search functionality
+                const searchInput = document.querySelector('.search-input');
+                if (searchInput) {
+                    searchInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            this.handleSearch(e.target.value);
+                        }
+                    });
+                }
+            }
+
+            handleSearch(query) {
+                if (query.trim()) {
+                    // Implement search functionality
+                    console.log('Searching for:', query);
+                    this.showNotification(`Searching for "${query}"`, 'info');
+                }
+            }
         }
 
-        // Initialize everything when DOM is loaded
+        // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            new ThemeManager();
-            new AudioPlayer();
-            new ActualityPageManager();
+            window.dfmApp = new DFMActualityApp();
         });
     </script>
 </body>
