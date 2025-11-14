@@ -13,6 +13,10 @@ const commentSchema = new mongoose.Schema({
     trim: true,
     maxlength: 1000
   },
+  likes: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -65,7 +69,7 @@ const articleSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
-  comments: [commentSchema],
+  comments: [commentSchema], // Using the commentSchema defined above
   shares: {
     type: Number,
     default: 0

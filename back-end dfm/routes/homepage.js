@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const homepageController = require('../controllers/homepageController');
-const { auth, adminAuth } = require('../middleware/auth');
+const { auth, adminAuth } = require('../middlewares/auth');
 
 // Public: get homepage data
 router.get('/', homepageController.getHomepage);

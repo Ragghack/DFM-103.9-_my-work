@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const newsController = require('../controllers/newsController');
-const { auth, adminAuth } = require('../middleware/auth');
+const { auth, adminAuth } = require('../middlewares/auth');
 
 // Public: list and get
 router.get('/', newsController.listNews);

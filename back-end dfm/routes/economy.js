@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const EconomyArticle = require('../models/EconomyArticle');
 const EconomyIndicator = require('../models/EconomyIndicator');
-const { auth, adminAuth } = require('../middleware/auth');
+const { auth, adminAuth } = require('../middlewares/auth');
 
 // Get all economy articles (public)
 router.get('/articles', async (req, res) => {
@@ -80,68 +80,25 @@ router.get('/indicators', async (req, res) => {
   }
 });
 
-// Get section-specific stats (public)
-// Update section-specific statistics (admin)
-router.put('/section-stats/:section', auth, adminAuth, async (req, res) => {
-  try {
-    const { section } = req.params;
-    const stats = req.body;
-
-    // Validate section
-    const validSections = ['eco-africa', 'eco-agriculture', 'eco-innovation'];
-    if (!validSections.includes(section)) {
-      return res.status(400).json({ message: 'Invalid section' });
-    }
-
-    // In a real implementation, you would save this to a database
-    // For now, we'll store it in memory (replace with database in production)
-    const sectionStats = {
-      'eco-africa': {
-        total_gdp: stats.total_gdp || '2.4T',
-        intra_african_trade: stats.intra_african_trade || '140B',
-        urbanization_rate: stats.urbanization_rate || '43%',
-        population: stats.population || '1.3B'
-      },
-      'eco-agriculture': {
-        workforce_percentage: stats.workforce_percentage || '42%',
-        organic_growth: stats.organic_growth || '18%',
-        yield_increase: stats.yield_increase || '30%',
-        water_efficiency: stats.water_efficiency || '45%'
-      },
-      'eco-innovation': {
-        patent_increase: stats.patent_increase || '35%',
-        renewable_energy_growth: stats.renewable_energy_growth || '300%',
-        recycling_improvement: stats.recycling_improvement || '65%',
-        wind_power_capacity: stats.wind_power_capacity || '120MW'
-      }
-    };
-
-    // TODO: Save to database instead of memory
-    // For now, we'll just return the updated stats
-    res.json({ 
-      section, 
-      stats: sectionStats[section],
-      message: `${section} statistics updated successfully` 
-    });
-  } catch (err) {
-    console.error('Update section stats error:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Get section-specific stats for admin (with current values)
-router.get('/admin/section-stats/:section', auth, adminAuth, async (req, res) => {
+// Get section-specific statistics (public)
+router.get('/section-stats/:section', async (req, res) => {
   try {
     const { section } = req.params;
     
     // Validate section
-    const validSections = ['eco-africa', 'eco-agriculture', 'eco-innovation'];
+    const validSections = ['economy', 'eco-africa', 'eco-agriculture', 'eco-innovation'];
     if (!validSections.includes(section)) {
       return res.status(400).json({ message: 'Invalid section' });
     }
 
     // Default values - in production, fetch from database
     const defaultStats = {
+      'economy': {
+        total_gdp: '2.4T',
+        intra_african_trade: '140B',
+        urbanization_rate: '43%',
+        population: '1.3B'
+      },
       'eco-africa': {
         total_gdp: '2.4T',
         intra_african_trade: '140B',
@@ -164,11 +121,38 @@ router.get('/admin/section-stats/:section', auth, adminAuth, async (req, res) =>
 
     res.json({ section, stats: defaultStats[section] });
   } catch (err) {
-    console.error('Get admin section stats error:', err);
+    console.error('Get section stats error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 // ADMIN ROUTES
+
+// Get all economy articles for admin (with filters)
+router.get('/admin/articles', auth, adminAuth, async (req, res) => {
+  try {
+    const { page = 1, limit = 10, section, status } = req.query;
+    const filter = {};
+
+    if (section) filter.section = section;
+    if (status) filter.status = status;
+
+    const skip = (page - 1) * limit;
+    const [items, total] = await Promise.all([
+      EconomyArticle.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit))
+        .lean(),
+      EconomyArticle.countDocuments(filter)
+    ]);
+
+    res.json({ items, total, page: Number(page), limit: Number(limit) });
+  } catch (err) {
+    console.error('Get admin economy articles error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // Create economy article (admin)
 router.post('/articles', auth, adminAuth, async (req, res) => {
@@ -263,28 +247,102 @@ router.put('/indicators', auth, adminAuth, async (req, res) => {
   }
 });
 
-// Get all economy articles for admin (with filters)
-router.get('/admin/articles', auth, adminAuth, async (req, res) => {
+// Update section-specific statistics (admin)
+router.put('/section-stats/:section', auth, adminAuth, async (req, res) => {
   try {
-    const { page = 1, limit = 10, section, status } = req.query;
-    const filter = {};
+    const { section } = req.params;
+    const stats = req.body;
 
-    if (section) filter.section = section;
-    if (status) filter.status = status;
+    // Validate section
+    const validSections = ['economy', 'eco-africa', 'eco-agriculture', 'eco-innovation'];
+    if (!validSections.includes(section)) {
+      return res.status(400).json({ message: 'Invalid section' });
+    }
 
-    const skip = (page - 1) * limit;
-    const [items, total] = await Promise.all([
-      EconomyArticle.find(filter)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(Number(limit))
-        .lean(),
-      EconomyArticle.countDocuments(filter)
-    ]);
+    // In a real implementation, you would save this to a database
+    // For now, we'll store it in memory (replace with database in production)
+    const sectionStats = {
+      'economy': {
+        total_gdp: stats.total_gdp || '2.4T',
+        intra_african_trade: stats.intra_african_trade || '140B',
+        urbanization_rate: stats.urbanization_rate || '43%',
+        population: stats.population || '1.3B'
+      },
+      'eco-africa': {
+        total_gdp: stats.total_gdp || '2.4T',
+        intra_african_trade: stats.intra_african_trade || '140B',
+        urbanization_rate: stats.urbanization_rate || '43%',
+        population: stats.population || '1.3B'
+      },
+      'eco-agriculture': {
+        workforce_percentage: stats.workforce_percentage || '42%',
+        organic_growth: stats.organic_growth || '18%',
+        yield_increase: stats.yield_increase || '30%',
+        water_efficiency: stats.water_efficiency || '45%'
+      },
+      'eco-innovation': {
+        patent_increase: stats.patent_increase || '35%',
+        renewable_energy_growth: stats.renewable_energy_growth || '300%',
+        recycling_improvement: stats.recycling_improvement || '65%',
+        wind_power_capacity: stats.wind_power_capacity || '120MW'
+      }
+    };
 
-    res.json({ items, total, page: Number(page), limit: Number(limit) });
+    // TODO: Save to database instead of memory
+    // For now, we'll just return the updated stats
+    res.json({ 
+      section, 
+      stats: sectionStats[section],
+      message: `${section} statistics updated successfully` 
+    });
   } catch (err) {
-    console.error('Get admin economy articles error:', err);
+    console.error('Update section stats error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get section-specific stats for admin (with current values)
+router.get('/admin/section-stats/:section', auth, adminAuth, async (req, res) => {
+  try {
+    const { section } = req.params;
+    
+    // Validate section
+    const validSections = ['economy', 'eco-africa', 'eco-agriculture', 'eco-innovation'];
+    if (!validSections.includes(section)) {
+      return res.status(400).json({ message: 'Invalid section' });
+    }
+
+    // Default values - in production, fetch from database
+    const defaultStats = {
+      'economy': {
+        total_gdp: '2.4T',
+        intra_african_trade: '140B',
+        urbanization_rate: '43%',
+        population: '1.3B'
+      },
+      'eco-africa': {
+        total_gdp: '2.4T',
+        intra_african_trade: '140B',
+        urbanization_rate: '43%',
+        population: '1.3B'
+      },
+      'eco-agriculture': {
+        workforce_percentage: '42%',
+        organic_growth: '18%',
+        yield_increase: '30%',
+        water_efficiency: '45%'
+      },
+      'eco-innovation': {
+        patent_increase: '35%',
+        renewable_energy_growth: '300%',
+        recycling_improvement: '65%',
+        wind_power_capacity: '120MW'
+      }
+    };
+
+    res.json({ section, stats: defaultStats[section] });
+  } catch (err) {
+    console.error('Get admin section stats error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });

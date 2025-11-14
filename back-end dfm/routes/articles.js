@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Article = require('../models/Article');
 const User = require('../models/User');
-const { auth } = require('../middleware/auth');
+const { auth } = require('../middlewares/auth');
 console.log('Auth type:', typeof auth);
 
 // Get single article with populated data

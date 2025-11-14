@@ -999,7 +999,7 @@
                                 </div>
                             </div>
                             <p>Exclusive interview with the Minister of Finance discussing new policies, budget allocation, and economic recovery plans.</p>
-                            <a href="#" class="btn btn-warning">Set Reminder</a>
+                            <a href="#" class="btn btn-warning" onclick = "">Set Reminder</a>
                         </div>
                     </div>
                 </div>
@@ -1306,98 +1306,445 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ // Add this script to your actuality.html page
     <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        
-        // Check for saved theme preference or respect OS preference
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        // Apply the saved theme
-        if (savedTheme === 'dark') {
-            body.setAttribute('data-theme', 'dark');
-        } else {
-            body.removeAttribute('data-theme');
-        }
-        
-        // Toggle theme function
-        function toggleTheme() {
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
+        // Theme Toggle
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle');
+                this.currentTheme = localStorage.getItem('theme') || 'light';
+                this.init();
+            }
+
+            init() {
+                this.applyTheme(this.currentTheme);
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+            }
+
+            applyTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+
+            toggleTheme() {
+                this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                this.applyTheme(this.currentTheme);
             }
         }
-        
-        // Add event listener to theme toggle button
-        themeToggle.addEventListener('click', toggleTheme);
-        
-        // Audio controls functionality
-        const playButton = document.getElementById('playButton');
-        const stopButton = document.getElementById('stopButton');
-        const radioPlay = document.getElementById('radioPlay');
-        const radioStop = document.getElementById('radioStop');
-        const footerPlay = document.getElementById('footerPlay');
-        const footerStop = document.getElementById('footerStop');
-        
-        function playAudio() {
-            // In a real implementation, this would play the radio stream
-            console.log('Playing audio...');
-            showNotification('Actuality Discussion is now playing', 'info');
-        }
-        
-        function stopAudio() {
-            // In a real implementation, this would stop the radio stream
-            console.log('Stopping audio...');
-            showNotification('Actuality Discussion stopped', 'info');
-        }
-        
-        playButton.addEventListener('click', playAudio);
-        stopButton.addEventListener('click', stopAudio);
-        radioPlay.addEventListener('click', playAudio);
-        radioStop.addEventListener('click', stopAudio);
-        footerPlay.addEventListener('click', playAudio);
-        footerStop.addEventListener('click', stopAudio);
-        
-        // Show notification function
-        function showNotification(message, type = 'info') {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-            notification.style.top = '20px';
-            notification.style.right = '20px';
-            notification.style.zIndex = '1050';
-            notification.style.minWidth = '300px';
-            notification.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            
-            // Add to body
-            document.body.appendChild(notification);
-            
-            // Auto remove after 3 seconds
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        // Animation for elements when they come into view
-        document.addEventListener('DOMContentLoaded', function() {
-            const animatedElements = document.querySelectorAll('.animate-card');
-            
-            animatedElements.forEach(element => {
-                element.style.opacity = '0';
-            });
-            
-            setTimeout(() => {
-                animatedElements.forEach(element => {
-                    element.style.opacity = '1';
+
+        // Audio Player
+        class AudioPlayer {
+            constructor() {
+                this.STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
+                this.audio = new Audio(this.STREAM_URL);
+                this.audio.preload = "none";
+                this.isPlaying = false;
+                
+                this.initPlayers();
+            }
+
+            initPlayers() {
+                // Header player
+                const headerPlay = document.getElementById('headerPlayButton');
+                if (headerPlay) {
+                    headerPlay.addEventListener('click', () => this.togglePlay());
+                }
+
+                // Footer players
+                const footerPlay = document.getElementById('footerPlayButton');
+                const footerStop = document.getElementById('footerStopButton');
+                
+                if (footerPlay) {
+                    footerPlay.addEventListener('click', () => this.togglePlay());
+                }
+                if (footerStop) {
+                    footerStop.addEventListener('click', () => this.stop());
+                }
+            }
+
+            async togglePlay() {
+                try {
+                    if (!this.isPlaying) {
+                        await this.audio.play();
+                        this.isPlaying = true;
+                        this.updateUI(true);
+                    } else {
+                        this.audio.pause();
+                        this.isPlaying = false;
+                        this.updateUI(false);
+                    }
+                } catch (error) {
+                    console.error('Audio playback error:', error);
+                    alert('Unable to play stream. Please check your connection.');
+                }
+            }
+
+            stop() {
+                this.audio.pause();
+                this.isPlaying = false;
+                this.updateUI(false);
+            }
+
+            updateUI(playing) {
+                const playIcons = document.querySelectorAll('.fa-play, .fa-pause');
+                playIcons.forEach(icon => {
+                    if (playing) {
+                        icon.classList.replace('fa-play', 'fa-pause');
+                    } else {
+                        icon.classList.replace('fa-pause', 'fa-play');
+                    }
                 });
-            }, 100);
+            }
+        }
+
+        // Actuality Data Manager
+        class ActualityPageManager {
+            constructor() {
+                this.API_BASE = 'http://localhost:5000/api';
+                this.init();
+            }
+
+            init() {
+                this.loadAllData();
+                // Refresh data every 5 minutes
+                setInterval(() => this.loadAllData(), 300000);
+            }
+
+            async loadAllData() {
+                try {
+                    await Promise.all([
+                        this.loadBreakingNews(),
+                        this.loadPrograms(),
+                        this.loadUpcomingPrograms(),
+                        this.loadFuturePrograms(),
+                        this.loadEconomySummary(),
+                        this.loadHotNews(),
+                        this.loadComments()
+                    ]);
+                } catch (error) {
+                    console.error('Error loading actuality data:', error);
+                }
+            }
+
+            async fetchData(endpoint) {
+                try {
+                    const response = await fetch(`${this.API_BASE}${endpoint}`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Fetch error for ${endpoint}:`, error);
+                    throw error;
+                }
+            }
+
+            async loadBreakingNews() {
+                try {
+                    // This would typically come from your API
+                    const breakingNews = [
+                        "Central Bank announces new monetary policy measures",
+                        "Stock market reaches all-time high",
+                        "Government launches new infrastructure projects",
+                        "Inflation rate drops to 2.3%",
+                        "New economic partnership signed with EU"
+                    ];
+                    
+                    const content = breakingNews.join(' | ');
+                    document.getElementById('breakingNewsContent').textContent = content;
+                } catch (error) {
+                    document.getElementById('breakingNewsContent').textContent = 
+                        "Stay tuned for the latest news updates";
+                }
+            }
+
+            async loadPrograms() {
+                try {
+                    const data = await this.fetchData('/actuality/programs');
+                    this.renderPrograms(data.programs || []);
+                } catch (error) {
+                    this.showError('programs-container', 'Failed to load programs');
+                }
+            }
+
+            async loadUpcomingPrograms() {
+                try {
+                    const data = await this.fetchData('/actuality/programs/upcoming');
+                    this.renderUpcomingPrograms(data.programs || []);
+                } catch (error) {
+                    this.showError('upcoming-programs-container', 'Failed to load upcoming programs');
+                }
+            }
+
+            async loadFuturePrograms() {
+                try {
+                    const data = await this.fetchData('/actuality/programs/future');
+                    this.renderFuturePrograms(data.programs || []);
+                } catch (error) {
+                    this.showError('future-programs-container', 'Failed to load future programs');
+                }
+            }
+
+            async loadEconomySummary() {
+                try {
+                    const data = await this.fetchData('/actuality/economy-summary');
+                    this.renderEconomySummary(data.summary || {});
+                } catch (error) {
+                    this.showError('economy-summary-container', 'Failed to load economy summary');
+                }
+            }
+
+            async loadHotNews() {
+                try {
+                    const data = await this.fetchData('/actuality/hot-news');
+                    this.renderHotNews(data.hotNews || []);
+                } catch (error) {
+                    this.showError('hot-news-container', 'Failed to load hot news');
+                }
+            }
+
+            async loadComments() {
+                try {
+                    const data = await this.fetchData('/actuality/comments');
+                    this.renderComments(data.comments || []);
+                } catch (error) {
+                    this.showError('comments-container', 'Failed to load comments');
+                }
+            }
+
+            renderPrograms(programs) {
+                const container = document.getElementById('programs-container');
+                if (!programs.length) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted py-4">No programs available</div>';
+                    return;
+                }
+
+                container.innerHTML = programs.map(program => `
+                    <div class="col-md-4 mb-4 animate-card">
+                        <div class="card program-card">
+                            <img src="${program.image || 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80'}" 
+                                 class="card-img-top" alt="${program.title}" loading="lazy">
+                            <div class="card-body">
+                                <span class="program-time">${program.schedule || 'Daily'}</span>
+                                <h5 class="card-title">${program.title}</h5>
+                                <p class="program-host">Hosted by ${program.host || 'DFM Team'}</p>
+                                <p class="program-description">${program.description || 'Join us for insightful discussions.'}</p>
+                                <a href="#" class="btn btn-sm btn-warning">Set Reminder</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderUpcomingPrograms(programs) {
+                const container = document.getElementById('upcoming-programs-container');
+                if (!programs.length) {
+                    container.innerHTML = '<div class="text-center text-muted py-4">No upcoming programs scheduled</div>';
+                    return;
+                }
+
+                container.innerHTML = programs.map(program => `
+                    <div class="card news-card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="bg-warning rounded-circle p-3 me-3">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-0">${program.title}</h5>
+                                            <p class="mb-0">${this.formatDate(program.date)} | ${program.time}</p>
+                                        </div>
+                                    </div>
+                                    <p>${program.description}</p>
+                                    <a href="#" class="btn btn-warning">Add to Calendar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderFuturePrograms(programs) {
+                const container = document.getElementById('future-programs-container');
+                if (!programs.length) {
+                    container.innerHTML = '<div class="text-center text-muted py-4">No future programs announced</div>';
+                    return;
+                }
+
+                container.innerHTML = programs.map(program => `
+                    <div class="col-md-6 mb-4">
+                        <div class="card news-card">
+                            <div class="card-body">
+                                <span class="badge bg-info mb-2">${program.status || 'Coming Soon'}</span>
+                                <h5 class="card-title">${program.title}</h5>
+                                <p class="card-text">${program.description}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted">${program.premiereDate ? `Premieres: ${this.formatDate(program.premiereDate)}` : 'Date TBA'}</span>
+                                    <a href="#" class="btn btn-sm btn-outline-warning">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderEconomySummary(summary) {
+                const container = document.getElementById('economy-summary-container');
+                const defaultSummary = {
+                    stockMarket: '+3.2%',
+                    inflation: '2.3%',
+                    currency: '582.50',
+                    businessRegistrations: '+15%',
+                    agriculture: '+8%'
+                };
+
+                const data = { ...defaultSummary, ...summary };
+
+                container.innerHTML = `
+                    <div class="economy-summary">
+                        <h4 class="mb-4">This Week in Economy</h4>
+                        <div class="economy-indicator">
+                            <span>Stock Market Performance</span>
+                            <span class="indicator-value">${data.stockMarket}</span>
+                        </div>
+                        <div class="economy-indicator">
+                            <span>Inflation Rate</span>
+                            <span class="indicator-value">${data.inflation}</span>
+                        </div>
+                        <div class="economy-indicator">
+                            <span>Currency Stability (FCFA/USD)</span>
+                            <span class="indicator-value">${data.currency}</span>
+                        </div>
+                        <div class="economy-indicator">
+                            <span>New Business Registrations</span>
+                            <span class="indicator-value">${data.businessRegistrations}</span>
+                        </div>
+                        <div class="economy-indicator">
+                            <span>Agricultural Production</span>
+                            <span class="indicator-value">${data.agriculture}</span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="#" class="btn btn-outline-warning">View Detailed Report</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderHotNews(hotNews) {
+                const container = document.getElementById('hot-news-container');
+                if (!hotNews.length) {
+                    container.innerHTML = '<div class="text-center text-muted py-4">No hot news available</div>';
+                    return;
+                }
+
+                const mainNews = hotNews[0];
+                const otherNews = hotNews.slice(1, 3);
+
+                container.innerHTML = `
+                    <div class="hot-news-ticker">
+                        <h4><i class="fas fa-fire me-2"></i>${mainNews.title}</h4>
+                        <p>${mainNews.content}</p>
+                        <a href="#" class="text-white">Read Full Story <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                    <div class="row mt-4">
+                        ${otherNews.map(news => `
+                            <div class="col-md-6 mb-4">
+                                <div class="card news-card">
+                                    <img src="${news.image || 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80'}" 
+                                         class="card-img-top" alt="${news.title}" loading="lazy">
+                                    <div class="card-body">
+                                        <span class="badge bg-danger mb-2">Hot Topic</span>
+                                        <h5 class="card-title">${news.title}</h5>
+                                        <p class="card-text">${news.content.substring(0, 100)}...</p>
+                                        <a href="#" class="btn btn-sm btn-outline-warning">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            renderComments(comments) {
+                const container = document.getElementById('comments-container');
+                if (!comments.length) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted py-4">No comments available</div>';
+                    return;
+                }
+
+                container.innerHTML = comments.map(comment => `
+                    <div class="col-md-6 mb-4">
+                        <div class="comment-block">
+                            <div class="comment-user d-flex align-items-center">
+                                <img src="${comment.user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80'}" 
+                                     alt="${comment.user?.name || 'User'}" class="comment-avatar" loading="lazy">
+                                <div>
+                                    <h6 class="mb-0">${comment.user?.name || 'Anonymous'}</h6>
+                                    <small class="text-muted">${this.formatTimeAgo(comment.createdAt)}</small>
+                                </div>
+                            </div>
+                            <div class="comment-content mt-3">
+                                <p>"${comment.content}"</p>
+                                ${comment.articleTitle ? `<small class="text-muted">On: ${comment.articleTitle}</small>` : ''}
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-thumbs-up me-1"></i> ${comment.likes || 0}
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-reply me-1"></i> Reply
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            formatDate(dateString) {
+                if (!dateString) return 'Date TBA';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            }
+
+            formatTimeAgo(dateString) {
+                if (!dateString) return 'Recently';
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+
+                if (diffMins < 1) return 'just now';
+                if (diffMins < 60) return `${diffMins} minutes ago`;
+                if (diffHours < 24) return `${diffHours} hours ago`;
+                if (diffDays < 7) return `${diffDays} days ago`;
+                
+                return this.formatDate(dateString);
+            }
+
+            showError(containerId, message) {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center text-danger py-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            ${message}
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            new ThemeManager();
+            new AudioPlayer();
+            new ActualityPageManager();
         });
     </script>
 </body>

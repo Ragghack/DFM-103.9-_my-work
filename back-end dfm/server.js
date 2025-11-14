@@ -21,6 +21,7 @@ const newsletterRoutes = require('./routes/newsletter');
 const usersRoutes = require('./routes/users');
 const homepageRoutes = require('./routes/homepage');
 const communityRoutes = require('./routes/community');
+const actualityRoutes = require('./routes/actuality');
 const app = express();
 
 // Connect to database
@@ -101,7 +102,10 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/homepage', homepageRoutes);
 app.use('/api/community', communityRoutes);
-
+app.use('/api/actuality', actualityRoutes);
+// This should be in your main server file
+app.use('/api/actuality', require('./routes/actuality'));
+app.use('/api/economy', require('./routes/economy'));
 // Health check
 app.get('/health', (req, res) => {
   res.status(200).json({ 
@@ -142,6 +146,7 @@ app.listen(PORT, () => {
   console.log(`Economy Page: http://localhost:${PORT}/economy`);
   console.log(`Finance Page: http://localhost:${PORT}/finance`);
   console.log(`API Health: http://localhost:${PORT}/health`);
+  console.log(`Login Page: http://localhost:${PORT}/admin-login`);
 });
 
 module.exports = app;

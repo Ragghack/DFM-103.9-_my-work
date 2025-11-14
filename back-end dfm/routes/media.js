@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
-const { auth, adminAuth } = require('../middleware/auth');
+const { auth, adminAuth } = require('../middlewares/auth');
 const Media = require('../models/Media');
 
 const storage = multer.memoryStorage();

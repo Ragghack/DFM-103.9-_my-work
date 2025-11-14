@@ -3758,6 +3758,378 @@ document.getElementById('test-create-article')?.addEventListener('click', testCr
         if (element) element.style.display = 'none';
     });
 });
+// ==================== ACTUALITY MANAGEMENT ====================
+class ActualityAdminManager {
+    constructor() {
+        this.currentEditingId = null;
+    }
+
+    async loadActualityData() {
+        try {
+            await Promise.all([
+                this.loadPrograms(),
+                this.loadHotNews(),
+                this.loadEconomySummary()
+            ]);
+        } catch (error) {
+            console.error('Error loading actuality data:', error);
+        }
+    }
+
+    async loadPrograms() {
+        try {
+            const response = await apiCall('/actuality/programs');
+            if (response?.programs) {
+                this.updateProgramsTable(response.programs);
+            }
+        } catch (error) {
+            console.error('Error loading programs:', error);
+        }
+    }
+
+    async loadHotNews() {
+        try {
+            const response = await apiCall('/actuality/hot-news');
+            if (response?.hotNews) {
+                this.updateHotNewsForm(response.hotNews[0]); // Load first active hot news
+            }
+        } catch (error) {
+            console.error('Error loading hot news:', error);
+        }
+    }
+
+    async loadEconomySummary() {
+        try {
+            const response = await apiCall('/actuality/economy-summary');
+            if (response?.summary) {
+                this.updateEconomySummaryForm(response.summary);
+            }
+        } catch (error) {
+            console.error('Error loading economy summary:', error);
+        }
+    }
+
+    updateProgramsTable(programs) {
+        const tbody = document.getElementById('programs-table-body');
+        if (!tbody) return;
+
+        if (!programs || programs.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fas fa-tv fa-2x mb-3 d-block"></i>
+                        No programs found
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-gold" onclick="actualityAdmin.showProgramForm()">
+                                <i class="fas fa-plus me-1"></i>Create Your First Program
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = programs.map(program => `
+            <tr>
+                <td>
+                    <input type="checkbox" class="form-check-input program-checkbox" value="${program._id}">
+                </td>
+                <td>
+                    ${program.image ? 
+                        `<img src="${program.image}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${program.title}">` : 
+                        '<i class="fas fa-image text-muted"></i>'
+                    }
+                </td>
+                <td>
+                    <div class="fw-bold">${program.title}</div>
+                    <small class="text-muted">${program.description.substring(0, 60)}...</small>
+                </td>
+                <td><span class="badge bg-secondary">${program.category}</span></td>
+                <td>${program.schedule}</td>
+                <td>${program.host}</td>
+                <td>
+                    <span class="badge bg-${program.status === 'active' ? 'success' : program.status === 'upcoming' ? 'warning' : 'info'}">
+                        ${program.status}
+                    </span>
+                    ${program.featured ? '<span class="badge bg-warning ms-1">Featured</span>' : ''}
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary" onclick="actualityAdmin.editProgram('${program._id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="actualityAdmin.deleteProgram('${program._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    updateHotNewsForm(hotNews) {
+        if (!hotNews) return;
+
+        document.getElementById('hot-news-title').value = hotNews.title || '';
+        document.getElementById('hot-news-content').value = hotNews.content || '';
+        document.getElementById('hot-news-status').value = hotNews.status || 'active';
+        document.getElementById('hot-news-priority').value = hotNews.priority || 'medium';
+        
+        if (hotNews.expiryDate) {
+            const expiryDate = new Date(hotNews.expiryDate).toISOString().slice(0, 16);
+            document.getElementById('hot-news-expiry').value = expiryDate;
+        }
+
+        // Update preview
+        document.getElementById('hot-news-preview-title').textContent = hotNews.title || '';
+        document.getElementById('hot-news-preview-content').textContent = hotNews.content ? 
+            hotNews.content.substring(0, 150) + '...' : '';
+
+        // Set image preview if exists
+        if (hotNews.image) {
+            const preview = document.getElementById('hot-news-image-preview');
+            preview.style.display = 'block';
+            document.getElementById('hot-news-preview-img').src = hotNews.image;
+        }
+    }
+
+    updateEconomySummaryForm(summary) {
+        document.getElementById('update-stock-growth').value = summary.stockMarket || '+3.2%';
+        document.getElementById('update-inflation-rate').value = summary.inflation || '2.3%';
+        document.getElementById('update-currency-rate').value = summary.currency || '582.50';
+        document.getElementById('update-business-growth').value = summary.businessRegistrations || '+15%';
+        document.getElementById('update-agriculture-growth').value = summary.agriculture || '+8%';
+    }
+
+    async saveProgram(formData) {
+        try {
+            const saveBtn = document.getElementById('save-program-btn');
+            setLoading(saveBtn, true);
+
+            let imageUrl = null;
+            const imageFile = document.getElementById('program-image').files[0];
+            if (imageFile) {
+                imageUrl = await uploadImage(imageFile);
+            }
+
+            const payload = {
+                title: document.getElementById('program-title').value,
+                description: document.getElementById('program-description').value,
+                host: document.getElementById('program-host').value,
+                schedule: document.getElementById('program-schedule').value,
+                startDate: document.getElementById('program-start-date').value,
+                category: document.getElementById('program-category').value,
+                status: document.getElementById('program-status').value,
+                featured: document.getElementById('program-featured').checked,
+                image: imageUrl,
+                reminderSettings: {
+                    email: document.getElementById('email-reminders').checked,
+                    push: document.getElementById('push-notifications').checked
+                }
+            };
+
+            let response;
+            if (this.currentEditingId) {
+                response = await apiCall(`/actuality/programs/${this.currentEditingId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                response = await apiCall('/actuality/programs', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            showToast(`Program ${this.currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
+            this.hideProgramForm();
+            await this.loadPrograms();
+
+        } catch (error) {
+            console.error('Error saving program:', error);
+            showToast('Failed to save program', 'danger');
+        } finally {
+            setLoading(document.getElementById('save-program-btn'), false);
+        }
+    }
+
+    async saveHotNews(formData) {
+        try {
+            const saveBtn = document.getElementById('save-hot-news');
+            setLoading(saveBtn, true);
+
+            let imageUrl = null;
+            const imageFile = document.getElementById('hot-news-image').files[0];
+            if (imageFile) {
+                imageUrl = await uploadImage(imageFile);
+            }
+
+            const payload = {
+                title: document.getElementById('hot-news-title').value,
+                content: document.getElementById('hot-news-content').value,
+                status: document.getElementById('hot-news-status').value,
+                priority: document.getElementById('hot-news-priority').value,
+                expiryDate: document.getElementById('hot-news-expiry').value,
+                image: imageUrl
+            };
+
+            // For simplicity, we'll update the first active hot news or create new
+            const existingNews = await apiCall('/actuality/hot-news');
+            if (existingNews?.hotNews?.length > 0) {
+                await apiCall(`/actuality/hot-news/${existingNews.hotNews[0]._id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                await apiCall('/actuality/hot-news', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            showToast('Hot news updated successfully!', 'success');
+            await this.loadHotNews();
+
+        } catch (error) {
+            console.error('Error saving hot news:', error);
+            showToast('Failed to save hot news', 'danger');
+        } finally {
+            setLoading(document.getElementById('save-hot-news'), false);
+        }
+    }
+
+    async saveEconomySummary(formData) {
+        try {
+            const payload = {
+                stockMarket: document.getElementById('update-stock-growth').value,
+                inflation: document.getElementById('update-inflation-rate').value,
+                currency: document.getElementById('update-currency-rate').value,
+                businessRegistrations: document.getElementById('update-business-growth').value,
+                agriculture: document.getElementById('update-agriculture-growth').value
+            };
+
+            await apiCall('/actuality/economy-summary', {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+
+            showToast('Economy summary updated successfully!', 'success');
+            await this.loadEconomySummary();
+
+        } catch (error) {
+            console.error('Error saving economy summary:', error);
+            showToast('Failed to update economy summary', 'danger');
+        }
+    }
+
+    showProgramForm(program = null) {
+        const formSection = document.getElementById('actuality-form');
+        const formTitle = document.getElementById('actuality-form-title');
+        
+        if (program) {
+            formTitle.textContent = 'Edit Program';
+            document.getElementById('program-title').value = program.title || '';
+            document.getElementById('program-description').value = program.description || '';
+            document.getElementById('program-host').value = program.host || '';
+            document.getElementById('program-schedule').value = program.schedule || '';
+            document.getElementById('program-category').value = program.category || '';
+            document.getElementById('program-status').value = program.status || 'active';
+            document.getElementById('program-featured').checked = program.featured || false;
+            document.getElementById('email-reminders').checked = program.reminderSettings?.email || false;
+            document.getElementById('push-notifications').checked = program.reminderSettings?.push || false;
+            
+            if (program.startDate) {
+                const startDate = new Date(program.startDate).toISOString().slice(0, 16);
+                document.getElementById('program-start-date').value = startDate;
+            }
+            
+            this.currentEditingId = program._id;
+
+            // Set image preview if exists
+            if (program.image) {
+                const preview = document.getElementById('program-image-preview');
+                preview.style.display = 'block';
+                document.getElementById('program-preview-img').src = program.image;
+            }
+        } else {
+            formTitle.textContent = 'Add New Actuality Program';
+            document.getElementById('actuality-program-form').reset();
+            this.currentEditingId = null;
+            document.getElementById('program-image-preview').style.display = 'none';
+        }
+        
+        formSection.style.display = 'block';
+        formSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    hideProgramForm() {
+        document.getElementById('actuality-form').style.display = 'none';
+    }
+
+    async editProgram(id) {
+        try {
+            const response = await apiCall(`/actuality/programs/${id}`);
+            if (response?.program) {
+                this.showProgramForm(response.program);
+            }
+        } catch (error) {
+            console.error('Error loading program for edit:', error);
+            showToast('Failed to load program', 'danger');
+        }
+    }
+
+    async deleteProgram(id) {
+        if (!confirm('Are you sure you want to delete this program?')) return;
+        
+        try {
+            await apiCall(`/actuality/programs/${id}`, { method: 'DELETE' });
+            showToast('Program deleted successfully!', 'success');
+            await this.loadPrograms();
+        } catch (error) {
+            console.error('Error deleting program:', error);
+            showToast('Failed to delete program', 'danger');
+        }
+    }
+}
+
+// Initialize actuality admin manager
+const actualityAdmin = new ActualityAdminManager();
+
+// Make globally available
+window.actualityAdmin = actualityAdmin;
+// Add to your existing event listeners section
+// Actuality management event listeners
+document.getElementById('actuality-program-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    actualityAdmin.saveProgram(new FormData(this));
+});
+
+document.getElementById('hot-news-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    actualityAdmin.saveHotNews(new FormData(this));
+});
+
+document.getElementById('economy-summary-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    actualityAdmin.saveEconomySummary(new FormData(this));
+});
+
+document.getElementById('add-actuality-program-btn')?.addEventListener('click', function() {
+    actualityAdmin.showProgramForm();
+});
+
+document.getElementById('cancel-actuality')?.addEventListener('click', function() {
+    actualityAdmin.hideProgramForm();
+});
+
+// Load actuality data when section is shown
+document.querySelector('[data-section="actuality"]')?.addEventListener('click', function() {
+    setTimeout(() => {
+        actualityAdmin.loadActualityData();
+    }, 100);
+});
+
 
 // ==================== SECTION STATISTICS MANAGEMENT ====================
 async function loadSectionStats() {

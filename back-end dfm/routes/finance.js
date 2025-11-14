@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const financeController = require('../controllers/financeController');
-const { auth, adminAuth } = require('../middleware/auth');
+const { auth, adminAuth } = require('../middlewares/auth');
 
 // Public routes
 router.get('/overview', financeController.getFinancialOverview);
