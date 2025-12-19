@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Finance Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-common.css">
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-microphone-alt me-2" style="color:#D4AF37;"></i>
+                        <span style="color:#D4AF37;">DFM</span><span style="color:#fff;"> ADMIN</span>
+                    </h2>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emissions.html">
+                                <i class="fas fa-podcast"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn"></i> Actuality
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="articles.html">
+                                <i class="fas fa-newspaper"></i> Articles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="economy.html">
+                                <i class="fas fa-chart-line"></i> Economy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="finance.html">
+                                <i class="fas fa-coins"></i> Finance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="homepage.html">
+                                <i class="fas fa-home"></i> Homepage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newsletter.html">
+                                <i class="fas fa-envelope"></i> Newsletter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ml-auto p-0 main-content">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="mobile-menu-btn me-3">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <h3 class="mb-0 d-inline-block">Finance Content Management</h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <div class="theme-toggle me-3" id="themeToggle">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                        <div class="theme-toggle-handle"></div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user me-2"></i><span id="user-display">Loading...</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#" id="profile-btn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finance Content -->
+                <div class="container-fluid py-4">
+                    <div class="content-section active" id="finance-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Finance Content Management</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-gold" id="add-finance-article-btn">
+                                    <i class="fas fa-plus me-2"></i> Add Finance Article
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="stock-market-growth">2.3%</div>
+                                    <div class="text-muted">Stock Market Growth</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-percentage fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="interest-rate">3.5%</div>
+                                    <div class="text-muted">Interest Rate</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-exchange-alt fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="usd-xaf">655.5</div>
+                                    <div class="text-muted">USD to XAF</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-hand-holding-usd fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="credit-growth">5.2%</div>
+                                    <div class="text-muted">Credit Growth</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Update Financial Statistics</h5>
+                                    <form id="finance-stats-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Stock Market Growth</label>
+                                            <input type="text" class="form-control" id="update-stock-growth" value="2.3%">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Interest Rate</label>
+                                            <input type="text" class="form-control" id="update-interest-rate" value="3.5%">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">USD to XAF</label>
+                                            <input type="text" class="form-control" id="update-usd-xaf" value="655.5">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Credit Growth</label>
+                                            <input type="text" class="form-control" id="update-credit-growth" value="5.2%">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Statistics</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Update Currency Exchange Rates</h5>
+                                    <form id="exchange-rates-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">USD</label>
+                                            <input type="text" class="form-control" id="update-usd" value="655.50">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">EUR</label>
+                                            <input type="text" class="form-control" id="update-eur" value="655.00">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">GBP</label>
+                                            <input type="text" class="form-control" id="update-gbp" value="758.25">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">CNY</label>
+                                            <input type="text" class="form-control" id="update-cny" value="90.15">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Rates</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-4">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Add Financial News</h5>
+                                    <form id="finance-article-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-select" id="finance-article-category">
+                                                <option>Bank</option>
+                                                <option>Budget</option>
+                                                <option>Project</option>
+                                                <option>Financial Update</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" class="form-control" id="finance-article-title" placeholder="Enter article title">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Content</label>
+                                            <textarea class="form-control" id="finance-article-content" rows="5" placeholder="Enter article content"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Featured Image</label>
+                                            <input type="file" class="form-control" id="finance-article-image" accept="image/*">
+                                            <div id="finance-article-image-preview" class="mt-2" style="display: none;">
+                                                <img id="finance-article-preview-img" src="" class="image-preview">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Add Article</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script>
+        // ==================== FINANCE MANAGEMENT ====================
+let currentEditingId = null;
+
+async function loadFinanceData() {
+    try {
+        await Promise.all([
+            loadFinanceStats(),
+            loadFinanceArticles()
+        ]);
+    } catch (error) {
+        console.error('Error loading finance data:', error);
+        showToast('Failed to load finance data', 'danger');
+    }
+}
+
+async function loadFinanceStats() {
+    try {
+        const data = await apiCall('/finance/overview');
+        if (data?.financialData) {
+            updateFinanceStatsForm(data.financialData);
+        }
+    } catch (error) {
+        console.error('Error loading finance stats:', error);
+    }
+}
+
+function updateFinanceStatsForm(data) {
+    if (data.stock_market_growth) {
+        document.getElementById('update-stock-growth').value = data.stock_market_growth;
+        document.getElementById('stock-market-growth').textContent = data.stock_market_growth;
+    }
+    if (data.interest_rate) {
+        document.getElementById('update-interest-rate').value = data.interest_rate;
+        document.getElementById('interest-rate').textContent = data.interest_rate;
+    }
+    if (data.usd_xaf) {
+        document.getElementById('update-usd-xaf').value = data.usd_xaf;
+        document.getElementById('usd-xaf').textContent = data.usd_xaf;
+    }
+    if (data.credit_growth) {
+        document.getElementById('update-credit-growth').value = data.credit_growth;
+        document.getElementById('credit-growth').textContent = data.credit_growth;
+    }
+}
+
+async function loadFinanceArticles() {
+    try {
+        const response = await apiCall('/finance/articles?limit=50');
+        if (response?.items) {
+            updateFinanceArticlesTable(response.items);
+        }
+    } catch (error) {
+        console.error('Error loading finance articles:', error);
+    }
+}
+
+function updateFinanceArticlesTable(articles) {
+    const container = document.querySelector('#finance-section .table-container');
+    if (!container || !articles || articles.length === 0) return;
+
+    // This would be implemented when we have a proper table structure
+    console.log('Finance articles loaded:', articles.length);
+}
+
+async function saveFinanceStats(formData) {
+    try {
+        const payload = {
+            stock_market_growth: document.getElementById('update-stock-growth').value,
+            interest_rate: document.getElementById('update-interest-rate').value,
+            usd_xaf: parseFloat(document.getElementById('update-usd-xaf').value),
+            credit_growth: document.getElementById('update-credit-growth').value
+        };
+        
+        await apiCall('/finance/stats', {
+            method: 'PUT',
+            body: JSON.stringify(payload)
+        });
+        
+        showToast('Financial statistics updated successfully!', 'success');
+        await loadFinanceStats();
+        
+    } catch (error) {
+        console.error('Error saving finance stats:', error);
+        showToast('Failed to update financial statistics', 'danger');
+    }
+}
+
+async function saveExchangeRates(formData) {
+    try {
+        const payload = {
+            usd: parseFloat(document.getElementById('update-usd').value),
+            eur: parseFloat(document.getElementById('update-eur').value),
+            gbp: parseFloat(document.getElementById('update-gbp').value),
+            cny: parseFloat(document.getElementById('update-cny').value)
+        };
+        
+        await apiCall('/finance/exchange-rates', {
+            method: 'PUT',
+            body: JSON.stringify(payload)
+        });
+        
+        showToast('Exchange rates updated successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Error saving exchange rates:', error);
+        showToast('Failed to update exchange rates', 'danger');
+    }
+}
+
+async function saveFinanceArticle(formData) {
+    try {
+        const saveBtn = document.querySelector('#finance-article-form .btn-gold');
+        setLoading(saveBtn, true);
+        
+        let imageUrl = null;
+        const imageFile = document.getElementById('finance-article-image').files[0];
+        if (imageFile) {
+            imageUrl = await uploadImage(imageFile);
+        }
+        
+        const payload = {
+            title: document.getElementById('finance-article-title').value,
+            content: document.getElementById('finance-article-content').value,
+            category: document.getElementById('finance-article-category').value,
+            image_url: imageUrl
+        };
+        
+        let response;
+        if (currentEditingId) {
+            response = await apiCall(`/finance/articles/${currentEditingId}`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+        } else {
+            response = await apiCall('/finance/articles', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+        }
+        
+        showToast(`Finance article ${currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
+        document.getElementById('finance-article-form').reset();
+        await loadFinanceArticles();
+        
+    } catch (error) {
+        console.error('Error saving finance article:', error);
+        showToast('Failed to save finance article', 'danger');
+    } finally {
+        setLoading(document.querySelector('#finance-article-form .btn-gold'), false);
+    }
+}
+
+function showFinanceArticleForm(article = null) {
+    // This would show a form for editing finance articles
+    if (article) {
+        showToast(`Editing finance article: ${article.title}`, 'info');
+    } else {
+        showToast('Add new finance article form would open here', 'info');
+    }
+}
+
+// Finance event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Setup image previews
+    setupImagePreview('finance-article-image', 'finance-article-image-preview');
+    
+    // Finance stats form
+    document.getElementById('finance-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveFinanceStats(new FormData(this));
+    });
+
+    // Exchange rates form
+    document.getElementById('exchange-rates-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveExchangeRates(new FormData(this));
+    });
+
+    // Finance article form
+    document.getElementById('finance-article-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveFinanceArticle(new FormData(this));
+    });
+
+    // Buttons
+    document.getElementById('add-finance-article-btn')?.addEventListener('click', function() {
+        showFinanceArticleForm();
+    });
+    
+    // Load initial data
+    loadFinanceData();
+});
+
+// Make functions globally available
+window.showFinanceArticleForm = showFinanceArticleForm;
+    </script>
+</body>
+</html>

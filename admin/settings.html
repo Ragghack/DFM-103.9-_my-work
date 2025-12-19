@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Website Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-common.css">
+    <style>
+        /* Settings-specific CSS */
+        .settings-tabs .nav-link {
+            color: var(--text-secondary);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+        
+        .settings-tabs .nav-link.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-accent);
+            border-left: 3px solid var(--primary-accent);
+        }
+        
+        .settings-tabs .nav-link:hover {
+            background: rgba(212, 175, 55, 0.05);
+            color: var(--primary-accent);
+        }
+        
+        .settings-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .settings-section.active {
+            display: block;
+        }
+        
+        .backup-status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .backup-status.success {
+            background: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid #28a745;
+        }
+        
+        .backup-status.warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+        }
+        
+        .backup-status.danger {
+            background: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+        }
+        
+        .api-key {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-microphone-alt me-2" style="color:#D4AF37;"></i>
+                        <span style="color:#D4AF37;">DFM</span><span style="color:#fff;"> ADMIN</span>
+                    </h2>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emissions.html">
+                                <i class="fas fa-podcast"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn"></i> Actuality
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="articles.html">
+                                <i class="fas fa-newspaper"></i> Articles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="economy.html">
+                                <i class="fas fa-chart-line"></i> Economy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finance.html">
+                                <i class="fas fa-coins"></i> Finance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="homepage.html">
+                                <i class="fas fa-home"></i> Homepage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newsletter.html">
+                                <i class="fas fa-envelope"></i> Newsletter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="settings.html">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ml-auto p-0 main-content">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="mobile-menu-btn me-3">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <h3 class="mb-0 d-inline-block">Website Settings</h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <div class="theme-toggle me-3" id="themeToggle">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                        <div class="theme-toggle-handle"></div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user me-2"></i><span id="user-display">Loading...</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#" id="profile-btn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="container-fluid py-4">
+                    <div class="content-section active" id="settings-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Website Settings</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-gold" id="save-all-settings">
+                                    <i class="fas fa-save me-2"></i> Save All Settings
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Settings Navigation -->
+                            <div class="col-md-3">
+                                <div class="form-container">
+                                    <ul class="nav flex-column settings-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#" data-tab="general">
+                                                <i class="fas fa-cog me-2"></i> General
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-tab="appearance">
+                                                <i class="fas fa-palette me-2"></i> Appearance
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-tab="api">
+                                                <i class="fas fa-key me-2"></i> API & Security
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-tab="backup">
+                                                <i class="fas fa-database me-2"></i> Backup & Restore
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-tab="notifications">
+                                                <i class="fas fa-bell me-2"></i> Notifications
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-tab="advanced">
+                                                <i class="fas fa-sliders-h me-2"></i> Advanced
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Settings Content -->
+                            <div class="col-md-9">
+                                <!-- General Settings -->
+                                <div class="settings-section active" id="general-settings">
+                                    <div class="form-container">
+                                        <h5 class="mb-3">General Settings</h5>
+                                        <form id="general-settings-form">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Site Title *</label>
+                                                        <input type="text" class="form-control" id="site-title" value="DFM Media" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Site Tagline</label>
+                                                        <input type="text" class="form-control" id="site-tagline" value="Your Trusted News Source">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Contact Email *</label>
+                                                        <input type="email" class="form-control" id="contact-email" value="contact@dfmmedia.cm" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Site Description</label>
+                                                        <textarea class="form-control" id="site-description" rows="4">DFM Media is a leading source for news, economy, and finance information in Cameroon and Africa.</textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Contact Phone</label>
+                                                        <input type="text" class="form-control" id="contact-phone" value="+237 6XX XXX XXX">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Default Language</label>
+                                                        <select class="form-select" id="default-language">
+                                                            <option value="en">English</option>
+                                                            <option value="fr">French</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Time Zone</label>
+                                                        <select class="form-select" id="timezone">
+                                                            <option value="Africa/Douala" selected>Africa/Douala (GMT+1)</option>
+                                                            <option value="UTC">UTC</option>
+                                                            <option value="Europe/Paris">Europe/Paris</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-gold">Save General Settings</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Appearance Settings -->
+                                <div class="settings-section" id="appearance-settings">
+                                    <div class="form-container">
+                                        <h5 class="mb-3">Appearance Settings</h5>
+                                        <form id="appearance-settings-form">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Primary Color</label>
+                                                        <input type="color" class="form-control form-control-color" id="primary-color" value="#D4AF37" title="Choose primary color">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Secondary Color</label>
+                                                        <input type="color" class="form-control form-control-color" id="secondary-color" value="#1a1814" title="Choose secondary color">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Logo</label>
+                                                        <input type="file" class="form-control" id="site-logo" accept="image/*">
+                                                        <div class="form-text">Recommended size: 200x60 pixels</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Favicon</label>
+                                                        <input type="file" class="form-control" id="site-favicon" accept="image/*">
+                                                        <div class="form-text">Recommended size: 32x32 pixels</div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Default Theme</label>
+                                                        <select class="form-select" id="default-theme">
+                                                            <option value="light">Light</option>
+                                                            <option value="dark">Dark</option>
+                                                            <option value="auto">Auto (System Preference)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Font Family</label>
+                                                        <select class="form-select" id="font-family">
+                                                            <option value="Inter" selected>Inter</option>
+                                                            <option value="Arial">Arial</option>
+                                                            <option value="Georgia">Georgia</option>
+                                                            <option value="Helvetica">Helvetica</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Custom CSS</label>
+                                                <textarea class="form-control" id="custom-css" rows="4" placeholder="Enter custom CSS code"></textarea>
+                                                <div class="form-text">Add custom CSS to override default styles</div>
+                                            </div>
+                                            <button type="submit" class="btn btn-gold">Save Appearance</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- API & Security Settings -->
+                                <div class="settings-section" id="api-settings">
+                                    <div class="form-container">
+                                        <h5 class="mb-3">API & Security Settings</h5>
+                                        <form id="api-settings-form">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">API Base URL</label>
+                                                        <input type="url" class="form-control" id="api-base-url" value="http://localhost:5000/api">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">API Rate Limit</label>
+                                                        <input type="number" class="form-control" id="api-rate-limit" value="1000" min="100" max="10000">
+                                                        <div class="form-text">Requests per hour per IP</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Session Timeout</label>
+                                                        <input type="number" class="form-control" id="session-timeout" value="60" min="15" max="480">
+                                                        <div class="form-text">Minutes before automatic logout</div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Password Policy</label>
+                                                        <select class="form-select" id="password-policy">
+                                                            <option value="low">Low (6+ characters)</option>
+                                                            <option value="medium" selected>Medium (8+ characters, mixed case)</option>
+                                                            <option value="high">High (12+ characters, mixed case + numbers + symbols)</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">API Keys</label>
+                                                <div class="api-key mb-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span>Main API Key: sk_live_xxxxxxxxxxxxxxxxxxxxxxxx</span>
+                                                        <button class="btn btn-sm btn-outline-warning" onclick="regenerateApiKey('main')">
+                                                            <i class="fas fa-sync-alt"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="api-key">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span>Backup API Key: sk_test_xxxxxxxxxxxxxxxxxxxxxxxx</span>
+                                                        <button class="btn btn-sm btn-outline-warning" onclick="regenerateApiKey('backup')">
+                                                            <i class="fas fa-sync-alt"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="enable-2fa">
+                                                    <label class="form-check-label">Enable Two-Factor Authentication</label>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="enable-ssl" checked>
+                                                    <label class="form-check-label">Force SSL/HTTPS</label>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="enable-cors">
+                                                    <label class="form-check-label">Enable CORS</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-gold">Save API & Security Settings</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Backup & Restore Settings -->
+                                <div class="settings-section" id="backup-settings">
+                                    <div class="form-container">
+                                        <h5 class="mb-3">Backup & Restore</h5>
+                                        
+                                        <div class="backup-status success">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">Last Backup: Today, 02:30 AM</h6>
+                                                    <p class="mb-0">Backup completed successfully. Size: 45.2 MB</p>
+                                                </div>
+                                                <span class="badge bg-success">Healthy</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-4">
+                                            <div class="col-md-6">
+                                                <div class="form-container text-center">
+                                                    <i class="fas fa-download fa-2x text-warning mb-3"></i>
+                                                    <h6>Create Backup</h6>
+                                                    <p class="text-muted small">Create a complete backup of your website data</p>
+                                                    <button class="btn btn-gold w-100" id="create-backup-btn">
+                                                        <i class="fas fa-plus me-2"></i>Create Backup
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-container text-center">
+                                                    <i class="fas fa-upload fa-2x text-warning mb-3"></i>
+                                                    <h6>Restore Backup</h6>
+                                                    <p class="text-muted small">Restore your website from a previous backup</p>
+                                                    <input type="file" class="form-control mb-2" id="backup-file" accept=".zip,.sql,.json">
+                                                    <button class="btn btn-outline-primary w-100" id="restore-backup-btn">
+                                                        <i class="fas fa-upload me-2"></i>Restore Backup
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <h6 class="mb-3">Backup Schedule</h6>
+                                        <form id="backup-settings-form">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Auto Backup Frequency</label>
+                                                        <select class="form-select" id="backup-frequency">
+                                                            <option value="daily">Daily</option>
+                                                            <option value="weekly" selected>Weekly</option>
+                                                            <option value="monthly">Monthly</option>
+                                                            <option value="never">Never</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Backup Retention</label>
+                                                        <select class="form-select" id="backup-retention">
+                                                            <option value="7">7 days</option>
+                                                            <option value="30" selected>30 days</option>
+                                                            <option value="90">90 days</option>
+                                                            <option value="365">1 year</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="backup-database" checked>
+                                                    <label class="form-check-label">Include Database</label>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="backup-media" checked>
+                                                    <label class="form-check-label">Include Media Files</label>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="backup-settings">
+                                                    <label class="form-check-label">Include Settings</label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-gold">Save Backup Settings</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Notifications Settings -->
+                                <div class="settings-section" id="notifications-settings">
+                                    <div class="form-container">
+                                        <h5 class="mb-3">Notification Settings</h5>
+                                        <form id="notifications-settings-form">
+                                            <div class="mb-3">
+                                                <label class="form-label">Email Notifications</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="email-new-user" checked>
+                                                    <label class="form-check-label">New user registrations</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="email-content-pending" checked>
+                                                    <label class="form-check-label">Pending content approval</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="email-system-alerts">
+                                                    <label class="form-check-label">System alerts</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="email-backup-complete" checked>
+                                                    <label class="form-check-label">Backup completion</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Push Notifications</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="push-breaking-news" checked>
+                                                    <label class="form-check-label">Breaking news</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="push-live-stream">
+                                                    <label class="form-check-label">Live stream events</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="push-system-maintenance">
+                                                    <label class="form-check-label">System maintenance</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">SMS Notifications</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="sms-critical-alerts">
+                                                    <label class="form-check-label">Critical system alerts only</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Notification Sound</label>
+                                                <select class="form-select" id="notification-sound">
+                                                    <option value="default">Default</option>
+                                                    <option value="chime">Chime</option>
+                                                    <option value="bell">Bell</option>
+                                                    <option value="none">None</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-gold">Save Notification Settings</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Advanced Settings -->
+                                <div class="settings-section" id="advanced-settings">
+                                    <div class="form-container">
+                                        <h5 class="mb-3">Advanced Settings</h5>
+                                        <form id="advanced-settings-form">
+                                            <div class="alert alert-warning">
+                                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                                <strong>Warning:</strong> These settings are for advanced users only. Incorrect configuration may break your website.
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Debug Mode</label>
+                                                <select class="form-select" id="debug-mode">
+                                                    <option value="false">Disabled</option>
+                                                    <option value="true">Enabled</option>
+                                                </select>
+                                                <div class="form-text">Enable for development and troubleshooting</div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Cache Strategy</label>
+                                                <select class="form-select" id="cache-strategy">
+                                                    <option value="memory">Memory Cache</option>
+                                                    <option value="redis" selected>Redis</option>
+                                                    <option value="file">File Cache</option>
+                                                    <option value="none">No Cache</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">CDN URL</label>
+                                                <input type="url" class="form-control" id="cdn-url" placeholder="https://cdn.yourdomain.com">
+                                                <div class="form-text">Content Delivery Network URL for static assets</div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Custom Headers</label>
+                                                <textarea class="form-control" id="custom-headers" rows="3" placeholder="X-Custom-Header: value"></textarea>
+                                                <div class="form-text">Add custom HTTP headers (one per line)</div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Maintenance Mode</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="maintenance-mode">
+                                                    <label class="form-check-label">Enable maintenance mode</label>
+                                                </div>
+                                                <div class="form-text">When enabled, only admins can access the site</div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Custom JavaScript</label>
+                                                <textarea class="form-control" id="custom-js" rows="4" placeholder="// Add custom JavaScript code"></textarea>
+                                                <div class="form-text">This code will be added to all admin pages</div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-gold">Save Advanced Settings</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script>
+        // ==================== SETTINGS MANAGEMENT ====================
+let currentSettings = {};
+
+async function loadSettings() {
+    try {
+        const data = await apiCall('/admin/settings');
+        if (data && data.settings) {
+            currentSettings = data.settings;
+            populateSettingsForms(data.settings);
+        }
+    } catch (error) {
+        console.error('Error loading settings:', error);
+        showToast('Failed to load settings', 'danger');
+    }
+}
+
+function populateSettingsForms(settings) {
+    // General Settings
+    if (settings.general) {
+        document.getElementById('site-title').value = settings.general.siteTitle || 'DFM Media';
+        document.getElementById('site-tagline').value = settings.general.siteTagline || '';
+        document.getElementById('site-description').value = settings.general.siteDescription || '';
+        document.getElementById('contact-email').value = settings.general.contactEmail || '';
+        document.getElementById('contact-phone').value = settings.general.contactPhone || '';
+        document.getElementById('default-language').value = settings.general.defaultLanguage || 'en';
+        document.getElementById('timezone').value = settings.general.timezone || 'Africa/Douala';
+    }
+
+    // Appearance Settings
+    if (settings.appearance) {
+        document.getElementById('primary-color').value = settings.appearance.primaryColor || '#D4AF37';
+        document.getElementById('secondary-color').value = settings.appearance.secondaryColor || '#1a1814';
+        document.getElementById('default-theme').value = settings.appearance.defaultTheme || 'light';
+        document.getElementById('font-family').value = settings.appearance.fontFamily || 'Inter';
+        document.getElementById('custom-css').value = settings.appearance.customCSS || '';
+    }
+
+    // API & Security Settings
+    if (settings.api) {
+        document.getElementById('api-base-url').value = settings.api.baseURL || 'http://localhost:5000/api';
+        document.getElementById('api-rate-limit').value = settings.api.rateLimit || 1000;
+        document.getElementById('session-timeout').value = settings.api.sessionTimeout || 60;
+        document.getElementById('password-policy').value = settings.api.passwordPolicy || 'medium';
+        document.getElementById('enable-2fa').checked = settings.api.enable2FA || false;
+        document.getElementById('enable-ssl').checked = settings.api.enableSSL !== false;
+        document.getElementById('enable-cors').checked = settings.api.enableCORS || false;
+    }
+
+    // Backup Settings
+    if (settings.backup) {
+        document.getElementById('backup-frequency').value = settings.backup.frequency || 'weekly';
+        document.getElementById('backup-retention').value = settings.backup.retention || 30;
+        document.getElementById('backup-database').checked = settings.backup.includeDatabase !== false;
+        document.getElementById('backup-media').checked = settings.backup.includeMedia !== false;
+        document.getElementById('backup-settings').checked = settings.backup.includeSettings !== false;
+    }
+
+    // Notification Settings
+    if (settings.notifications) {
+        document.getElementById('email-new-user').checked = settings.notifications.emailNewUser !== false;
+        document.getElementById('email-content-pending').checked = settings.notifications.emailContentPending !== false;
+        document.getElementById('email-system-alerts').checked = settings.notifications.emailSystemAlerts || false;
+        document.getElementById('email-backup-complete').checked = settings.notifications.emailBackupComplete !== false;
+        document.getElementById('push-breaking-news').checked = settings.notifications.pushBreakingNews !== false;
+        document.getElementById('push-live-stream').checked = settings.notifications.pushLiveStream || false;
+        document.getElementById('push-system-maintenance').checked = settings.notifications.pushSystemMaintenance || false;
+        document.getElementById('sms-critical-alerts').checked = settings.notifications.smsCriticalAlerts || false;
+        document.getElementById('notification-sound').value = settings.notifications.sound || 'default';
+    }
+
+    // Advanced Settings
+    if (settings.advanced) {
+        document.getElementById('debug-mode').value = settings.advanced.debugMode ? 'true' : 'false';
+        document.getElementById('cache-strategy').value = settings.advanced.cacheStrategy || 'redis';
+        document.getElementById('cdn-url').value = settings.advanced.cdnURL || '';
+        document.getElementById('custom-headers').value = settings.advanced.customHeaders || '';
+        document.getElementById('maintenance-mode').checked = settings.advanced.maintenanceMode || false;
+        document.getElementById('custom-js').value = settings.advanced.customJS || '';
+    }
+}
+
+async function saveGeneralSettings(formData) {
+    try {
+        const payload = {
+            general: {
+                siteTitle: document.getElementById('site-title').value,
+                siteTagline: document.getElementById('site-tagline').value,
+                siteDescription: document.getElementById('site-description').value,
+                contactEmail: document.getElementById('contact-email').value,
+                contactPhone: document.getElementById('contact-phone').value,
+                defaultLanguage: document.getElementById('default-language').value,
+                timezone: document.getElementById('timezone').value
+            }
+        };
+
+        await apiCall('/admin/settings/general', {
+            method: 'PUT',
+            body: JSON.stringify(payload.general)
+        });
+
+        showToast('General settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving general settings:', error);
+        showToast('Failed to save general settings', 'danger');
+    }
+}
+
+async function saveAppearanceSettings(formData) {
+    try {
+        const payload = {
+            appearance: {
+                primaryColor: document.getElementById('primary-color').value,
+                secondaryColor: document.getElementById('secondary-color').value,
+                defaultTheme: document.getElementById('default-theme').value,
+                fontFamily: document.getElementById('font-family').value,
+                customCSS: document.getElementById('custom-css').value
+            }
+        };
+
+        // Handle file uploads for logo and favicon
+        const logoFile = document.getElementById('site-logo').files[0];
+        const faviconFile = document.getElementById('site-favicon').files[0];
+
+        if (logoFile) {
+            const logoUrl = await uploadImage(logoFile);
+            if (logoUrl) {
+                payload.appearance.logo = logoUrl;
+            }
+        }
+
+        if (faviconFile) {
+            const faviconUrl = await uploadImage(faviconFile);
+            if (faviconUrl) {
+                payload.appearance.favicon = faviconUrl;
+            }
+        }
+
+        await apiCall('/admin/settings/appearance', {
+            method: 'PUT',
+            body: JSON.stringify(payload.appearance)
+        });
+
+        showToast('Appearance settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving appearance settings:', error);
+        showToast('Failed to save appearance settings', 'danger');
+    }
+}
+
+async function saveApiSettings(formData) {
+    try {
+        const payload = {
+            api: {
+                baseURL: document.getElementById('api-base-url').value,
+                rateLimit: parseInt(document.getElementById('api-rate-limit').value),
+                sessionTimeout: parseInt(document.getElementById('session-timeout').value),
+                passwordPolicy: document.getElementById('password-policy').value,
+                enable2FA: document.getElementById('enable-2fa').checked,
+                enableSSL: document.getElementById('enable-ssl').checked,
+                enableCORS: document.getElementById('enable-cors').checked
+            }
+        };
+
+        await apiCall('/admin/settings/api', {
+            method: 'PUT',
+            body: JSON.stringify(payload.api)
+        });
+
+        showToast('API & Security settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving API settings:', error);
+        showToast('Failed to save API settings', 'danger');
+    }
+}
+
+async function saveBackupSettings(formData) {
+    try {
+        const payload = {
+            backup: {
+                frequency: document.getElementById('backup-frequency').value,
+                retention: parseInt(document.getElementById('backup-retention').value),
+                includeDatabase: document.getElementById('backup-database').checked,
+                includeMedia: document.getElementById('backup-media').checked,
+                includeSettings: document.getElementById('backup-settings').checked
+            }
+        };
+
+        await apiCall('/admin/settings/backup', {
+            method: 'PUT',
+            body: JSON.stringify(payload.backup)
+        });
+
+        showToast('Backup settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving backup settings:', error);
+        showToast('Failed to save backup settings', 'danger');
+    }
+}
+
+async function saveNotificationSettings(formData) {
+    try {
+        const payload = {
+            notifications: {
+                emailNewUser: document.getElementById('email-new-user').checked,
+                emailContentPending: document.getElementById('email-content-pending').checked,
+                emailSystemAlerts: document.getElementById('email-system-alerts').checked,
+                emailBackupComplete: document.getElementById('email-backup-complete').checked,
+                pushBreakingNews: document.getElementById('push-breaking-news').checked,
+                pushLiveStream: document.getElementById('push-live-stream').checked,
+                pushSystemMaintenance: document.getElementById('push-system-maintenance').checked,
+                smsCriticalAlerts: document.getElementById('sms-critical-alerts').checked,
+                sound: document.getElementById('notification-sound').value
+            }
+        };
+
+        await apiCall('/admin/settings/notifications', {
+            method: 'PUT',
+            body: JSON.stringify(payload.notifications)
+        });
+
+        showToast('Notification settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving notification settings:', error);
+        showToast('Failed to save notification settings', 'danger');
+    }
+}
+
+async function saveAdvancedSettings(formData) {
+    try {
+        const payload = {
+            advanced: {
+                debugMode: document.getElementById('debug-mode').value === 'true',
+                cacheStrategy: document.getElementById('cache-strategy').value,
+                cdnURL: document.getElementById('cdn-url').value,
+                customHeaders: document.getElementById('custom-headers').value,
+                maintenanceMode: document.getElementById('maintenance-mode').checked,
+                customJS: document.getElementById('custom-js').value
+            }
+        };
+
+        await apiCall('/admin/settings/advanced', {
+            method: 'PUT',
+            body: JSON.stringify(payload.advanced)
+        });
+
+        showToast('Advanced settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving advanced settings:', error);
+        showToast('Failed to save advanced settings', 'danger');
+    }
+}
+
+async function createBackup() {
+    try {
+        const createBtn = document.getElementById('create-backup-btn');
+        setLoading(createBtn, true);
+
+        const response = await apiCall('/admin/backup/create', {
+            method: 'POST'
+        });
+
+        showToast('Backup created successfully!', 'success');
+        
+        // Update backup status
+        setTimeout(() => {
+            updateBackupStatus();
+        }, 2000);
+
+    } catch (error) {
+        console.error('Error creating backup:', error);
+        showToast('Failed to create backup', 'danger');
+    } finally {
+        setLoading(document.getElementById('create-backup-btn'), false);
+    }
+}
+
+async function restoreBackup() {
+    const backupFile = document.getElementById('backup-file').files[0];
+    if (!backupFile) {
+        showToast('Please select a backup file', 'warning');
+        return;
+    }
+
+    if (!confirm('Are you sure you want to restore from this backup? This will overwrite current data.')) {
+        return;
+    }
+
+    try {
+        const restoreBtn = document.getElementById('restore-backup-btn');
+        setLoading(restoreBtn, true);
+
+        const formData = new FormData();
+        formData.append('backup', backupFile);
+
+        const response = await fetch(`${API_BASE}/admin/backup/restore`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('dfm_token')}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Restore failed');
+
+        showToast('Backup restored successfully!', 'success');
+        document.getElementById('backup-file').value = '';
+
+    } catch (error) {
+        console.error('Error restoring backup:', error);
+        showToast('Failed to restore backup', 'danger');
+    } finally {
+        setLoading(document.getElementById('restore-backup-btn'), false);
+    }
+}
+
+async function regenerateApiKey(keyType) {
+    if (!confirm(`Are you sure you want to regenerate the ${keyType} API key? This will invalidate the current key.`)) {
+        return;
+    }
+
+    try {
+        const response = await apiCall(`/admin/settings/regenerate-api-key/${keyType}`, {
+            method: 'POST'
+        });
+
+        showToast(`${keyType} API key regenerated successfully!`, 'success');
+        
+        // Reload settings to show new API key
+        setTimeout(() => {
+            loadSettings();
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error regenerating API key:', error);
+        showToast('Failed to regenerate API key', 'danger');
+    }
+}
+
+async function updateBackupStatus() {
+    try {
+        const response = await apiCall('/admin/backup/status');
+        if (response && response.lastBackup) {
+            // Update the backup status display
+            const backupStatus = document.querySelector('.backup-status');
+            if (backupStatus && response.lastBackup) {
+                backupStatus.querySelector('h6').textContent = `Last Backup: ${new Date(response.lastBackup.timestamp).toLocaleString()}`;
+                backupStatus.querySelector('p').textContent = `Backup completed successfully. Size: ${response.lastBackup.size}`;
+            }
+        }
+    } catch (error) {
+        console.error('Error updating backup status:', error);
+    }
+}
+
+async function saveAllSettings() {
+    try {
+        await Promise.all([
+            saveGeneralSettings(),
+            saveAppearanceSettings(),
+            saveApiSettings(),
+            saveBackupSettings(),
+            saveNotificationSettings(),
+            saveAdvancedSettings()
+        ]);
+        
+        showToast('All settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving all settings:', error);
+        showToast('Some settings failed to save', 'warning');
+    }
+}
+
+function switchSettingsTab(tabId) {
+    // Hide all sections
+    document.querySelectorAll('.settings-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show selected section
+    const targetSection = document.getElementById(`${tabId}-settings`);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    
+    // Update active tab
+    document.querySelectorAll('.settings-tabs .nav-link').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+    if (activeTab) {
+        activeTab.classList.add('active');
+    }
+}
+
+// Settings event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Settings tab navigation
+    document.querySelectorAll('.settings-tabs .nav-link').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tabId = this.getAttribute('data-tab');
+            switchSettingsTab(tabId);
+        });
+    });
+
+    // Settings forms
+    document.getElementById('general-settings-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveGeneralSettings(new FormData(this));
+    });
+
+    document.getElementById('appearance-settings-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveAppearanceSettings(new FormData(this));
+    });
+
+    document.getElementById('api-settings-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveApiSettings(new FormData(this));
+    });
+
+    document.getElementById('backup-settings-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveBackupSettings(new FormData(this));
+    });
+
+    document.getElementById('notifications-settings-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveNotificationSettings(new FormData(this));
+    });
+
+    document.getElementById('advanced-settings-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveAdvancedSettings(new FormData(this));
+    });
+
+    // Backup actions
+    document.getElementById('create-backup-btn')?.addEventListener('click', createBackup);
+    document.getElementById('restore-backup-btn')?.addEventListener('click', restoreBackup);
+
+    // Save all settings
+    document.getElementById('save-all-settings')?.addEventListener('click', saveAllSettings);
+
+    // Load initial data
+    loadSettings();
+    updateBackupStatus();
+});
+
+// Make functions globally available
+window.regenerateApiKey = regenerateApiKey;
+window.switchSettingsTab = switchSettingsTab;
+    </script>
+</body>
+</html>

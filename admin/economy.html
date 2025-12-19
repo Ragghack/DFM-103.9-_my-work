@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Economy Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-common.css">
+    <style>
+        /* Economy-specific CSS */
+        .economy-summary-admin {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+            color: rgb(255, 255, 64);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .economy-indicator-admin {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .economy-indicator-admin:last-child {
+            border-bottom: none;
+        }
+        
+        .indicator-value-admin {
+            font-weight: 700;
+            color: var(--primary-accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-microphone-alt me-2" style="color:#D4AF37;"></i>
+                        <span style="color:#D4AF37;">DFM</span><span style="color:#fff;"> ADMIN</span>
+                    </h2>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emissions.html">
+                                <i class="fas fa-podcast"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn"></i> Actuality
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="articles.html">
+                                <i class="fas fa-newspaper"></i> Articles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="economy.html">
+                                <i class="fas fa-chart-line"></i> Economy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finance.html">
+                                <i class="fas fa-coins"></i> Finance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="homepage.html">
+                                <i class="fas fa-home"></i> Homepage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newsletter.html">
+                                <i class="fas fa-envelope"></i> Newsletter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ml-auto p-0 main-content">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="mobile-menu-btn me-3">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <h3 class="mb-0 d-inline-block">Economy Content Management</h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <div class="theme-toggle me-3" id="themeToggle">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                        <div class="theme-toggle-handle"></div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user me-2"></i><span id="user-display">Loading...</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#" id="profile-btn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Economy Content -->
+                <div class="container-fluid py-4">
+                    <div class="content-section active" id="economy-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Economy Content Management</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-gold" id="add-economy-article-btn">
+                                    <i class="fas fa-plus me-2"></i> Add Economy Article
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="economy-summary-admin mb-4">
+                            <h5 class="mb-3">Economic Indicators Summary</h5>
+                            <div class="economy-indicator-admin">
+                                <span>GDP Growth</span>
+                                <span class="indicator-value-admin" id="gdp-growth">3.2%</span>
+                            </div>
+                            <div class="economy-indicator-admin">
+                                <span>Industrial Growth</span>
+                                <span class="indicator-value-admin" id="industrial-growth">4.5%</span>
+                            </div>
+                            <div class="economy-indicator-admin">
+                                <span>Unemployment Rate</span>
+                                <span class="indicator-value-admin" id="unemployment-rate">5.8%</span>
+                            </div>
+                            <div class="economy-indicator-admin">
+                                <span>Inflation Rate</span>
+                                <span class="indicator-value-admin" id="inflation-rate">2.1%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Add Economy Article Form -->
+                        <div class="form-container form-section mb-4" id="economy-article-form-section" style="display: none;">
+                            <h5 class="mb-3" id="economy-article-form-title">Add New Economy Article</h5>
+                            <form id="economy-article-form">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label class="form-label">Article Title *</label>
+                                            <input type="text" class="form-control" id="economy-article-title" required>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Content *</label>
+                                            <textarea class="form-control" id="economy-article-content" rows="6" required></textarea>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Excerpt</label>
+                                            <textarea class="form-control" id="economy-article-excerpt" rows="3" maxlength="300"></textarea>
+                                            <div class="form-text">Brief summary of the article (max 300 characters)</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Section *</label>
+                                            <select class="form-select" id="economy-article-section" required>
+                                                <option value="">Select Section</option>
+                                                <option value="economy">Economy</option>
+                                                <option value="eco-africa">Eco Africa</option>
+                                                <option value="eco-agriculture">Eco Agriculture</option>
+                                                <option value="eco-innovation">Eco Innovation</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-select" id="economy-article-category">
+                                                <option value="news">News</option>
+                                                <option value="analysis">Analysis</option>
+                                                <option value="report">Report</option>
+                                                <option value="interview">Interview</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Author</label>
+                                            <input type="text" class="form-control" id="economy-article-author" placeholder="Enter author name">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <select class="form-select" id="economy-article-status">
+                                                <option value="draft">Draft</option>
+                                                <option value="published">Published</option>
+                                                <option value="archived">Archived</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Featured Image</label>
+                                            <input type="file" class="form-control" id="economy-article-image" accept="image/*">
+                                            <div class="form-text">Upload an image for this article</div>
+                                            <div id="economy-article-image-preview" class="mt-2" style="display: none;">
+                                                <img id="economy-article-preview-img" src="" class="image-preview">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Image Alt Text</label>
+                                            <input type="text" class="form-control" id="economy-article-image-alt" placeholder="Describe the image for accessibility">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="economy-article-featured">
+                                                <label class="form-check-label">Featured Article</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-secondary me-2" id="cancel-economy-article">Cancel</button>
+                                    <button type="submit" class="btn btn-gold" id="save-economy-article">
+                                        <span class="btn-text">Save Article</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Update Economic Statistics</h5>
+                                    <form id="economy-stats-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">GDP Growth (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-gdp-growth" value="3.2">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Industrial Growth (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-industrial-growth" value="4.5">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Unemployment Rate (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-unemployment-rate" value="5.8">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Inflation Rate (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-inflation-rate" value="2.1">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Statistics</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Recent Economy Articles</h5>
+                                        <button class="btn btn-sm btn-outline-primary" id="refresh-economy-articles">
+                                            <i class="fas fa-sync-alt me-1"></i> Refresh
+                                        </button>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Title</th>
+                                                    <th>Section</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="economy-articles-table-body">
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted py-4">
+                                                        <div class="spinner-border spinner-border-sm me-2"></div>
+                                                        Loading economy articles...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script>// ==================== ECONOMY MANAGEMENT ====================
+let currentEditingId = null;
+
+async function loadEconomyData() {
+    try {
+        await Promise.all([
+            loadEconomicIndicators(),
+            loadEconomyArticles()
+        ]);
+    } catch (error) {
+        console.error('Error loading economy data:', error);
+        showToast('Failed to load economy data', 'danger');
+    }
+}
+
+async function loadEconomicIndicators() {
+    try {
+        const data = await apiCall('/economy/indicators');
+        if (data) {
+            // Update form fields
+            document.getElementById('update-gdp-growth').value = data.gdp_growth || '';
+            document.getElementById('update-industrial-growth').value = data.industrial_growth || '';
+            document.getElementById('update-unemployment-rate').value = data.unemployment_rate || '';
+            document.getElementById('update-inflation-rate').value = data.inflation_rate || '';
+            
+            // Update summary display
+            document.getElementById('gdp-growth').textContent = `${data.gdp_growth}%` || '3.2%';
+            document.getElementById('industrial-growth').textContent = `${data.industrial_growth}%` || '4.5%';
+            document.getElementById('unemployment-rate').textContent = `${data.unemployment_rate}%` || '5.8%';
+            document.getElementById('inflation-rate').textContent = `${data.inflation_rate}%` || '2.1%';
+        }
+    } catch (error) {
+        console.error('Error loading economic indicators:', error);
+    }
+}
+
+async function loadEconomyArticles(page = 1, section = '') {
+    try {
+        const tbody = document.getElementById('economy-articles-table-body');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading economy articles...</td></tr>';
+        
+        let endpoint = `/economy/admin/articles?page=${page}&limit=10`;
+        if (section) endpoint += `&section=${section}`;
+        
+        const data = await apiCall(endpoint);
+        
+        if (!data || !data.items || data.items.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fas fa-chart-line fa-2x mb-3 d-block"></i>
+                        No economy articles found
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-gold" onclick="showEconomyArticleForm()">
+                                <i class="fas fa-plus me-1"></i>Create Your First Economy Article
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = data.items.map(article => `
+            <tr>
+                <td>
+                    ${article.image_url ? 
+                        `<img src="${article.image_url}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${article.image_alt || article.title}">` : 
+                        '<i class="fas fa-image text-muted"></i>'
+                    }
+                </td>
+                <td>
+                    <div class="fw-bold">${article.title}</div>
+                    <small class="text-muted">${article.excerpt ? article.excerpt.substring(0, 60) + '...' : ''}</small>
+                </td>
+                <td>
+                    <span class="badge bg-primary">${article.section}</span>
+                    <span class="badge bg-secondary ms-1">${article.category}</span>
+                </td>
+                <td>${new Date(article.createdAt).toLocaleDateString()}</td>
+                <td>
+                    <span class="badge bg-${article.status === 'published' ? 'success' : 'warning'}">
+                        ${article.status}
+                    </span>
+                    ${article.featured ? '<span class="badge bg-warning ms-1">Featured</span>' : ''}
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary" onclick="editEconomyArticle('${article._id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="deleteEconomyArticle('${article._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Error loading economy articles:', error);
+        const tbody = document.getElementById('economy-articles-table-body');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Failed to load economy articles</td></tr>';
+        }
+    }
+}
+
+async function saveEconomicIndicators(formData) {
+    try {
+        const payload = {
+            gdp_growth: parseFloat(document.getElementById('update-gdp-growth').value),
+            industrial_growth: parseFloat(document.getElementById('update-industrial-growth').value),
+            unemployment_rate: parseFloat(document.getElementById('update-unemployment-rate').value),
+            inflation_rate: parseFloat(document.getElementById('update-inflation-rate').value),
+            period: 'Current',
+            year: new Date().getFullYear()
+        };
+        
+        const response = await apiCall('/economy/indicators', {
+            method: 'PUT',
+            body: JSON.stringify(payload)
+        });
+        
+        showToast('Economic indicators updated successfully!', 'success');
+        await loadEconomicIndicators();
+        
+    } catch (error) {
+        console.error('Error saving economic indicators:', error);
+        showToast('Failed to update economic indicators', 'danger');
+    }
+}
+
+async function saveEconomyArticle(formData) {
+    try {
+        const saveBtn = document.getElementById('save-economy-article');
+        setLoading(saveBtn, true);
+        
+        let imageUrl = null;
+        const imageFile = document.getElementById('economy-article-image').files[0];
+        if (imageFile) {
+            imageUrl = await uploadImage(imageFile);
+        }
+        
+        const payload = {
+            title: document.getElementById('economy-article-title').value,
+            content: document.getElementById('economy-article-content').value,
+            excerpt: document.getElementById('economy-article-excerpt').value,
+            section: document.getElementById('economy-article-section').value,
+            category: document.getElementById('economy-article-category').value,
+            author: document.getElementById('economy-article-author').value,
+            image_url: imageUrl,
+            image_alt: document.getElementById('economy-article-image-alt').value,
+            status: document.getElementById('economy-article-status').value,
+            featured: document.getElementById('economy-article-featured').checked
+        };
+        
+        let response;
+        if (currentEditingId) {
+            response = await apiCall(`/economy/articles/${currentEditingId}`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+        } else {
+            response = await apiCall('/economy/articles', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+        }
+        
+        showToast(`Economy article ${currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
+        hideEconomyArticleForm();
+        await loadEconomyArticles();
+        
+    } catch (error) {
+        console.error('Error saving economy article:', error);
+        showToast('Failed to save economy article', 'danger');
+    } finally {
+        setLoading(document.getElementById('save-economy-article'), false);
+    }
+}
+
+function showEconomyArticleForm(article = null) {
+    const formSection = document.getElementById('economy-article-form-section');
+    const formTitle = document.getElementById('economy-article-form-title');
+    
+    if (article) {
+        formTitle.textContent = 'Edit Economy Article';
+        document.getElementById('economy-article-title').value = article.title || '';
+        document.getElementById('economy-article-content').value = article.content || '';
+        document.getElementById('economy-article-excerpt').value = article.excerpt || '';
+        document.getElementById('economy-article-section').value = article.section || '';
+        document.getElementById('economy-article-category').value = article.category || '';
+        document.getElementById('economy-article-author').value = article.author || '';
+        document.getElementById('economy-article-status').value = article.status || 'draft';
+        document.getElementById('economy-article-featured').checked = article.featured || false;
+        document.getElementById('economy-article-image-alt').value = article.image_alt || '';
+        currentEditingId = article._id;
+        
+        // Set image preview if exists
+        if (article.image_url) {
+            const preview = document.getElementById('economy-article-image-preview');
+            preview.style.display = 'block';
+            document.getElementById('economy-article-preview-img').src = article.image_url;
+        }
+    } else {
+        formTitle.textContent = 'Add New Economy Article';
+        document.getElementById('economy-article-form').reset();
+        currentEditingId = null;
+        document.getElementById('economy-article-image-preview').style.display = 'none';
+    }
+    
+    formSection.style.display = 'block';
+    formSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideEconomyArticleForm() {
+    document.getElementById('economy-article-form-section').style.display = 'none';
+}
+
+async function editEconomyArticle(id) {
+    try {
+        const response = await apiCall(`/economy/articles/${id}`);
+        if (response.article) {
+            showEconomyArticleForm(response.article);
+        }
+    } catch (error) {
+        console.error('Error loading economy article for edit:', error);
+        showToast('Failed to load economy article', 'danger');
+    }
+}
+
+async function deleteEconomyArticle(id) {
+    if (!confirm('Are you sure you want to delete this economy article?')) return;
+    
+    try {
+        await apiCall(`/economy/articles/${id}`, { method: 'DELETE' });
+        showToast('Economy article deleted successfully!', 'success');
+        await loadEconomyArticles();
+    } catch (error) {
+        console.error('Error deleting economy article:', error);
+        showToast('Failed to delete economy article', 'danger');
+    }
+}
+
+// Economy event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Setup image previews
+    setupImagePreview('economy-article-image', 'economy-article-image-preview');
+    
+    // Economy article form
+    document.getElementById('economy-article-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveEconomyArticle(new FormData(this));
+    });
+
+    // Economy stats form
+    document.getElementById('economy-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveEconomicIndicators(new FormData(this));
+    });
+
+    // Buttons
+    document.getElementById('add-economy-article-btn')?.addEventListener('click', function() {
+        showEconomyArticleForm();
+    });
+
+    document.getElementById('cancel-economy-article')?.addEventListener('click', function() {
+        hideEconomyArticleForm();
+    });
+
+    document.getElementById('refresh-economy-articles')?.addEventListener('click', function() {
+        loadEconomyArticles();
+    });
+    
+    // Load initial data
+    loadEconomyData();
+});
+
+// Make functions globally available
+window.editEconomyArticle = editEconomyArticle;
+window.deleteEconomyArticle = deleteEconomyArticle;
+window.showEconomyArticleForm = showEconomyArticleForm;
+</script>
+</body>
+</html>

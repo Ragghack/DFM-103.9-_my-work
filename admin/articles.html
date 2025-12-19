@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Article Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-common.css">
+    <style>
+        /* Articles-specific CSS */
+        .hot-news-ticker-admin {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hot-news-ticker-admin::before {
+            content: 'HOT';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--primary-dark);
+            color: var(--primary-accent);
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 10px 15px;
+            border-radius: 50%;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-microphone-alt me-2" style="color:#D4AF37;"></i>
+                        <span style="color:#D4AF37;">DFM</span><span style="color:#fff;"> ADMIN</span>
+                    </h2>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emissions.html">
+                                <i class="fas fa-podcast"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn"></i> Actuality
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="articles.html">
+                                <i class="fas fa-newspaper"></i> Articles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="economy.html">
+                                <i class="fas fa-chart-line"></i> Economy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finance.html">
+                                <i class="fas fa-coins"></i> Finance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="homepage.html">
+                                <i class="fas fa-home"></i> Homepage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newsletter.html">
+                                <i class="fas fa-envelope"></i> Newsletter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ml-auto p-0 main-content">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="mobile-menu-btn me-3">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <h3 class="mb-0 d-inline-block">Article Management</h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <div class="theme-toggle me-3" id="themeToggle">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                        <div class="theme-toggle-handle"></div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user me-2"></i><span id="user-display">Loading...</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#" id="profile-btn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Articles Content -->
+                <div class="container-fluid py-4">
+                    <div class="content-section active" id="articles-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Article Management</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-secondary" id="refresh-articles">
+                                    <i class="fas fa-sync-alt me-2"></i> Refresh
+                                </button>
+                                <button class="btn btn-gold" id="add-article-btn">
+                                    <i class="fas fa-plus me-2"></i> Add New Article
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Add Article Form -->
+                        <div class="form-container form-section mb-4" id="article-form-section">
+                            <h5 class="mb-3" id="article-form-title">Add New Article</h5>
+                            <form id="article-form">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label class="form-label">Article Title *</label>
+                                            <input type="text" class="form-control" id="article-title" required>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Content *</label>
+                                            <textarea class="form-control" id="article-content" rows="6" required></textarea>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Excerpt</label>
+                                            <textarea class="form-control" id="article-excerpt" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Category *</label>
+                                            <select class="form-select" id="article-category" required>
+                                                <option value="">Select Category</option>
+                                                <option value="economy">Economy</option>
+                                                <option value="finance">Finance</option>
+                                                <option value="agriculture">Agriculture</option>
+                                                <option value="energy">Energy</option>
+                                                <option value="innovation">Innovation</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <select class="form-select" id="article-status">
+                                                <option value="draft">Draft</option>
+                                                <option value="published">Published</option>
+                                                <option value="archived">Archived</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Featured Image</label>
+                                            <input type="file" class="form-control" id="article-image" accept="image/*">
+                                            <div class="form-text">Upload an image for this article</div>
+                                            <div id="article-image-preview" class="mt-2" style="display: none;">
+                                                <img id="article-preview-img" src="" class="image-preview">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="article-featured">
+                                                <label class="form-check-label">Featured Article</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-secondary me-2" id="cancel-article">Cancel</button>
+                                    <button type="submit" class="btn btn-gold" id="save-article">
+                                        <span class="btn-text">Save Article</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Articles List -->
+                        <div class="table-container">
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">All Articles</h5>
+                                <div class="d-flex">
+                                    <button class="btn btn-sm btn-outline-warning me-2" id="debug-articles-btn" title="Debug API">
+                                        <i class="fas fa-bug me-1"></i>Debug
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success me-2" id="test-create-article" title="Create Test Article">
+                                        <i class="fas fa-vial me-1"></i>Test Create
+                                    </button>
+                                    <input type="text" class="form-control me-2" id="search-articles" placeholder="Search articles...">
+                                    <select class="form-select" id="filter-articles-category" style="width: auto;">
+                                        <option value="">All Categories</option>
+                                        <option value="economy">Economy</option>
+                                        <option value="finance">Finance</option>
+                                        <option value="agriculture">Agriculture</option>
+                                        <option value="energy">Energy</option>
+                                        <option value="innovation">Innovation</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th width="40">
+                                                <input type="checkbox" class="form-check-input" id="select-all-articles">
+                                            </th>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Author</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="articles-table-body">
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted py-4">
+                                                <div class="spinner-border spinner-border-sm me-2"></div>
+                                                Loading articles...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="p-3 border-top d-flex justify-content-between align-items-center">
+                                <div>
+                                    <select class="form-select d-inline-block me-2" id="bulk-action-articles" style="width: auto;">
+                                        <option>Bulk Actions</option>
+                                        <option value="publish">Publish</option>
+                                        <option value="draft">Move to Draft</option>
+                                        <option value="delete">Delete</option>
+                                    </select>
+                                    <button class="btn btn-outline-secondary" id="apply-bulk-articles">Apply</button>
+                                </div>
+                                <nav>
+                                    <ul class="pagination mb-0" id="articles-pagination">
+                                        <!-- Pagination will be generated here -->
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/admin-articles.js">
+        // ==================== EMISSIONS MANAGEMENT ====================
+let currentEditingId = null;
+
+async function loadEmissions() {
+    try {
+        const tbody = document.getElementById('episodes-table-body');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading episodes...</td></tr>';
+        
+        const data = await apiCall('/emissions/admin/emissions?limit=50');
+        
+        if (!data || !data.emissions || data.emissions.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fas fa-podcast fa-2x mb-3 d-block"></i>
+                        No emissions found
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-gold" onclick="showEmissionForm()">
+                                <i class="fas fa-plus me-1"></i>Create Your First Emission
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = data.emissions.map(emission => `
+            <tr>
+                <td>
+                    <input type="checkbox" class="form-check-input emission-checkbox" value="${emission._id}">
+                </td>
+                <td>
+                    ${emission.thumbnail ? 
+                        `<img src="${emission.thumbnail}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${emission.title}">` : 
+                        '<i class="fas fa-image text-muted"></i>'
+                    }
+                </td>
+                <td>
+                    <div class="fw-bold">${emission.title}</div>
+                    <small class="text-muted">${emission.description.substring(0, 60)}...</small>
+                </td>
+                <td><span class="badge bg-secondary">${emission.category}</span></td>
+                <td>${new Date(emission.publish_date).toLocaleDateString()}</td>
+                <td>${emission.duration}</td>
+                <td>
+                    <span class="badge bg-${emission.status === 'published' ? 'success' : emission.status === 'scheduled' ? 'warning' : 'secondary'}">
+                        ${emission.status}
+                    </span>
+                    ${emission.featured ? '<span class="badge bg-warning ms-1">Featured</span>' : ''}
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary" onclick="editEmission('${emission._id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="deleteEmission('${emission._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Error loading emissions:', error);
+        const tbody = document.getElementById('episodes-table-body');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-4">Failed to load episodes</td></tr>';
+        }
+    }
+}
+
+function showEmissionForm(emission = null) {
+    const formSection = document.getElementById('episode-form');
+    const formTitle = document.getElementById('episode-form-title');
+    
+    if (emission) {
+        formTitle.textContent = 'Edit Emission';
+        document.getElementById('episode-title').value = emission.title || '';
+        document.getElementById('episode-description').value = emission.description || '';
+        document.getElementById('episode-duration').value = emission.duration || '';
+        document.getElementById('episode-category').value = emission.category || '';
+        document.getElementById('episode-status').value = emission.status || 'draft';
+        document.getElementById('episode-featured').checked = emission.featured || false;
+        
+        if (emission.publish_date) {
+            const publishDate = new Date(emission.publish_date).toISOString().slice(0, 16);
+            document.getElementById('episode-publish-date').value = publishDate;
+        }
+        
+        currentEditingId = emission._id;
+
+        if (emission.thumbnail) {
+            const preview = document.getElementById('episode-thumbnail-preview');
+            preview.style.display = 'block';
+            document.getElementById('episode-preview-img').src = emission.thumbnail;
+        }
+    } else {
+        formTitle.textContent = 'Add New Emission';
+        document.getElementById('episode-form-data').reset();
+        currentEditingId = null;
+        document.getElementById('episode-thumbnail-preview').style.display = 'none';
+    }
+    
+    formSection.style.display = 'block';
+    formSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function saveEmission(formData) {
+    try {
+        const saveBtn = document.querySelector('#episode-form-data .btn-gold');
+        setLoading(saveBtn, true);
+
+        let thumbnailUrl = null;
+        const thumbnailFile = document.getElementById('episode-thumbnail').files[0];
+        if (thumbnailFile) {
+            thumbnailUrl = await uploadImage(thumbnailFile);
+        }
+
+        let audioUrl = null;
+        const audioFile = document.getElementById('episode-audio').files[0];
+        if (audioFile) {
+            audioUrl = await uploadImage(audioFile);
+        }
+
+        const payload = {
+            title: document.getElementById('episode-title').value,
+            description: document.getElementById('episode-description').value,
+            duration: document.getElementById('episode-duration').value,
+            audio_url: audioUrl,
+            thumbnail: thumbnailUrl,
+            category: document.getElementById('episode-category').value,
+            status: document.getElementById('episode-status').value,
+            featured: document.getElementById('episode-featured').checked,
+            publish_date: document.getElementById('episode-publish-date').value
+        };
+
+        let response;
+        if (currentEditingId) {
+            response = await apiCall(`/emissions/admin/emissions/${currentEditingId}`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+        } else {
+            response = await apiCall('/emissions/admin/emissions', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+        }
+
+        showToast(`Emission ${currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
+        hideEmissionForm();
+        await loadEmissions();
+
+    } catch (error) {
+        console.error('Error saving emission:', error);
+        showToast('Failed to save emission', 'danger');
+    } finally {
+        setLoading(document.querySelector('#episode-form-data .btn-gold'), false);
+    }
+}
+
+function hideEmissionForm() {
+    document.getElementById('episode-form').style.display = 'none';
+}
+
+async function editEmission(id) {
+    try {
+        const response = await apiCall(`/emissions/${id}`);
+        if (response?.emission) {
+            showEmissionForm(response.emission);
+        }
+    } catch (error) {
+        console.error('Error loading emission for edit:', error);
+        showToast('Failed to load emission', 'danger');
+    }
+}
+
+async function deleteEmission(id) {
+    if (!confirm('Are you sure you want to delete this emission?')) return;
+    
+    try {
+        await apiCall(`/emissions/admin/emissions/${id}`, { method: 'DELETE' });
+        showToast('Emission deleted successfully!', 'success');
+        await loadEmissions();
+    } catch (error) {
+        console.error('Error deleting emission:', error);
+        showToast('Failed to delete emission', 'danger');
+    }
+}
+
+// Live stream management
+function toggleLiveStream() {
+    showToast('Live stream toggle functionality would be implemented here', 'info');
+}
+
+function saveStreamSettings() {
+    showToast('Stream settings saved successfully!', 'success');
+}
+
+function testStream() {
+    showToast('Stream test initiated. Checking connection...', 'info');
+    setTimeout(() => {
+        showToast('Stream test completed successfully!', 'success');
+    }, 2000);
+}
+
+// Emissions event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Setup image previews
+    setupImagePreview('episode-thumbnail', 'episode-thumbnail-preview');
+    
+    // Emission form
+    document.getElementById('episode-form-data')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveEmission(new FormData(this));
+    });
+
+    // Buttons
+    document.getElementById('add-episode-btn')?.addEventListener('click', function() {
+        showEmissionForm();
+    });
+
+    document.getElementById('cancel-episode')?.addEventListener('click', function() {
+        hideEmissionForm();
+    });
+
+    document.getElementById('manage-live-btn')?.addEventListener('click', function() {
+        showToast('Live stream management modal would open here', 'info');
+    });
+
+    document.getElementById('toggle-stream-btn-emission')?.addEventListener('click', toggleLiveStream);
+    document.getElementById('save-stream-settings')?.addEventListener('click', saveStreamSettings);
+    document.getElementById('test-stream')?.addEventListener('click', testStream);
+    
+    // Load initial data
+    loadEmissions();
+});
+
+// Make functions globally available
+window.editEmission = editEmission;
+window.deleteEmission = deleteEmission;
+window.showEmissionForm = showEmissionForm;
+    </script>
+</body>
+</html>

@@ -226,7 +226,7 @@
             }
 
             // Safe redirect
-            safeRedirect('admin frontend.html');
+            safeRedirect('index.html');
         } catch (err) {
             alert('Login error: ' + err.message);
             console.error('Login error:', err);
@@ -249,7 +249,7 @@
         setTimeout(async () => {
             const hasValidSession = await checkExistingSession();
             if (hasValidSession) {
-                safeRedirect('admin frontend.html');
+                safeRedirect('index.html');
             }
         }, 500);
     });

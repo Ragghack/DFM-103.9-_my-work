@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Homepage Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-common.css">
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-microphone-alt me-2" style="color:#D4AF37;"></i>
+                        <span style="color:#D4AF37;">DFM</span><span style="color:#fff;"> ADMIN</span>
+                    </h2>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emissions.html">
+                                <i class="fas fa-podcast"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn"></i> Actuality
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="articles.html">
+                                <i class="fas fa-newspaper"></i> Articles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="economy.html">
+                                <i class="fas fa-chart-line"></i> Economy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finance.html">
+                                <i class="fas fa-coins"></i> Finance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="homepage.html">
+                                <i class="fas fa-home"></i> Homepage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newsletter.html">
+                                <i class="fas fa-envelope"></i> Newsletter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ml-auto p-0 main-content">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="mobile-menu-btn me-3">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <h3 class="mb-0 d-inline-block">Homepage Content Management</h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <div class="theme-toggle me-3" id="themeToggle">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                        <div class="theme-toggle-handle"></div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user me-2"></i><span id="user-display">Loading...</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#" id="profile-btn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Homepage Content -->
+                <div class="container-fluid py-4">
+                    <div class="content-section active" id="homepage-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Homepage Content Management</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-secondary me-2" id="refresh-homepage">
+                                    <i class="fas fa-sync-alt me-2"></i> Refresh
+                                </button>
+                                <button class="btn btn-gold" id="save-homepage-btn">
+                                    <i class="fas fa-save me-2"></i> Save All Changes
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Breaking News Ticker -->
+                            <div class="col-md-6 mb-4">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Breaking News Ticker</h5>
+                                    <form id="ticker-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Ticker Content</label>
+                                            <textarea class="form-control" id="ticker-content" rows="3" placeholder="Enter breaking news separated by |">DFM Radio launches its news portal | Follow economy, politics and sports live | New tax reform announced for 2025 | World Cup preparations underway | Inflation down for the 3rd consecutive month</textarea>
+                                            <div class="form-text">Separate multiple news items with | character</div>
+                                        </div>
+                                        <button type="button" class="btn btn-gold" id="update-ticker">Update Ticker</button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- Featured Article -->
+                            <div class="col-md-6 mb-4">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Featured Article</h5>
+                                    <form id="featured-article-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Featured Article</label>
+                                            <select class="form-select" id="featured-article-select">
+                                                <option value="">-- Select Article --</option>
+                                            </select>
+                                        </div>
+                                        <div id="featured-article-preview" class="mt-3 p-3 border rounded" style="display: none;">
+                                            <h6 id="preview-title"></h6>
+                                            <p id="preview-excerpt" class="text-muted small mb-2"></p>
+                                            <img id="preview-image" src="" class="img-fluid rounded" style="max-height: 150px; display: none;">
+                                        </div>
+                                        <button type="button" class="btn btn-gold mt-2" id="set-featured">Set as Featured</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Current News Management -->
+                        <div class="form-container mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Current News Section</h5>
+                                <button class="btn btn-gold btn-sm" id="add-current-news-btn">
+                                    <i class="fas fa-plus me-1"></i> Add News
+                                </button>
+                            </div>
+                            
+                            <!-- Current News List -->
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th width="50">Image</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Status</th>
+                                            <th>Featured</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="current-news-table">
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">
+                                                <div class="spinner-border spinner-border-sm me-2"></div>
+                                                Loading current news...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Links -->
+                        <div class="form-container">
+                            <h5 class="mb-3">Quick Links</h5>
+                            <form id="quick-links-form">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Economy Link Description</label>
+                                        <input type="text" class="form-control" id="economy-link" value="Market trends and analysis">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Finance Link Description</label>
+                                        <input type="text" class="form-control" id="finance-link" value="Banking and investment news">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Articles Link Description</label>
+                                        <input type="text" class="form-control" id="articles-link" value="In-depth analysis and reports">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Actuality Link Description</label>
+                                        <input type="text" class="form-control" id="actuality-link" value="Current events and programs">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-gold" id="update-quick-links">Update Quick Links</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script>
+        // ==================== HOMEPAGE MANAGEMENT ====================
+let allArticles = [];
+
+async function loadHomepageData() {
+    try {
+        // Load homepage data
+        const homepageResponse = await apiCall('/homepage');
+        if (homepageResponse?.homepage) {
+            document.getElementById('ticker-content').value = homepageResponse.homepage.breakingNews || '';
+            
+            // Load quick links
+            const links = homepageResponse.homepage.quickLinks;
+            if (links) {
+                document.getElementById('economy-link').value = links.economy || '';
+                document.getElementById('finance-link').value = links.finance || '';
+                document.getElementById('articles-link').value = links.articles || '';
+                document.getElementById('actuality-link').value = links.actuality || '';
+            }
+        }
+        
+        // Load articles for featured article dropdown
+        await loadArticlesForFeatured();
+        
+        // Load current news
+        await loadCurrentNewsForHomepage();
+        
+    } catch (error) {
+        console.error('Error loading homepage data:', error);
+        showToast('Failed to load homepage data', 'danger');
+    }
+}
+
+async function loadArticlesForFeatured() {
+    try {
+        const response = await apiCall('/articles?limit=100');
+        allArticles = response?.items || [];
+        
+        const select = document.getElementById('featured-article-select');
+        select.innerHTML = '<option value="">-- Select Article --</option>';
+        
+        allArticles.forEach(article => {
+            const option = document.createElement('option');
+            option.value = article._id || article.id;
+            option.textContent = article.title;
+            select.appendChild(option);
+        });
+        
+        // Load current featured article
+        const homepageResponse = await apiCall('/homepage');
+        if (homepageResponse?.homepage?.featuredArticle) {
+            select.value = homepageResponse.homepage.featuredArticle;
+            updateFeaturedArticlePreview(homepageResponse.homepage.featuredArticle);
+        }
+        
+    } catch (error) {
+        console.error('Error loading articles:', error);
+        showToast('Failed to load articles for featured selection', 'warning');
+    }
+}
+
+function updateFeaturedArticlePreview(articleId) {
+    const article = allArticles.find(a => (a._id || a.id) === articleId);
+    const preview = document.getElementById('featured-article-preview');
+    
+    if (article) {
+        preview.style.display = 'block';
+        document.getElementById('preview-title').textContent = article.title;
+        document.getElementById('preview-excerpt').textContent = article.excerpt || 
+            (article.content ? article.content.substring(0, 100) + '...' : 'No excerpt available');
+        
+        const previewImage = document.getElementById('preview-image');
+        if (article.image_url) {
+            previewImage.src = article.image_url;
+            previewImage.style.display = 'block';
+        } else {
+            previewImage.style.display = 'none';
+        }
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+async function loadCurrentNewsForHomepage() {
+    try {
+        const response = await apiCall('/news?limit=20');
+        const tbody = document.getElementById('current-news-table');
+        
+        if (!response?.items || response.items.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fas fa-newspaper fa-2x mb-3 d-block"></i>
+                        No news articles found
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-gold" onclick="window.location.href='actuality.html'">
+                                <i class="fas fa-plus me-1"></i>Add News Articles
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = response.items.map(news => `
+            <tr>
+                <td>
+                    ${news.image_url ? 
+                        `<img src="${news.image_url}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${news.title}">` : 
+                        '<i class="fas fa-image text-muted"></i>'
+                    }
+                </td>
+                <td>
+                    <div class="fw-bold">${news.title}</div>
+                    <small class="text-muted">${news.description ? news.description.substring(0, 60) + '...' : ''}</small>
+                </td>
+                <td><span class="badge bg-secondary">${news.category || 'General'}</span></td>
+                <td>
+                    <span class="badge bg-${news.status === 'published' ? 'success' : 'warning'}">
+                        ${news.status}
+                    </span>
+                </td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input featured-news-toggle" type="checkbox" 
+                               ${news.featured ? 'checked' : ''} 
+                               data-id="${news._id || news.id}"
+                               onchange="toggleFeaturedNews('${news._id || news.id}', this.checked)">
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editNews('${news._id || news.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteNews('${news._id || news.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Error loading current news:', error);
+        document.getElementById('current-news-table').innerHTML = 
+            '<tr><td colspan="6" class="text-center text-danger py-4">Failed to load news</td></tr>';
+    }
+}
+
+async function updateTicker() {
+    try {
+        const breakingNews = document.getElementById('ticker-content').value;
+        if (!breakingNews.trim()) {
+            showToast('Please enter breaking news content', 'warning');
+            return;
+        }
+        
+        await apiCall('/homepage/breaking-news', {
+            method: 'PUT',
+            body: JSON.stringify({ breakingNews })
+        });
+        showToast('Breaking news updated successfully!', 'success');
+    } catch (error) {
+        console.error('Error updating ticker:', error);
+        showToast('Failed to update breaking news', 'danger');
+    }
+}
+
+async function setFeaturedArticle() {
+    try {
+        const featuredArticleId = document.getElementById('featured-article-select').value;
+        if (!featuredArticleId) {
+            showToast('Please select an article', 'warning');
+            return;
+        }
+        
+        await apiCall('/homepage/featured-article', {
+            method: 'PUT',
+            body: JSON.stringify({ featuredArticle: featuredArticleId })
+        });
+        showToast('Featured article updated successfully!', 'success');
+    } catch (error) {
+        console.error('Error setting featured article:', error);
+        showToast('Failed to update featured article', 'danger');
+    }
+}
+
+async function updateQuickLinks() {
+    try {
+        const quickLinks = {
+            economy: document.getElementById('economy-link').value,
+            finance: document.getElementById('finance-link').value,
+            articles: document.getElementById('articles-link').value,
+            actuality: document.getElementById('actuality-link').value
+        };
+        
+        // Validate quick links
+        if (!quickLinks.economy.trim() || !quickLinks.finance.trim() || 
+            !quickLinks.articles.trim() || !quickLinks.actuality.trim()) {
+            showToast('Please fill all quick link descriptions', 'warning');
+            return;
+        }
+        
+        await apiCall('/homepage/quick-links', {
+            method: 'PUT',
+            body: JSON.stringify({ quickLinks })
+        });
+        showToast('Quick links updated successfully!', 'success');
+    } catch (error) {
+        console.error('Error updating quick links:', error);
+        showToast('Failed to update quick links', 'danger');
+    }
+}
+
+async function toggleFeaturedNews(newsId, isFeatured) {
+    try {
+        await apiCall(`/news/${newsId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ featured: isFeatured })
+        });
+        showToast(`News ${isFeatured ? 'added to' : 'removed from'} featured section`, 'success');
+    } catch (error) {
+        console.error('Error toggling featured news:', error);
+        showToast('Failed to update featured status', 'danger');
+    }
+}
+
+async function saveAllHomepageChanges() {
+    try {
+        await Promise.all([
+            updateTicker(),
+            setFeaturedArticle(),
+            updateQuickLinks()
+        ]);
+        showToast('All homepage changes saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving homepage changes:', error);
+        showToast('Failed to save some homepage changes', 'warning');
+    }
+}
+
+function editNews(id) {
+    showToast(`Edit news functionality for ID: ${id} would open here`, 'info');
+    // This would typically redirect to the news editing page or open a modal
+}
+
+function deleteNews(id) {
+    if (!confirm('Are you sure you want to delete this news article?')) return;
+    
+    showToast(`Delete news functionality for ID: ${id} would execute here`, 'info');
+    // This would call the API to delete the news article
+}
+
+// Homepage event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Ticker management
+    document.getElementById('update-ticker')?.addEventListener('click', updateTicker);
+    
+    // Featured article management
+    document.getElementById('featured-article-select')?.addEventListener('change', function() {
+        updateFeaturedArticlePreview(this.value);
+    });
+    document.getElementById('set-featured')?.addEventListener('click', setFeaturedArticle);
+    
+    // Quick links management
+    document.getElementById('update-quick-links')?.addEventListener('click', updateQuickLinks);
+    
+    // Refresh and save buttons
+    document.getElementById('refresh-homepage')?.addEventListener('click', loadHomepageData);
+    document.getElementById('save-homepage-btn')?.addEventListener('click', saveAllHomepageChanges);
+    
+    // Add current news button
+    document.getElementById('add-current-news-btn')?.addEventListener('click', function() {
+        window.location.href = 'actuality.html';
+    });
+    
+    // Load initial data
+    loadHomepageData();
+});
+
+// Make functions globally available
+window.toggleFeaturedNews = toggleFeaturedNews;
+window.editNews = editNews;
+window.deleteNews = deleteNews;
+    </script>
+</body>
+</html>

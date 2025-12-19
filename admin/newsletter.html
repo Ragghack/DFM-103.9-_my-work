@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Newsletter Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-common.css">
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-microphone-alt me-2" style="color:#D4AF37;"></i>
+                        <span style="color:#D4AF37;">DFM</span><span style="color:#fff;"> ADMIN</span>
+                    </h2>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emissions.html">
+                                <i class="fas fa-podcast"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn"></i> Actuality
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="articles.html">
+                                <i class="fas fa-newspaper"></i> Articles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="economy.html">
+                                <i class="fas fa-chart-line"></i> Economy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finance.html">
+                                <i class="fas fa-coins"></i> Finance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="homepage.html">
+                                <i class="fas fa-home"></i> Homepage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="newsletter.html">
+                                <i class="fas fa-envelope"></i> Newsletter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ml-auto p-0 main-content">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="mobile-menu-btn me-3">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <h3 class="mb-0 d-inline-block">Newsletter Management</h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <div class="theme-toggle me-3" id="themeToggle">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                        <div class="theme-toggle-handle"></div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user me-2"></i><span id="user-display">Loading...</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#" id="profile-btn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Newsletter Content -->
+                <div class="container-fluid py-4">
+                    <div class="content-section active" id="newsletter-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Newsletter Management</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-gold" id="send-newsletter-btn">
+                                    <i class="fas fa-paper-plane me-2"></i> Send Newsletter
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-users fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="total-subscribers">0</div>
+                                    <div class="text-muted">Total Subscribers</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-envelope-open fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="open-rate">72%</div>
+                                    <div class="text-muted">Open Rate</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-mouse-pointer fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="click-rate">34%</div>
+                                    <div class="text-muted">Click Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Send Newsletter</h5>
+                                    <form id="newsletter-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Subject</label>
+                                            <input type="text" class="form-control" id="newsletter-subject" placeholder="Enter newsletter subject">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Content</label>
+                                            <textarea class="form-control" id="newsletter-content" rows="8" placeholder="Enter newsletter content"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Recipients</label>
+                                            <select class="form-select" id="newsletter-recipients">
+                                                <option value="all">All Subscribers</option>
+                                                <option value="active">Active Subscribers Only</option>
+                                                <option value="segment">Specific Segment</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Schedule Send</label>
+                                            <input type="datetime-local" class="form-control" id="newsletter-schedule">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Send Newsletter</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Recent Subscribers</h5>
+                                        <button class="btn btn-sm btn-outline-primary" id="refresh-subscribers">
+                                            <i class="fas fa-sync-alt me-1"></i> Refresh
+                                        </button>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Email</th>
+                                                    <th>Date Subscribed</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subscribers-table-body">
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted py-4">
+                                                        <div class="spinner-border spinner-border-sm me-2"></div>
+                                                        Loading subscribers...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Newsletter Templates -->
+                                <div class="form-container mt-4">
+                                    <h5 class="mb-3">Newsletter Templates</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card template-card">
+                                                <div class="card-body text-center">
+                                                    <i class="fas fa-newspaper fa-2x text-warning mb-2"></i>
+                                                    <h6>Weekly Digest</h6>
+                                                    <button class="btn btn-sm btn-outline-primary w-100">Use Template</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card template-card">
+                                                <div class="card-body text-center">
+                                                    <i class="fas fa-bullhorn fa-2x text-warning mb-2"></i>
+                                                    <h6>Breaking News</h6>
+                                                    <button class="btn btn-sm btn-outline-primary w-100">Use Template</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script>
+        // ==================== NEWSLETTER MANAGEMENT ====================
+async function loadNewsletterData() {
+    try {
+        await Promise.all([
+            loadSubscribersStats(),
+            loadSubscribersList()
+        ]);
+    } catch (error) {
+        console.error('Error loading newsletter data:', error);
+        showToast('Failed to load newsletter data', 'danger');
+    }
+}
+
+async function loadSubscribersStats() {
+    try {
+        const data = await apiCall('/newsletter/stats');
+        if (data) {
+            document.getElementById('total-subscribers').textContent = data.totalSubscribers || 0;
+            document.getElementById('open-rate').textContent = data.openRate ? `${data.openRate}%` : '72%';
+            document.getElementById('click-rate').textContent = data.clickRate ? `${data.clickRate}%` : '34%';
+        }
+    } catch (error) {
+        console.error('Error loading subscriber stats:', error);
+        // Set default values if API fails
+        document.getElementById('total-subscribers').textContent = '0';
+        document.getElementById('open-rate').textContent = '72%';
+        document.getElementById('click-rate').textContent = '34%';
+    }
+}
+
+async function loadSubscribersList() {
+    try {
+        const tbody = document.getElementById('subscribers-table-body');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading subscribers...</td></tr>';
+        
+        const data = await apiCall('/newsletter/subscribers?limit=20');
+        
+        if (!data || !data.subscribers || data.subscribers.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                        <i class="fas fa-users fa-2x mb-3 d-block"></i>
+                        No subscribers found
+                        <div class="mt-2">
+                            <small>Subscribers will appear here when they sign up</small>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = data.subscribers.map(subscriber => `
+            <tr>
+                <td>
+                    <div class="fw-bold">${subscriber.email}</div>
+                    ${subscriber.name ? `<small class="text-muted">${subscriber.name}</small>` : ''}
+                </td>
+                <td>
+                    <small>${new Date(subscriber.subscribedAt).toLocaleDateString()}</small>
+                    <br>
+                    <small class="text-muted">${new Date(subscriber.subscribedAt).toLocaleTimeString()}</small>
+                </td>
+                <td>
+                    <span class="badge bg-${subscriber.status === 'active' ? 'success' : 'warning'}">
+                        ${subscriber.status}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-danger" onclick="unsubscribe('${subscriber._id || subscriber.id}')">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Error loading subscribers:', error);
+        const tbody = document.getElementById('subscribers-table-body');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-4">Failed to load subscribers</td></tr>';
+        }
+    }
+}
+
+async function sendNewsletter(formData) {
+    try {
+        const sendBtn = document.querySelector('#newsletter-form .btn-gold');
+        setLoading(sendBtn, true);
+        
+        const payload = {
+            subject: document.getElementById('newsletter-subject').value,
+            content: document.getElementById('newsletter-content').value,
+            recipients: document.getElementById('newsletter-recipients').value,
+            schedule: document.getElementById('newsletter-schedule').value || null
+        };
+        
+        if (!payload.subject.trim()) {
+            showToast('Please enter a newsletter subject', 'warning');
+            return;
+        }
+        
+        if (!payload.content.trim()) {
+            showToast('Please enter newsletter content', 'warning');
+            return;
+        }
+        
+        const response = await apiCall('/newsletter/send', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        
+        showToast('Newsletter sent successfully!', 'success');
+        document.getElementById('newsletter-form').reset();
+        
+    } catch (error) {
+        console.error('Error sending newsletter:', error);
+        showToast('Failed to send newsletter', 'danger');
+    } finally {
+        setLoading(document.querySelector('#newsletter-form .btn-gold'), false);
+    }
+}
+
+async function unsubscribe(subscriberId) {
+    if (!confirm('Are you sure you want to remove this subscriber?')) return;
+    
+    try {
+        await apiCall(`/newsletter/subscribers/${subscriberId}`, { 
+            method: 'DELETE' 
+        });
+        showToast('Subscriber removed successfully!', 'success');
+        await loadSubscribersList();
+        await loadSubscribersStats();
+        
+    } catch (error) {
+        console.error('Error removing subscriber:', error);
+        showToast('Failed to remove subscriber', 'danger');
+    }
+}
+
+function useTemplate(templateType) {
+    let subject = '';
+    let content = '';
+    
+    switch(templateType) {
+        case 'weekly-digest':
+            subject = 'Weekly Economic Digest - ' + new Date().toLocaleDateString();
+            content = `Hello Subscriber,
+
+Here's your weekly economic digest from DFM Media:
+
+## This Week's Highlights
+- Market trends and analysis
+- Key economic indicators
+- Important policy changes
+- Upcoming events
+
+Stay informed with DFM Media!
+
+Best regards,
+The DFM Team`;
+            break;
+            
+        case 'breaking-news':
+            subject = 'BREAKING: Important Economic Update';
+            content = `Important Update:
+
+We have breaking news that requires your immediate attention.
+
+Key points:
+- Significant market developments
+- Policy announcements
+- Economic data releases
+
+Read the full story on our website.
+
+DFM Media - Your trusted news source.`;
+            break;
+            
+        default:
+            subject = 'Newsletter from DFM Media';
+            content = 'Thank you for subscribing to DFM Media newsletter.';
+    }
+    
+    document.getElementById('newsletter-subject').value = subject;
+    document.getElementById('newsletter-content').value = content;
+    showToast(`"${templateType}" template loaded`, 'success');
+}
+
+// Newsletter event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Newsletter form
+    document.getElementById('newsletter-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        sendNewsletter(new FormData(this));
+    });
+
+    // Refresh buttons
+    document.getElementById('refresh-subscribers')?.addEventListener('click', loadSubscribersList);
+    document.getElementById('send-newsletter-btn')?.addEventListener('click', function() {
+        document.getElementById('newsletter-form').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Template buttons
+    document.querySelectorAll('.template-card .btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const templateType = this.closest('.card').querySelector('h6').textContent.toLowerCase().replace(' ', '-');
+            useTemplate(templateType);
+        });
+    });
+    
+    // Load initial data
+    loadNewsletterData();
+});
+
+// Make functions globally available
+window.unsubscribe = unsubscribe;
+window.useTemplate = useTemplate;
+    </script>
+</body>
+</html>

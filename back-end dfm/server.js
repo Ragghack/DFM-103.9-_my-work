@@ -137,7 +137,8 @@ app.use((err, req, res, next) => {
     ...(process.env.NODE_ENV === 'development' && { error: err.message })
   });
 });
-
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/audio', express.static(path.join(__dirname, '..', 'audio')));
 const PORT = 5000; // Hardcoded to only run on port 5000
 
 app.listen(PORT, () => {

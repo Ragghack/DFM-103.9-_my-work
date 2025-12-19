@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-common.css">
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-microphone-alt me-2" style="color:#D4AF37;"></i>
+                        <span style="color:#D4AF37;">DFM</span><span style="color:#fff;"> ADMIN</span>
+                    </h2>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emissions.html">
+                                <i class="fas fa-podcast"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn"></i> Actuality
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="articles.html">
+                                <i class="fas fa-newspaper"></i> Articles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="economy.html">
+                                <i class="fas fa-chart-line"></i> Economy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finance.html">
+                                <i class="fas fa-coins"></i> Finance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="homepage.html">
+                                <i class="fas fa-home"></i> Homepage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newsletter.html">
+                                <i class="fas fa-envelope"></i> Newsletter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ml-auto p-0 main-content">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="mobile-menu-btn me-3">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <h3 class="mb-0 d-inline-block">Dashboard Overview</h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <div class="theme-toggle me-3" id="themeToggle">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                        <div class="theme-toggle-handle"></div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user me-2"></i><span id="user-display">Loading...</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#" id="profile-btn"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div class="container-fluid py-4">
+                    <div class="content-section active" id="dashboard-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Dashboard Overview</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-primary btn-sm" id="refresh-dashboard">
+                                    <i class="fas fa-sync-alt me-1"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-podcast fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="stat-episodes">0</div>
+                                    <div class="text-muted">Total Episodes</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-newspaper fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="stat-articles">0</div>
+                                    <div class="text-muted">Total Articles</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-bullhorn fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="stat-news">0</div>
+                                    <div class="text-muted">Total News</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card text-center">
+                                    <i class="fas fa-users fa-2x text-warning mb-2"></i>
+                                    <div class="stat-value" id="stat-subscribers">0</div>
+                                    <div class="text-muted">Subscribers</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-8 mb-4">
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Recent Content</h5>
+                                        <button class="btn btn-sm btn-outline-primary" id="refresh-recent">
+                                            <i class="fas fa-sync-alt me-1"></i> Refresh
+                                        </button>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Type</th>
+                                                    <th>Category</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recent-content-body">
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted py-4">
+                                                        <div class="spinner-border spinner-border-sm me-2"></div>
+                                                        Loading recent content...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="table-container mb-4">
+                                    <div class="p-3 border-bottom">
+                                        <h5 class="mb-0">Quick Actions</h5>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-gold mb-2" onclick="window.location.href='emissions.html'">
+                                                <i class="fas fa-plus me-2"></i> Add New Episode
+                                            </button>
+                                            <button class="btn btn-gold mb-2" onclick="window.location.href='actuality.html'">
+                                                <i class="fas fa-plus me-2"></i> Add News
+                                            </button>
+                                            <button class="btn btn-gold mb-2" onclick="window.location.href='articles.html'">
+                                                <i class="fas fa-plus me-2"></i> Add New Article
+                                            </button>
+                                            <button class="btn btn-outline-secondary mb-2" onclick="window.location.href='economy.html'">
+                                                <i class="fas fa-chart-line me-2"></i> Update Economic Data
+                                            </button>
+                                            <button class="btn btn-outline-secondary mb-2" onclick="window.location.href='finance.html'">
+                                                <i class="fas fa-coins me-2"></i> Update Financial Stats
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Live Stream Status -->
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom">
+                                        <h5 class="mb-0">Live Stream Status</h5>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <span class="live-indicator" id="live-indicator"></span>
+                                            <span class="me-3">Status:</span>
+                                            <span id="stream-status" class="badge bg-danger">OFFLINE</span>
+                                        </div>
+                                        <button class="btn btn-success btn-sm w-100" id="toggle-stream-btn">
+                                            <i class="fas fa-video me-2"></i> Go Live
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script>// ==================== DASHBOARD FUNCTIONS ====================
+async function loadDashboardStats() {
+    try {
+        const data = await apiCall('/analytics');
+        if (data) {
+            document.getElementById('stat-episodes').textContent = data.counts?.episodes || 0;
+            document.getElementById('stat-articles').textContent = data.counts?.articles || 0;
+            document.getElementById('stat-news').textContent = data.counts?.news || 0;
+            document.getElementById('stat-subscribers').textContent = data.counts?.subscribers || 0;
+            
+            await loadRecentContent();
+        }
+    } catch (error) {
+        console.error('Error loading dashboard stats:', error);
+        showToast('Failed to load dashboard statistics', 'danger');
+    }
+}
+
+async function loadRecentContent() {
+    try {
+        const tbody = document.getElementById('recent-content-body');
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading...</td></tr>';
+        
+        const [articlesData, newsData, economyData, financeData] = await Promise.all([
+            apiCall('/articles?limit=5'),
+            apiCall('/news?limit=5'),
+            apiCall('/economy/admin/articles?limit=5'),
+            apiCall('/finance/articles?limit=5')
+        ]);
+        
+        const recentItems = [
+            ...(articlesData?.items || []).map(item => ({
+                ...item,
+                type: 'article',
+                date: item.createdAt || item.publish_date
+            })),
+            ...(newsData?.items || []).map(item => ({
+                ...item,
+                type: 'news',
+                date: item.createdAt || item.publish_date
+            })),
+            ...(economyData?.items || []).map(item => ({
+                ...item,
+                type: 'economy',
+                date: item.createdAt
+            })),
+            ...(financeData?.items || []).map(item => ({
+                ...item,
+                type: 'finance',
+                date: item.createdAt
+            }))
+        ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+        
+        if (recentItems.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No recent content found</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = recentItems.map(item => `
+            <tr>
+                <td>${item.title || 'Untitled'}</td>
+                <td><span class="badge bg-${item.type === 'article' ? 'primary' : item.type === 'news' ? 'success' : item.type === 'economy' ? 'warning' : 'info'}">${item.type}</span></td>
+                <td>${item.category || item.section || '-'}</td>
+                <td>${new Date(item.date).toLocaleDateString()}</td>
+                <td><span class="badge bg-${item.status === 'published' ? 'success' : 'warning'}">${item.status}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" onclick="viewItem('${item.type}', '${item._id || item.id}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        document.getElementById('recent-content-body').innerHTML = 
+            '<tr><td colspan="6" class="text-center text-danger py-4">Failed to load recent content</td></tr>';
+    }
+}
+
+function viewItem(type, id) {
+    showToast(`Viewing ${type}: ${id}`, 'info');
+}
+
+// Dashboard event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('refresh-dashboard')?.addEventListener('click', loadDashboardStats);
+    document.getElementById('refresh-recent')?.addEventListener('click', loadRecentContent);
+    document.getElementById('toggle-stream-btn')?.addEventListener('click', function() {
+        showToast('Stream toggle functionality would be implemented here', 'info');
+    });
+    
+    // Load initial data
+    loadDashboardStats();
+});
+
+window.viewItem = viewItem;
+</script>
+</body>
+</html>
