@@ -577,6 +577,73 @@
                     white-space: nowrap;
                 }
             }
+              /* Add to existing styles */
+    .refresh-indicator {
+        font-size: 0.8rem;
+        color: var(--primary-accent);
+        margin-top: 10px;
+    }
+    
+    .refresh-btn {
+        background: var(--primary-accent);
+        color: var(--primary-dark);
+        border: none;
+        border-radius: 20px;
+        padding: 5px 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .refresh-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+    
+    .refresh-btn.loading {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    
+    .refresh-btn.loading i {
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .stat-box {
+        position: relative;
+    }
+    
+    .stat-trend {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+    
+    .trend-up {
+        color: #28a745;
+    }
+    
+    .trend-down {
+        color: #dc3545;
+    }
+    
+    .trend-neutral {
+        color: #6c757d;
+    }
+    
+    .last-updated {
+        font-size: 0.7rem;
+        opacity: 0.7;
+        margin-top: 5px;
+    }
         </style>
     </head>
     <body>
@@ -711,30 +778,36 @@
             </div>
 
             <!-- Economy Content -->
-            <div class="economy-content active" id="economy-content">
-                <h2 class="section-header">Economic Overview</h2>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <i class="fas fa-chart-line fa-2x text-warning"></i>
-                        <div class="stat-value">3.2%</div>
+           <div class="economy-content active" id="economy-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-header">Economic Overview</h2>
+        <button class="refresh-btn" id="refreshEconomy">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+    <div class="refresh-indicator" id="economyRefreshTime">Last updated: Loading...</div>
+                    <div class="stats-grid">
+                   <div class="stat-box">
+                      <i class="fas fa-chart-line fa-2x text-warning"></i>
+                     <div class="stat-value" id="gdp-growth">3.2%</div>
                         <div class="stat-label">GDP Growth (2023)</div>
-                    </div>
+                 </div>
                     <div class="stat-box">
-                        <i class="fas fa-industry fa-2x text-warning"></i>
-                        <div class="stat-value">4.5%</div>
-                        <div class="stat-label">Industrial Growth</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-unemployment fa-2x text-warning"></i>
-                        <div class="stat-value">5.8%</div>
-                        <div class="stat-label">Unemployment Rate</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-money-bill-wave fa-2x text-warning"></i>
-                        <div class="stat-value">2.1%</div>
-                        <div class="stat-label">Inflation Rate</div>
-                    </div>
-                </div>
+                    <i class="fas fa-industry fa-2x text-warning"></i>
+                   <div class="stat-value" id="industrial-growth">4.5%</div>
+                  <div class="stat-label">Industrial Growth</div>
+                   </div>
+               <div class="stat-box">
+                <i class="fas fa-unemployment fa-2x text-warning"></i>
+                <div class="stat-value" id="unemployment-rate">5.8%</div>
+        <div class="stat-label">Unemployment Rate</div>
+          </div>
+    <div class="stat-box">
+        <i class="fas fa-money-bill-wave fa-2x text-warning"></i>
+        <div class="stat-value" id="inflation-rate">2.1%</div>
+        <div class="stat-label">Inflation Rate</div>
+    </div>
+</div>
                 
                 <div class="row">
                     <div class="col-md-6">
@@ -783,30 +856,36 @@
             </div>
 
             <!-- Eco Africa Content -->
-            <div class="economy-content" id="eco-africa-content">
-                <h2 class="section-header">Eco Africa</h2>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <i class="fas fa-globe-africa fa-2x text-warning"></i>
-                        <div class="stat-value">$2.4T</div>
-                        <div class="stat-label">Africa's Total GDP</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-handshake fa-2x text-warning"></i>
-                        <div class="stat-value">$140B</div>
-                        <div class="stat-label">Intra-African Trade</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-city fa-2x text-warning"></i>
-                        <div class="stat-value">43%</div>
-                        <div class="stat-label">Urbanization Rate</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-users fa-2x text-warning"></i>
-                        <div class="stat-value">1.3B</div>
-                        <div class="stat-label">Africa's Population</div>
-                    </div>
-                </div>
+ <div class="economy-content" id="eco-africa-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-header">Eco Africa</h2>
+        <button class="refresh-btn" id="refreshAfrica">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+    <div class="refresh-indicator" id="africaRefreshTime">Last updated: Loading...</div>
+              <div class="stats-grid">
+    <div class="stat-box">
+        <i class="fas fa-globe-africa fa-2x text-warning"></i>
+        <div class="stat-value" id="total-gdp">$2.4T</div>
+        <div class="stat-label">Africa's Total GDP</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-handshake fa-2x text-warning"></i>
+        <div class="stat-value" id="intra-african-trade">$140B</div>
+        <div class="stat-label">Intra-African Trade</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-city fa-2x text-warning"></i>
+        <div class="stat-value" id="urbanization-rate">43%</div>
+        <div class="stat-label">Urbanization Rate</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-users fa-2x text-warning"></i>
+        <div class="stat-value" id="population">1.3B</div>
+        <div class="stat-label">Africa's Population</div>
+    </div>
+</div>
                 
                 <div class="row">
                     <div class="col-md-6">
@@ -855,30 +934,37 @@
             </div>
 
             <!-- Eco Agriculture Content -->
-            <div class="economy-content" id="eco-agriculture-content">
-                <h2 class="section-header">Eco Agriculture</h2>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <i class="fas fa-tractor fa-2x text-warning"></i>
-                        <div class="stat-value">42%</div>
-                        <div class="stat-label">Of Workforce in Agriculture</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-leaf fa-2x text-warning"></i>
-                        <div class="stat-value">18%</div>
-                        <div class="stat-label">Organic Farming Growth</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-seedling fa-2x text-warning"></i>
-                        <div class="stat-value">30%</div>
-                        <div class="stat-label">Crop Yield Increase</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-hand-holding-water fa-2x text-warning"></i>
-                        <div class="stat-value">45%</div>
-                        <div class="stat-label">Water Efficiency Improvement</div>
-                    </div>
-                </div>
+<div class="economy-content" id="eco-agriculture-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-header">Eco Agriculture</h2>
+        <button class="refresh-btn" id="refreshAgriculture">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+    <div class="refresh-indicator" id="agricultureRefreshTime">Last updated: Loading...</div>
+              <div class="stats-grid">
+    <div class="stat-box">
+        <i class="fas fa-tractor fa-2x text-warning"></i>
+        <div class="stat-value" id="workforce-percentage">42%</div>
+        <div class="stat-label">Of Workforce in Agriculture</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-leaf fa-2x text-warning"></i>
+        <div class="stat-value" id="organic-growth">18%</div>
+        <div class="stat-label">Organic Farming Growth</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-seedling fa-2x text-warning"></i>
+        <div class="stat-value" id="yield-increase">30%</div>
+        <div class="stat-label">Crop Yield Increase</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-hand-holding-water fa-2x text-warning"></i>
+        <div class="stat-value" id="water-efficiency">45%</div>
+        <div class="stat-label">Water Efficiency Improvement</div>
+    </div>
+</div>
+
                 
                 <div class="row">
                     <div class="col-md-6">
@@ -927,30 +1013,36 @@
             </div>
 
             <!-- Eco Innovation Content -->
-            <div class="economy-content" id="eco-innovation-content">
-                <h2 class="section-header">Eco Innovation</h2>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <i class="fas fa-lightbulb fa-2x text-warning"></i>
-                        <div class="stat-value">35%</div>
-                        <div class="stat-label">Increase in Patent Applications</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-solar-panel fa-2x text-warning"></i>
-                        <div class="stat-value">300%</div>
-                        <div class="stat-label">Renewable Energy Growth</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-recycle fa-2x text-warning"></i>
-                        <div class="stat-value">65%</div>
-                        <div class="stat-label">Recycling Rate Improvement</div>
-                    </div>
-                    <div class="stat-box">
-                        <i class="fas fa-wind fa-2x text-warning"></i>
-                        <div class="stat-value">120MW</div>
-                        <div class="stat-label">Wind Power Capacity</div>
-                    </div>
-                </div>
+           <div class="economy-content" id="eco-innovation-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-header">Eco Innovation</h2>
+        <button class="refresh-btn" id="refreshInnovation">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+    <div class="refresh-indicator" id="innovationRefreshTime">Last updated: Loading...</div>
+               <div class="stats-grid">
+    <div class="stat-box">
+        <i class="fas fa-lightbulb fa-2x text-warning"></i>
+        <div class="stat-value" id="patent-increase">35%</div>
+        <div class="stat-label">Increase in Patent Applications</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-solar-panel fa-2x text-warning"></i>
+        <div class="stat-value" id="renewable-energy-growth">300%</div>
+        <div class="stat-label">Renewable Energy Growth</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-recycle fa-2x text-warning"></i>
+        <div class="stat-value" id="recycling-improvement">65%</div>
+        <div class="stat-label">Recycling Rate Improvement</div>
+    </div>
+    <div class="stat-box">
+        <i class="fas fa-wind fa-2x text-warning"></i>
+        <div class="stat-value" id="wind-power-capacity">120MW</div>
+        <div class="stat-label">Wind Power Capacity</div>
+    </div>
+</div>
                 
                 <div class="row">
                     <div class="col-md-6">
@@ -1082,95 +1174,111 @@
             </div>
         </footer>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Theme toggle functionality
-            const themeToggle = document.getElementById('themeToggle');
-            const body = document.body;
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_BASE = 'http://localhost:5000/api';
+    
+    // ==================== AUTO-UPDATE CONFIGURATION ====================
+    const UPDATE_INTERVALS = {
+        ECONOMY: 300000,      // 5 minutes for main economy indicators
+        AFRICA: 600000,       // 10 minutes for Africa stats
+        AGRICULTURE: 900000,  // 15 minutes for agriculture
+        INNOVATION: 1200000,  // 20 minutes for innovation
+        ARTICLES: 1800000     // 30 minutes for articles
+    };
+    
+    let updateIntervals = {};
+
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    // Check for saved theme preference or respect OS preference
+    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    
+    // Apply the saved theme
+    if (savedTheme === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+    } else {
+        body.removeAttribute('data-theme');
+    }
+    
+    // Toggle theme function
+    function toggleTheme() {
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    
+    // Add event listener to theme toggle button
+    themeToggle.addEventListener('click', toggleTheme);
+    
+    // Audio controls functionality
+    const playButton = document.getElementById('playButton');
+    const stopButton = document.getElementById('stopButton');
+    const radioPlay = document.getElementById('radioPlay');
+    const radioStop = document.getElementById('radioStop');
+    const footerPlay = document.getElementById('footerPlay');
+    const footerStop = document.getElementById('footerStop');
+    
+    function playAudio() {
+        // In a real implementation, this would play the radio stream
+        console.log('Playing audio...');
+        showNotification('Radio is now playing', 'info');
+    }
+    
+    function stopAudio() {
+        // In a real implementation, this would stop the radio stream
+        console.log('Stopping audio...');
+        showNotification('Radio stopped', 'info');
+    }
+    
+    playButton.addEventListener('click', playAudio);
+    stopButton.addEventListener('click', stopAudio);
+    radioPlay.addEventListener('click', playAudio);
+    radioStop.addEventListener('click', stopAudio);
+    footerPlay.addEventListener('click', playAudio);
+    footerStop.addEventListener('click', stopAudio);
+    
+    // Economy tabs functionality
+    const economyTabs = document.querySelectorAll('.economy-tab');
+    const economyContents = document.querySelectorAll('.economy-content');
+    
+    economyTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-tab');
             
-            // Check for saved theme preference or respect OS preference
-            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            // Update active tab
+            economyTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
             
-            // Apply the saved theme
-            if (savedTheme === 'dark') {
-                body.setAttribute('data-theme', 'dark');
-            } else {
-                body.removeAttribute('data-theme');
-            }
-            
-            // Toggle theme function
-            function toggleTheme() {
-                if (body.getAttribute('data-theme') === 'dark') {
-                    body.removeAttribute('data-theme');
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    body.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
+            // Show corresponding content
+            economyContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === `${tabId}-content`) {
+                    content.classList.add('active');
                 }
-            }
-            
-            // Add event listener to theme toggle button
-            themeToggle.addEventListener('click', toggleTheme);
-            
-            // Audio controls functionality
-            const playButton = document.getElementById('playButton');
-            const stopButton = document.getElementById('stopButton');
-            const radioPlay = document.getElementById('radioPlay');
-            const radioStop = document.getElementById('radioStop');
-            const footerPlay = document.getElementById('footerPlay');
-            const footerStop = document.getElementById('footerStop');
-            
-            function playAudio() {
-                // In a real implementation, this would play the radio stream
-                console.log('Playing audio...');
-                showNotification('Radio is now playing', 'info');
-            }
-            
-            function stopAudio() {
-                // In a real implementation, this would stop the radio stream
-                console.log('Stopping audio...');
-                showNotification('Radio stopped', 'info');
-            }
-            
-            playButton.addEventListener('click', playAudio);
-            stopButton.addEventListener('click', stopAudio);
-            radioPlay.addEventListener('click', playAudio);
-            radioStop.addEventListener('click', stopAudio);
-            footerPlay.addEventListener('click', playAudio);
-            footerStop.addEventListener('click', stopAudio);
-            
-            // Economy tabs functionality
-            const economyTabs = document.querySelectorAll('.economy-tab');
-            const economyContents = document.querySelectorAll('.economy-content');
-            
-            economyTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    
-                    // Update active tab
-                    economyTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    
-                    // Show corresponding content
-                    economyContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === `${tabId}-content`) {
-                            content.classList.add('active');
-                        }
-                    });
-                });
             });
+        });
+    });
+    
+    // Dropdown tab navigation
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tabId = item.getAttribute('data-tab');
             
-            // Dropdown tab navigation
-            const dropdownItems = document.querySelectorAll('.dropdown-item');
-            dropdownItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const tabId = item.getAttribute('data-tab');
-                    
-                    // Update active tab
-                    economyTabs.forEach(t => t.classList.remove('active'));
-                    document.querySelector(`.economy-tab[data-tab="${tabId}"]`).classList.add('active');
+            if (tabId) {
+                // Update active tab
+                economyTabs.forEach(t => t.classList.remove('active'));
+                const targetTab = document.querySelector(`.economy-tab[data-tab="${tabId}"]`);
+                if (targetTab) {
+                    targetTab.classList.add('active');
                     
                     // Show corresponding content
                     economyContents.forEach(content => {
@@ -1182,40 +1290,370 @@
                     
                     // Scroll to content
                     document.querySelector('.economy-hero').scrollIntoView({ behavior: 'smooth' });
-                });
+                }
+            }
+        });
+    });
+    
+    // Show notification function
+    function showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '1050';
+        notification.style.minWidth = '300px';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        // Add to body
+        document.body.appendChild(notification);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    
+    
+    // ==================== API FUNCTIONS ====================
+    
+    // Fetch economic indicators from backend
+    async function loadEconomicIndicators() {
+        try {
+            const response = await fetch(`${API_BASE}/economy/indicators`);
+            if (!response.ok) throw new Error('Failed to fetch indicators');
+            
+            const data = await response.json();
+            
+            // Update the main economy section indicators
+            updateStatBox('economy-content', 'gdp-growth', data.gdp_growth, '%');
+            updateStatBox('economy-content', 'industrial-growth', data.industrial_growth, '%');
+            updateStatBox('economy-content', 'unemployment-rate', data.unemployment_rate, '%');
+            updateStatBox('economy-content', 'inflation-rate', data.inflation_rate, '%');
+            
+        } catch (error) {
+            console.error('Error loading economic indicators:', error);
+            // Keep default values if API fails
+        }
+    }
+    
+    // Load section-specific statistics
+    async function loadSectionStats(section) {
+        try {
+            const response = await fetch(`${API_BASE}/economy/section-stats/${section}`);
+            if (!response.ok) throw new Error(`Failed to fetch ${section} stats`);
+            
+            const data = await response.json();
+            
+            // Update the stats for this section
+            if (section === 'eco-africa') {
+                updateStatBox('eco-africa-content', 'total-gdp', data.stats.total_gdp, '');
+                updateStatBox('eco-africa-content', 'intra-african-trade', data.stats.intra_african_trade, '');
+                updateStatBox('eco-africa-content', 'urbanization-rate', data.stats.urbanization_rate, '%');
+                updateStatBox('eco-africa-content', 'population', data.stats.population, '');
+            } else if (section === 'eco-agriculture') {
+                updateStatBox('eco-agriculture-content', 'workforce-percentage', data.stats.workforce_percentage, '%');
+                updateStatBox('eco-agriculture-content', 'organic-growth', data.stats.organic_growth, '%');
+                updateStatBox('eco-agriculture-content', 'yield-increase', data.stats.yield_increase, '%');
+                updateStatBox('eco-agriculture-content', 'water-efficiency', data.stats.water_efficiency, '%');
+            } else if (section === 'eco-innovation') {
+                updateStatBox('eco-innovation-content', 'patent-increase', data.stats.patent_increase, '%');
+                updateStatBox('eco-innovation-content', 'renewable-energy-growth', data.stats.renewable_energy_growth, '%');
+                updateStatBox('eco-innovation-content', 'recycling-improvement', data.stats.recycling_improvement, '%');
+                updateStatBox('eco-innovation-content', 'wind-power-capacity', data.stats.wind_power_capacity, '');
+            }
+            
+        } catch (error) {
+            console.error(`Error loading ${section} statistics:`, error);
+        }
+    }
+    
+    // Load economy articles for a specific section
+    async function loadEconomyArticles(section) {
+        try {
+            const response = await fetch(`${API_BASE}/economy/articles?section=${section}&status=published&limit=4`);
+            if (!response.ok) throw new Error(`Failed to fetch ${section} articles`);
+            
+            const data = await response.json();
+            
+            // Update the articles in this section
+            updateSectionArticles(section, data.items || []);
+            
+        } catch (error) {
+            console.error(`Error loading ${section} articles:`, error);
+            // Keep the default/hardcoded articles if API fails
+        }
+    }
+    
+    // Helper function to update stat boxes
+    function updateStatBox(sectionId, statName, value, suffix = '') {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+        
+        const statElement = section.querySelector(`.stat-value[id="${statName}"]`);
+        if (statElement) {
+            statElement.textContent = value + suffix;
+        }
+    }
+    
+    // Update articles in a specific section
+    function updateSectionArticles(section, articles) {
+        const sectionContent = document.getElementById(`${section}-content`);
+        if (!sectionContent || !articles || articles.length === 0) return;
+        
+        // Find all rows in the section
+        const rows = sectionContent.querySelectorAll('.row');
+        
+        // We'll update the second row (index 1) which should contain the articles
+        if (rows.length >= 2) {
+            const articleRow = rows[1];
+            
+            // Clear existing content
+            articleRow.innerHTML = '';
+            
+            // Add new articles (limit to 2 per row)
+            articles.slice(0, 2).forEach((article) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="card news-card h-100">
+                        <img src="${article.image_url || getDefaultImage(section)}" 
+                             class="card-img-top" 
+                             alt="${article.image_alt || article.title}"
+                             style="height: 220px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">${article.title}</h5>
+                            <p class="card-text">${article.excerpt || article.content.substring(0, 150) + '...'}</p>
+                            <a href="#" class="btn btn-sm btn-dark" onclick="viewArticle('${article._id}'); return false;">Read more</a>
+                        </div>
+                    </div>
+                `;
+                articleRow.appendChild(col);
+            });
+        }
+        
+        // If there's a third row with more articles, update it too
+        if (rows.length >= 3 && articles.length > 2) {
+            const moreArticlesRow = rows[2];
+            moreArticlesRow.innerHTML = '';
+            
+            articles.slice(2, 4).forEach((article) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="card news-card h-100">
+                        <img src="${article.image_url || getDefaultImage(section)}" 
+                             class="card-img-top" 
+                             alt="${article.image_alt || article.title}"
+                             style="height: 220px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">${article.title}</h5>
+                            <p class="card-text">${article.excerpt || article.content.substring(0, 150) + '...'}</p>
+                            <a href="#" class="btn btn-sm btn-dark" onclick="viewArticle('${article._id}'); return false;">Read more</a>
+                        </div>
+                    </div>
+                `;
+                moreArticlesRow.appendChild(col);
+            });
+        }
+    }
+    
+    // Get default image based on section
+    function getDefaultImage(section) {
+        const defaultImages = {
+            'economy': 'https://images.unsplash.com/photo-1588690154757-badf4644190f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'eco-africa': 'https://images.unsplash.com/photo-1447601932606-2b63e2e64331?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'eco-agriculture': 'https://images.unsplash.com/photo-1625246335525-8f9cb4f4b8a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'eco-innovation': 'https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+        };
+        return defaultImages[section] || defaultImages.economy;
+    }
+    
+    // Function to view a full article
+    async function viewArticle(articleId) {
+        try {
+            const response = await fetch(`${API_BASE}/economy/articles/${articleId}`);
+            if (!response.ok) throw new Error('Failed to fetch article');
+            
+            const data = await response.json();
+            showArticleModal(data.article);
+            
+        } catch (error) {
+            console.error('Error loading article:', error);
+            showNotification('Failed to load article', 'danger');
+        }
+    }
+    
+    // Show article in modal
+    function showArticleModal(article) {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('articleModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        const modalHtml = `
+            <div class="modal fade" id="articleModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">${article.title}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${article.image_url ? 
+                                `<img src="${article.image_url}" class="img-fluid rounded mb-3" alt="${article.image_alt || article.title}" style="width: 100%; max-height: 300px; object-fit: cover;">` : 
+                                ''}
+                            <div class="article-meta mb-3">
+                                ${article.author ? `<p class="mb-1"><strong>By:</strong> ${article.author}</p>` : ''}
+                                <p class="mb-1"><strong>Published:</strong> ${new Date(article.createdAt).toLocaleDateString('en-US', { 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric' 
+                                })}</p>
+                                ${article.section ? `<span class="badge bg-primary me-1">${article.section}</span>` : ''}
+                                ${article.category ? `<span class="badge bg-secondary">${article.category}</span>` : ''}
+                            </div>
+                            <hr>
+                            <div class="article-content">
+                                ${article.content || ''}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-dark" onclick="shareArticle('${article._id}', '${article.title}')">
+                                <i class="fas fa-share-alt me-1"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to body
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('articleModal'));
+        modal.show();
+        
+        // Remove modal from DOM when hidden
+        document.getElementById('articleModal').addEventListener('hidden.bs.modal', function () {
+            this.remove();
+        });
+    }
+    
+    // Share article function
+    function shareArticle(articleId, title) {
+        const shareUrl = `${window.location.origin}/economy.html#article-${articleId}`;
+        const shareText = `Check out this article: ${title}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: shareText,
+                url: shareUrl
+            });
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(`${shareText}\n${shareUrl}`).then(() => {
+                showNotification('Link copied to clipboard!', 'success');
+            });
+        }
+    }
+    
+    // Load all economy data when page loads
+    async function loadAllEconomyData() {
+        try {
+            // Show loading state
+            document.querySelectorAll('.stat-value').forEach(el => {
+                el.classList.add('loading');
             });
             
-            // Show notification function
-            function showNotification(message, type = 'info') {
-                // Create notification element
-                const notification = document.createElement('div');
-                notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-                notification.style.top = '20px';
-                notification.style.right = '20px';
-                notification.style.zIndex = '1050';
-                notification.style.minWidth = '300px';
-                notification.innerHTML = `
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
+            // Load main economic indicators
+            await loadEconomicIndicators();
+            
+            // Load statistics and articles for each section
+            const sections = ['economy', 'eco-africa', 'eco-agriculture', 'eco-innovation'];
+            
+            for (const section of sections) {
+                // Load section statistics
+                await loadSectionStats(section);
                 
-                // Add to body
-                document.body.appendChild(notification);
-                
-                // Auto remove after 3 seconds
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
+                // Load section articles
+                await loadEconomyArticles(section);
             }
             
-            // Simulated financial data (in a real implementation, this would come from Google API)
-            function updateFinancialData() {
-                // This would fetch real data from an API
-                console.log('Updating financial data...');
-            }
+            showNotification('Economy data loaded successfully!', 'success');
             
-            // Update financial data on page load
-            document.addEventListener('DOMContentLoaded', updateFinancialData);
-        </script>
+        } catch (error) {
+            console.error('Error loading economy data:', error);
+            showNotification('Some data failed to load. Showing cached content.', 'warning');
+        } finally {
+            // Remove loading state
+            document.querySelectorAll('.stat-value').forEach(el => {
+                el.classList.remove('loading');
+            });
+        }
+    }
+    
+    // Initialize loading when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load economy data
+        loadAllEconomyData();
+        
+        // Check if there's an article ID in the URL hash
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#article-')) {
+            const articleId = hash.replace('#article-', '');
+            setTimeout(() => viewArticle(articleId), 1000); // Small delay to ensure page loads
+        }
+        
+        // Update financial data on page load (if you have this function)
+        if (typeof updateFinancialData === 'function') {
+            updateFinancialData();
+        }
+    });
+    
+    // Add loading CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        .stat-value.loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            color: transparent;
+            border-radius: 4px;
+            min-width: 60px;
+            display: inline-block;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .article-meta {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .article-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+        }
+    `;
+    document.head.appendChild(style);
+</script>
     </body>
     </html>

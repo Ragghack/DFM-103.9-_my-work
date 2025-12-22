@@ -94,13 +94,22 @@ async function uploadFile(file, type = 'image') {
         const formData = new FormData();
         formData.append('file', file);
         
+        console.log('Uploading file:', {
+            name: file.name,
+            type: file.type,
+            size: file.size
+        });
+
         const response = await fetch(`${API_BASE}/media/upload`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('dfm_token')}`
+                // Note: Don't set Content-Type for FormData - browser sets it automatically
             },
             body: formData
         });
+        
+        console.log('Upload response status:', response.status);
         
         if (!response.ok) {
             const errorData = await response.json();
@@ -108,9 +117,11 @@ async function uploadFile(file, type = 'image') {
         }
         
         const data = await response.json();
+        console.log('Upload successful:', data);
         return data.url;
+        
     } catch (error) {
-        console.error('File upload error:', error);
+        console.error('File upload error details:', error);
         showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} upload failed: ${error.message}`, 'danger');
         return null;
     }

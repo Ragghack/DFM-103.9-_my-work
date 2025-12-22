@@ -34,7 +34,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5500',
   'http://localhost:5502',
-  'http://localhost:5000'
+  'http://localhost:5000',
+  'null' 
 ];
 
 app.use(helmet());
@@ -88,7 +89,9 @@ app.get('/finance', (req, res) => {
 app.get('/admin-login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'admin-login.html'));
 });
-
+app.get('/articles', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'articles.html'));
+});
 // ==================== API ROUTES ====================
 app.use('/api/auth', authRoutes);
 app.use('/api/articles', articleRoutes);
@@ -106,6 +109,7 @@ app.use('/api/actuality', actualityRoutes);
 // This should be in your main server file
 app.use('/api/actuality', require('./routes/actuality'));
 app.use('/api/economy', require('./routes/economy'));
+
 // Health check
 app.get('/health', (req, res) => {
   res.status(200).json({ 

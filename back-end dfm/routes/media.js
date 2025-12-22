@@ -1,44 +1,88 @@
-// routes/media.js - UPDATED VERSION
+// routes/media.js - DUAL STORAGE (Cloudinary + Local)
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
+const path = require('path');
+const fs = require('fs');
 const { auth, adminAuth } = require('../middlewares/auth');
-const Media = require('../models/Media');
 
-const storage = multer.memoryStorage();
-const upload = multer({ 
-  storage,
-  limits: {
-    fileSize: 50 * 1024 * 1024 // 50MB limit for audio files
-  },
-  fileFilter: (req, file, cb) => {
-    // Allow both images AND audio files
-    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('audio/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image and audio files are allowed'), false);
-    }
-  }
-});
-// Simple fallback storage without database
-const uploadToLocal = (file) => {
-  // For development - return a mock URL
-  const fileType = file.mimetype.startsWith('audio/') ? 'audio' : 'image';
-  const mockUrls = {
-    audio: '/uploads/audio/sample-episode.mp3',
-    image: '/uploads/images/sample-thumbnail.jpg'
-  };
-  return mockUrls[fileType];
-};
-// Configure Cloudinary if available
-if (process.env.CLOUDINARY_CLOUD_NAME) {
+// Try to require Cloudinary (optional)
+let cloudinary;
+try {
+  cloudinary = require('cloudinary').v2;
+} catch (err) {
+  console.log('Cloudinary not installed, using local storage only');
+}
+
+// Configure Cloudinary if environment variables exist
+const useCloudinary = process.env.CLOUDINARY_CLOUD_NAME && 
+                     process.env.CLOUDINARY_API_KEY && 
+                     process.env.CLOUDINARY_API_SECRET;
+
+if (useCloudinary && cloudinary) {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET
   });
+  console.log('Cloudinary configured');
+} else {
+  console.log('Cloudinary not configured, using local storage');
 }
+
+// Configure local storage (always available as fallback)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Create uploads directory if it doesn't exist
+    const uploadDir = path.join(__dirname, '..', 'public', 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    
+    // Create subdirectories based on file type
+    if (file.mimetype.startsWith('audio/')) {
+      const audioDir = path.join(uploadDir, 'audio');
+      if (!fs.existsSync(audioDir)) {
+        fs.mkdirSync(audioDir, { recursive: true });
+      }
+      cb(null, audioDir);
+    } else if (file.mimetype.startsWith('image/')) {
+      const imageDir = path.join(uploadDir, 'images');
+      if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir, { recursive: true });
+      }
+      cb(null, imageDir);
+    } else {
+      cb(null, uploadDir);
+    }
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    const filename = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9]/g, '-') + 
+                     '-' + uniqueSuffix + ext;
+    cb(null, filename);
+  }
+});
+
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 50MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|webp|mp3|wav|mpeg|ogg/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(new Error('Only image and audio files are allowed'), false);
+    }
+  }
+});
 
 // POST /api/media/upload (admin only)
 router.post('/upload', auth, adminAuth, upload.single('file'), async (req, res) => {
@@ -57,60 +101,64 @@ router.post('/upload', auth, adminAuth, upload.single('file'), async (req, res) 
     }
 
     let result;
-
-    if (process.env.CLOUDINARY_CLOUD_NAME) {
-      // Upload to Cloudinary
-      const resourceType = req.file.mimetype.startsWith('audio/') ? 'video' : 'image';
-      
-      result = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { 
-            folder: 'dfm_media',
-            resource_type: resource_type
-          }, 
-          (error, result) => {
-            if (error) return reject(error);
-            resolve(result);
-          }
-        );
-        stream.end(req.file.buffer);
-      });
-
-      res.json({
-        success: true,
-        url: result.secure_url,
-        public_id: result.public_id,
-        message: 'File uploaded to Cloudinary successfully'
-      });
-    } else {
-      // Development fallback - return a usable URL
-      const fileType = req.file.mimetype.startsWith('audio/') ? 'audio' : 'image';
-      
-      // For audio files, return a test audio URL that actually works
-      if (fileType === 'audio') {
-        const testAudioUrls = [
-          "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
-          "https://www.soundjay.com/communication/sounds/telephone-ring-03.wav",
-          "https://www.soundjay.com/mechanical/sounds/camera-shutter-click-05.wav"
-        ];
-        const audioUrl = testAudioUrls[Math.floor(Math.random() * testAudioUrls.length)];
+    let storageType = 'local';
+    
+    // Option 1: Upload to Cloudinary (if configured and available)
+    if (useCloudinary && cloudinary) {
+      try {
+        const resourceType = req.file.mimetype.startsWith('audio/') ? 'video' : 'image';
         
-        res.json({
-          success: true,
-          url: audioUrl,
-          message: 'Using test audio URL (Cloudinary not configured)'
+        result = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { 
+              folder: 'dfm_media',
+              resource_type: resourceType,
+              public_id: `dfm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+            }, 
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result);
+            }
+          );
+          stream.end(req.file.buffer);
         });
-      } else {
-        // For images, return a placeholder
-        const placeholderImage = "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80";
+
+        storageType = 'cloudinary';
+        console.log('File uploaded to Cloudinary:', result.secure_url);
         
-        res.json({
-          success: true,
-          url: placeholderImage,
-          message: 'Using placeholder image (Cloudinary not configured)'
-        });
+      } catch (cloudinaryError) {
+        console.warn('Cloudinary upload failed, falling back to local storage:', cloudinaryError.message);
+        // Continue to local storage fallback
       }
     }
+    
+    // Option 2: Use local storage (always available)
+    if (!result) {
+      // Generate URL relative to public folder
+      const filePath = req.file.path;
+      const relativePath = path.relative(path.join(__dirname, '..', 'public'), filePath);
+      const fileUrl = '/uploads/' + relativePath.split(path.sep).join('/');
+      
+      result = {
+        url: fileUrl,
+        filename: req.file.filename,
+        originalname: req.file.originalname
+      };
+      
+      console.log('File saved locally:', fileUrl);
+    }
+
+    res.json({
+      success: true,
+      url: result.url,
+      filename: result.filename || req.file.filename,
+      originalname: result.originalname || req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      storage: storageType,
+      message: `File uploaded successfully to ${storageType}`
+    });
+
   } catch (err) {
     console.error('Upload error:', err);
     res.status(500).json({ 
@@ -120,6 +168,7 @@ router.post('/upload', auth, adminAuth, upload.single('file'), async (req, res) 
     });
   }
 });
+
 
 // Simple media list endpoint
 router.get('/', auth, adminAuth, async (req, res) => {
@@ -140,6 +189,6 @@ router.get('/', auth, adminAuth, async (req, res) => {
   }
 });
 
-module.exports = router;
+
 
 module.exports = router;
