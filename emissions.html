@@ -1420,6 +1420,52 @@
         function updateDataTimestamp() { 
             document.getElementById('data-timestamp').textContent = new Date().toLocaleTimeString(); 
         }
+        // Add this function to emissions.html to handle audio loading errors:
+function setupAudioPlayers() {
+    // Setup featured audio player
+    const featuredAudio = document.getElementById('featured-audio');
+    if (featuredAudio) {
+        featuredAudio.addEventListener('error', function(e) {
+            console.error('Featured audio error:', e);
+            this.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+            this.load();
+        });
+    }
+    
+    // Setup modal audio players
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.episode-card')) {
+            setTimeout(() => {
+                const modalPlayer = document.getElementById('modal-player');
+                if (modalPlayer) {
+                    modalPlayer.addEventListener('error', function(e) {
+                        console.error('Modal audio error:', e);
+                        this.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+                        this.load();
+                    });
+                }
+            }, 100);
+        }
+    });
+}
+
+// Call this function in your loadAllData function:
+async function loadAllData() {
+    const loadingEl = document.getElementById('loading');
+    const contentEl = document.getElementById('content');
+    try {
+        await loadEpisodes('all');
+        setupAudioPlayers(); // ADD THIS LINE
+        updateDataTimestamp();
+        loadingEl.style.display = 'none';
+        contentEl.style.display = 'block';
+    } catch (error) {
+        console.error("Error loading data:", error);
+        loadingEl.style.display = 'none';
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('error-text').textContent = "Connection error: Make sure the server is running on port 5000.";
+    }
+}
 
         window.openEpisode = openEpisode;
         window.toggleLike = toggleLike;

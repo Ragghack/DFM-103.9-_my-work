@@ -289,7 +289,7 @@
         /* 5. SECTION STYLES */
         .section-header {
             border-bottom: 3px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
+            padding-bottom: 1.0rem;
             margin-bottom: 1.5rem;
             color: var(--primary-color);
             font-weight: 800;
@@ -486,13 +486,20 @@
         }
 
         /* 10. EPISODE TABLE (NEW) */
-        .episode-table-section {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+.episode-table-section {
+    background: white;
+    border-radius: 10px;
+    padding: 0.1rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position:relative;
+    /* Alignment Fixes */
+    float: left;         /* Push to the left */
+    width: 300px;        /* You must define a width when floating */
+    margin-right: 20px;  /* Adds space so content doesn't touch the right side */
+
+}
         
         .episode-table {
             width: 100%;
@@ -691,9 +698,48 @@
     </header>
 
     <main class="container mt-4">
+                            <div class="col-lg-4">
+                <!-- Recent & Upcoming Episodes Table (NEW) -->
+                <section class="episode-table-section mb-5">
+                    <h5 class="mb-3" style="color: var(--primary-color); font-weight: 700;">
+                        <i class="fas fa-list-ul me-2"></i>Recent & Upcoming Episodes
+                    </h5>
+                    
+                    <div id="episode-table-loading" class="text-center py-4">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        <p class="mt-2 small text-muted">Loading episodes...</p>
+                    </div>
+                    
+                    <div id="episode-table-content" style="display: none;">
+                        <table class="episode-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="episode-table-body">
+                                <!-- Episode rows will be loaded here -->
+                            </tbody>
+                        </table>
+                        
+                        <div class="text-center mt-3">
+                            <a href="emissions.html" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-headphones me-1"></i> All Episodes
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div id="no-episodes-table" style="display: none;" class="text-center py-4">
+                        <i class="fas fa-podcast fa-2x text-muted mb-3"></i>
+                        <p class="text-muted small">No episodes available</p>
+                    </div>
+                </section>
+            </div>
 
         <!-- LATEST EPISODE BANNER (NEW) - Display before Top Story -->
         <section id="latest-episode-banner" style="display: none;">
+            <h2 class="section-header">Recent Episode</h2>
             <div class="episode-banner">
                 <div class="row g-0">
                     <div class="col-md-8">
@@ -781,6 +827,7 @@
             </div>
         </section>
 
+
         <!-- EPISODE PREVIEWS SECTION (NEW) - Under Latest Economy News -->
         <section class="mb-5">
             <div class="section-subheader">
@@ -863,44 +910,7 @@
                 </section>
             </div>
             
-            <div class="col-lg-4">
-                <!-- Recent & Upcoming Episodes Table (NEW) -->
-                <section class="episode-table-section mb-5">
-                    <h5 class="mb-3" style="color: var(--primary-color); font-weight: 700;">
-                        <i class="fas fa-list-ul me-2"></i>Recent & Upcoming Episodes
-                    </h5>
-                    
-                    <div id="episode-table-loading" class="text-center py-4">
-                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-                        <p class="mt-2 small text-muted">Loading episodes...</p>
-                    </div>
-                    
-                    <div id="episode-table-content" style="display: none;">
-                        <table class="episode-table">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="episode-table-body">
-                                <!-- Episode rows will be loaded here -->
-                            </tbody>
-                        </table>
-                        
-                        <div class="text-center mt-3">
-                            <a href="emissions.html" class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-headphones me-1"></i> All Episodes
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div id="no-episodes-table" style="display: none;" class="text-center py-4">
-                        <i class="fas fa-podcast fa-2x text-muted mb-3"></i>
-                        <p class="text-muted small">No episodes available</p>
-                    </div>
-                </section>
-            </div>
+
         </div>
 
     </main>
@@ -1108,73 +1118,63 @@
         }
 
         // 2. DISPLAY LATEST EPISODE IN BANNER
-        function displayLatestEpisode(episode) {
-            const bannerSection = document.getElementById('latest-episode-banner');
-            
-            if (!episode) {
-                bannerSection.style.display = 'none';
-                return;
-            }
-            
-          // Update episode details
+function displayLatestEpisode(episode) {
+    const bannerSection = document.getElementById('latest-episode-banner');
+    
+    if (!episode) {
+        if (bannerSection) bannerSection.style.display = 'none';
+        return;
+    }
+    
     document.getElementById('latest-episode-title').textContent = episode.title || 'Latest Radio Episode';
-    document.getElementById('latest-episode-description').textContent = episode.description ? (episode.description.substring(0, 150) + '...') : 'Listen to our latest radio broadcast';
+    document.getElementById('latest-episode-description').textContent = 
+        episode.excerpt || episode.description || 'Listen to our latest radio broadcast';
     document.getElementById('latest-episode-duration').textContent = episode.duration || '30:00';
     document.getElementById('latest-episode-date').textContent = formatDate(episode.publish_date);
     document.getElementById('latest-episode-category').textContent = episode.category || 'General';
+    
+    const thumbnailImg = document.getElementById('latest-episode-thumbnail');
+    if (thumbnailImg) {
+        const imageUrl = episode.thumbnail ? getFullUrl(episode.thumbnail) : 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80';
+        thumbnailImg.src = imageUrl;
+        thumbnailImg.onerror = function() {
+            this.src = 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80';
+            this.onerror = null; 
+        };
+    }
+    
+    const audioElement = document.getElementById('latest-episode-audio');
+    if (audioElement) {
+        // FIX: Check both possible audio property names
+        const audioPath = episode.audio || episode.audio_url;
+        
+        if (audioPath) {
+            const audioUrl = getFullUrl(audioPath, 'audio');
+            audioElement.src = audioUrl;
+            audioElement.load();
             
-            // Set thumbnail with proper error handling
-            const thumbnailImg = document.getElementById('latest-episode-thumbnail');
-            if (episode.thumbnail) {
-                const imageUrl = getFullUrl(episode.thumbnail);
-                thumbnailImg.src = imageUrl;
-                
-                // Add error handling for the image
-                thumbnailImg.onerror = function() {
-                    this.src = 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80';
-                    this.onerror = null; // Prevent infinite loop
-                };
-                
-                // Add load event to handle successful loading
-                thumbnailImg.onload = function() {
-                    console.log('Episode thumbnail loaded successfully:', imageUrl);
-                };
-            } else {
-                thumbnailImg.src = 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80';
-            }
-            
-            // Set audio for banner player
-            const audioElement = document.getElementById('latest-episode-audio');
-            if (episode.audio_url) {
-                const audioUrl = getFullUrl(episode.audio_url, 'audio');
-                audioElement.src = audioUrl;
-                audioElement.load();
-                
-                // Add audio load event
-                audioElement.addEventListener('loadeddata', function() {
-                    console.log('Banner audio loaded:', audioUrl);
-                });
-                
-                // Add audio error handling
-                audioElement.addEventListener('error', function(e) {
-                    console.error('Audio loading error:', e);
-                    // Fallback to demo audio
-                    audioElement.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-                    audioElement.load();
-                });
-                
-                // For demo: Limit playback to 120 seconds (2 minutes) as preview
-                audioElement.addEventListener('timeupdate', function() {
-                    if (this.currentTime > 120) { // 2 minutes
-                        this.pause();
-                        this.currentTime = 0;
-                        alert('This is a preview only. Please visit the Emissions page to listen to the full episode.');
-                    }
-                });
-            }
-            
-            bannerSection.style.display = 'block';
+            audioElement.ontimeupdate = function() {
+                if (this.currentTime > 120) {
+                    this.pause();
+                    this.currentTime = 0;
+                    alert('This is a preview only. Visit the Emissions page for the full episode.');
+                }
+            };
+
+            audioElement.onerror = function() {
+                console.warn('Audio file not found, loading fallback.');
+                this.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+                this.load();
+            };
+        } else {
+            // Fallback audio if no audio path
+            audioElement.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+            audioElement.load();
         }
+    }
+    
+    if (bannerSection) bannerSection.style.display = 'block';
+}
 
         // 3. SETUP HOT EPISODE IN HERO BANNER
         function setupHotEpisodeInHero(episode) {
@@ -1716,25 +1716,36 @@
         }
 
         // 18. Utility Functions
-        function getFullUrl(url, type = 'image') {
-            if (!url) {
-                return type === 'image' 
-                    ? 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80' 
-                    : 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-            }
-            if (url.startsWith('http')) return url;
-            
-            // For audio files, check if it's a full URL or needs the uploads path
-            if (type === 'audio') {
-                if (url.includes('soundhelix.com') || url.includes('unsplash.com')) {
-                    return url;
-                }
-                return `http://localhost:5000/uploads/${url}`;
-            }
-            
-            // For images
-            return `http://localhost:5000/uploads/${url}`;
+ function getFullUrl(url, type = 'image') {
+    if (!url) {
+        return type === 'image' 
+            ? 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80' 
+            : 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+    }
+    if (url.startsWith('http')) return url;
+    
+    // Clean path - remove leading slash if exists
+    const cleanPath = url.startsWith('/') ? url.substring(1) : url;
+    
+    // For audio files
+    if (type === 'audio') {
+        // Check if it's already a demo URL
+        if (url.includes('soundhelix.com') || url.includes('unsplash.com')) {
+            return url;
         }
+        // Check if path already contains uploads/
+        if (cleanPath.startsWith('uploads/')) {
+            return `http://localhost:5000/${cleanPath}`;
+        }
+        return `http://localhost:5000/uploads/${cleanPath}`;
+    }
+    // For images
+    if (cleanPath.startsWith('uploads/')) {
+        return `http://localhost:5000/${cleanPath}`;
+    }
+    return `http://localhost:5000/uploads/${cleanPath}`;
+}
+
 
         function formatDate(dateString) {
             if (!dateString) return 'Recent';
