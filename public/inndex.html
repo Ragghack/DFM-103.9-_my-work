@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Radio Station</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1814;
+            --primary-accent: #D4AF37;
+            --secondary-dark: #2d2b24;
+            --light-bg: #F8F5F0;
+            --card-bg: #ffffff;
+            --text-primary: #1a1814;
+            --text-secondary: #333333;
+            --border-light: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --box-text-color: #1a1814;
+        }
+        
+        [data-theme="dark"] {
+            --light-bg: #121212;
+            --card-bg: #1a1a1a;
+            --text-primary: #D4AF37;
+            --text-secondary: #ffffff;
+            --border-light: #333333;
+            --glass-bg: rgba(26, 24, 20, 0.9);
+            --glass-border: rgba(212, 175, 55, 0.1);
+            --box-text-color: #f8f3c9;
+        }
+        
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--light-bg);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* RFI-Style Header */
+        .rfi-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            border-bottom: 4px solid var(--primary-accent);
+            box-shadow: 0 4px 32px rgba(26, 24, 20, 0.3);
+        }
+        
+        .rfi-header .navbar-brand { 
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(90deg, var(--primary-accent), #fff 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .rfi-logo {
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .rfi-header .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 12px 16px !important;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .rfi-header .nav-link:hover,
+        .rfi-header .nav-link.active {
+            color: var(--primary-accent) !important;
+            border-bottom: 3px solid var(--primary-accent);
+            transform: translateY(-2px);
+        }
+        
+        /* Top Navigation Bar (RFI Style) */
+        .rfi-top-nav {
+            background: var(--secondary-dark);
+            color: var(--primary-accent);
+            padding: 8px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .rfi-top-nav a {
+            color: var(--primary-accent);
+            text-decoration: none;
+            margin-right: 20px;
+            opacity: 0.9;
+        }
+        
+        .rfi-top-nav a:hover {
+            opacity: 1;
+            color: #fff;
+        }
+        
+        .language-selector {
+            background: transparent;
+            border: 1px solid var(--primary-accent);
+            color: var(--primary-accent);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        
+        /* Breaking News - Enhanced */
+        .breaking-news-enhanced { 
+            padding: 12px 0;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(90deg, var(--primary-dark), var(--secondary-dark));
+            color: var(--primary-accent);
+            border-bottom: 2px solid var(--primary-accent);
+        }
+        
+        .breaking-label {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-right: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .marquee-container {
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .marquee {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+            font-weight: 700;
+            white-space: nowrap;
+            color: var(--primary-accent);
+        }
+        
+        @keyframes marquee {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Main Content Sections */
+        .rfi-main-section {
+            padding: 40px 0;
+            background: var(--light-bg);
+        }
+        
+        .rfi-section-header {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+        
+        .rfi-section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), rgba(212, 175, 55, 0.3));
+            border-radius: 2px;
+        }
+        
+        /* Featured Article - RFI Style */
+        .rfi-featured-article {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border: 1px solid var(--border-light);
+            transition: transform 0.3s ease;
+        }
+        
+        .rfi-featured-article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .rfi-featured-article img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            filter: brightness(0.9) contrast(1.1);
+        }
+        
+        .rfi-featured-content {
+            padding: 30px;
+            background: var(--card-bg);
+        }
+        
+        .rfi-featured-content h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .rfi-category-tag {
+            display: inline-block;
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+        
+        .rfi-summary {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .rfi-read-more {
+            color: var(--primary-accent);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .rfi-read-more:hover {
+            color: var(--text-primary);
+            padding-left: 10px;
+        }
+        
+        /* News Cards - RFI Style */
+        .rfi-news-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            height: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .rfi-news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-color: var(--primary-accent);
+        }
+        
+        .rfi-news-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+        
+        .rfi-news-card:hover img {
+            filter: brightness(1);
+        }
+        
+        .rfi-card-content {
+            padding: 20px;
+        }
+        
+        .rfi-news-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .rfi-date {
+            color: var(--primary-accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* Live Radio Player - Enhanced */
+        .live-radio-player {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 25px;
+            border-radius: 16px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .live-radio-player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        
+        .live-indicator {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-left: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .play-btn-enhanced {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.3rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 15px;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .play-btn-enhanced::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-accent), #f8e14d);
+            z-index: -1;
+            opacity: 0;
+        }
+        
+        .play-btn-enhanced:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.6);
+        }
+        
+        .play-btn-enhanced:hover::before {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+        
+        /* Podcast Section */
+        .podcast-section {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            margin: 40px 0;
+            border: 1px solid var(--border-light);
+        }
+        
+        .podcast-card {
+            background: var(--light-bg);
+            border-radius: 12px;
+            padding: 25px;
+            height: 100%;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+        
+        .podcast-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+        }
+        
+        .podcast-icon {
+            color: var(--primary-accent);
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        /* Newsletter Section */
+        .newsletter-section {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+            padding: 50px;
+            border-radius: 16px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .newsletter-section h3 {
+            color: var(--primary-accent);
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .newsletter-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--primary-accent);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+        }
+        
+        .newsletter-input::placeholder {
+            color: rgba(212, 175, 55, 0.7);
+        }
+        
+        .newsletter-btn {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        /* Side News List */
+        .side-news-list {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .side-news-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .side-news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .side-news-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+        
+        /* Footer - Enhanced */
+        .rfi-footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 50px 0 30px;
+        }
+        
+        .rfi-footer h5 {
+            color: var(--primary-accent);
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .rfi-footer a {
+            color: rgba(212, 175, 55, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .rfi-footer a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .social-icons-enhanced a {
+            color: var(--primary-accent) !important;
+            font-size: 1.4rem;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.7);
+        }
+        
+        .social-icons-enhanced a:hover {
+            color: #fff200 !important;
+            transform: translateY(-3px);
+            text-shadow: 0 0 16px #fff200, 0 0 4px var(--primary-accent);
+        }
+        
+        .footer-bottom {
+            background: rgba(26, 24, 20, 0.8);
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        /* Theme Toggle - Enhanced */
+        .theme-toggle-enhanced {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--secondary-dark);
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            border: 2px solid var(--primary-accent);
+        }
+        
+        .theme-toggle-handle {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-accent);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.5);
+        }
+        
+        [data-theme="dark"] .theme-toggle-handle {
+            transform: translateX(30px);
+        }
+        
+        .theme-toggle-enhanced i {
+            font-size: 12px;
+            z-index: 1;
+            color: var(--primary-dark);
+        }
+        
+        .theme-toggle-enhanced .fa-sun {
+            margin-right: auto;
+            padding-left: 6px;
+        }
+        
+        .theme-toggle-enhanced .fa-moon {
+            margin-left: auto;
+            padding-right: 6px;
+        }
+        
+        /* Loading Placeholder */
+        .loading-placeholder {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 768px) {
+            .rfi-featured-article img {
+                height: 250px;
+            }
+            
+            .rfi-featured-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .rfi-section-header {
+                font-size: 1.5rem;
+            }
+            
+            .play-btn-enhanced {
+                width: 50px;
+                height: 50px;
+                margin: 0 10px;
+            }
+            
+            .newsletter-section {
+                padding: 30px 20px;
+            }
+            
+            .podcast-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="rfi-top-nav">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <a href="#"><i class="fas fa-archive me-1"></i> Archive</a>
+                <a href="#"><i class="fas fa-podcast me-1"></i> Podcasts</a>
+                <a href="#"><i class="fas fa-video me-1"></i> Videos</a>
+                <a href="#"><i class="fas fa-list me-1"></i> Playlist</a>
+            </div>
+            <div>
+                <select class="language-selector">
+                    <option>English</option>
+                    <option>Français</option>
+                    <option>Español</option>
+                    <option>العربية</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="rfi-header sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img class="rfi-logo" src="Logo.png" alt="DFM Media Logo" width="60" height="60" class="d-inline-block align-text-top me-2">
+                    <i class="fas fa-microphone-alt me-2" style="color:#D4AF37; font-size:2rem;"></i>
+                    <span style="color:#D4AF37;">DFM</span><span style="color:#fff; margin-left:4px;"> MEDIA</span>
+                </a>
+                
+                <!-- Search -->
+                <div class="search-container d-none d-lg-block me-4">
+                    <div class="position-relative">
+                        <i class="fas fa-search position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-accent);"></i>
+                        <input type="search" class="form-control ps-4" placeholder="Search news..." style="background: rgba(255,255,255,0.1); border: 1px solid var(--primary-accent); color: white; width: 250px;">
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle-enhanced me-3" id="themeToggle">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                        <div class="theme-toggle-handle"></div>
+                    </div>
+                    
+                    <!-- Audio Controls -->
+                    <button class="play-btn-enhanced me-2" id="playButton">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="play-btn-enhanced" id="stopButton" style="background: var(--secondary-dark); color: var(--primary-accent);">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    
+                    <button class="navbar-toggler ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="emmsion.html"><i class="fas fa-broadcast-tower me-1"></i> Emission</a></li>
+                        
+                        <!-- Economy Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="economyDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-chart-line me-1"></i> Economy
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="economy.html">Economy</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-africa">Eco Africa</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-agriculture">Eco Agriculture</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-innovation">Eco Innovation</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Finance Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="financeDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-coins me-1"></i> Finance
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="finance.html">Finance Market</a></li>
+                                <li><a class="dropdown-item" href="finance.html#budget">National Budget</a></li>
+                                <li><a class="dropdown-item" href="finance.html#banking">Bank Projects</a></li>
+                                <li><a class="dropdown-item" href="finance.html#statistics">Statistics of the Day</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Articles Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="articlesDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-newspaper me-1"></i> Articles
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="articles.html">Articles</a></li>
+                                <li><a class="dropdown-item" href="articles.html#newsletter">Newsletter</a></li>
+                                <li><a class="dropdown-item" href="articles.html#blog">Blog</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li class="nav-item"><a class="nav-link" href="actuality.html"><i class="fas fa-bullhorn me-1"></i> Actuality</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breaking News Ticker -->
+    <div class="breaking-news-enhanced">
+        <div class="container d-flex align-items-center">
+            <span class="breaking-label"><i class="fas fa-bolt me-2"></i>BREAKING</span>
+            <div class="marquee-container">
+                <div class="marquee" id="breaking-news-ticker">
+                    Loading breaking news...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Featured Section -->
+        <section class="rfi-main-section">
+            <div class="row">
+                <!-- Featured Article -->
+                <div class="col-lg-8 mb-4">
+                    <article class="rfi-featured-article" id="featured-article-container">
+                        <div class="loading-placeholder p-5">
+                            <div class="spinner-border text-warning"></div>
+                            <p class="mt-3 text-muted">Loading featured content...</p>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Side News -->
+                <div class="col-lg-4">
+                    <h3 class="rfi-section-header">Latest Updates</h3>
+                    <div class="side-news-list" id="side-news-container">
+                        <div class="loading-placeholder p-4">
+                            <div class="spinner-border spinner-border-sm text-warning"></div>
+                            <p class="mt-2 text-muted">Loading updates...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="mt-4">
+                        <h3 class="rfi-section-header">Quick Access</h3>
+                        <div class="side-news-list">
+                            <a href="economy.html" class="side-news-item d-block text-decoration-none">
+                                <h4><i class="fas fa-chart-line me-2" style="color: var(--primary-accent);"></i> Economy</h4>
+                                <p class="text-muted mb-0">Market analysis & trends</p>
+                            </a>
+                            <a href="finance.html" class="side-news-item d-block text-decoration-none">
+                                <h4><i class="fas fa-coins me-2" style="color: var(--primary-accent);"></i> Finance</h4>
+                                <p class="text-muted mb-0">Budget & investments</p>
+                            </a>
+                            <a href="articles.html" class="side-news-item d-block text-decoration-none">
+                                <h4><i class="fas fa-newspaper me-2" style="color: var(--primary-accent);"></i> Articles</h4>
+                                <p class="text-muted mb-0">In-depth analysis</p>
+                            </a>
+                            <a href="actuality.html" class="side-news-item d-block text-decoration-none">
+                                <h4><i class="fas fa-bullhorn me-2" style="color: var(--primary-accent);"></i> Actuality</h4>
+                                <p class="text-muted mb-0">Latest news</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current News Section -->
+        <section class="rfi-main-section" style="background: var(--card-bg); border-radius: 16px; padding: 40px;">
+            <h2 class="rfi-section-header">Current News</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="current-news-container">
+                <div class="col">
+                    <div class="loading-placeholder p-5">
+                        <div class="spinner-border text-warning"></div>
+                        <p class="mt-3 text-muted">Loading current news...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Radio Player -->
+        <section class="live-radio-player">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-3">
+                        <i class="fas fa-microphone-alt me-2"></i>
+                        DFM Radio 103.9 MHz
+                        <span class="live-indicator">LIVE</span>
+                    </h2>
+                    <p class="mb-0" style="opacity: 0.9;">Listen to our live broadcast with current news and economic analysis</p>
+                    <div id="current-program" class="mt-2" style="font-weight: 600;">Loading current program...</div>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <button class="play-btn-enhanced" id="footerPlayButton">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="play-btn-enhanced" id="footerStopButton" style="background: var(--secondary-dark); color: var(--primary-accent);">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Podcast Section -->
+        <section class="podcast-section">
+            <h2 class="rfi-section-header">Featured Podcasts</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="podcast-card">
+                        <div class="podcast-icon">
+                            <i class="fas fa-podcast"></i>
+                        </div>
+                        <h4>Economic Analysis</h4>
+                        <p class="text-muted">Weekly analysis of global economic trends and market developments.</p>
+                        <button class="btn btn-sm" style="background: var(--primary-accent); color: var(--primary-dark); font-weight: 600;">
+                            <i class="fas fa-play me-1"></i> Listen Now
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="podcast-card">
+                        <div class="podcast-icon">
+                            <i class="fas fa-microphone-alt"></i>
+                        </div>
+                        <h4>Market Updates</h4>
+                        <p class="text-muted">Daily financial market reports and investment insights.</p>
+                        <button class="btn btn-sm" style="background: var(--primary-accent); color: var(--primary-dark); font-weight: 600;">
+                            <i class="fas fa-play me-1"></i> Listen Now
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="podcast-card">
+                        <div class="podcast-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>Business Interviews</h4>
+                        <p class="text-muted">Exclusive interviews with industry leaders and policymakers.</p>
+                        <button class="btn btn-sm" style="background: var(--primary-accent); color: var(--primary-dark); font-weight: 600;">
+                            <i class="fas fa-play me-1"></i> Listen Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section">
+            <h3>Subscribe to Our Newsletter</h3>
+            <p class="mb-4" style="opacity: 0.9; max-width: 600px; margin: 0 auto;">Get daily updates on economic news, market analysis, and exclusive insights directly in your inbox.</p>
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                <input type="email" class="newsletter-input" placeholder="Your email address">
+                <button class="newsletter-btn">
+                    <i class="fas fa-envelope me-2"></i> Subscribe
+                </button>
+            </div>
+            <p class="mt-3" style="opacity: 0.7; font-size: 0.9rem;">By subscribing, you agree to our Privacy Policy</p>
+        </section>
+
+        <!-- Quick Links Section -->
+        <section class="rfi-main-section">
+            <h2 class="rfi-section-header">Explore Our Content</h2>
+            <div class="row row-cols-2 row-cols-md-4 g-4" id="quick-links-container">
+                <div class="col">
+                    <a href="economy.html" class="text-decoration-none">
+                        <div class="rfi-news-card text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-line fa-3x" style="color: var(--primary-accent);"></i>
+                            </div>
+                            <h5 class="fw-bold">Economy</h5>
+                            <p class="text-muted small">Market analysis & economic trends</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="finance.html" class="text-decoration-none">
+                        <div class="rfi-news-card text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-coins fa-3x" style="color: var(--primary-accent);"></i>
+                            </div>
+                            <h5 class="fw-bold">Finance</h5>
+                            <p class="text-muted small">Budget, banking & investments</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="articles.html" class="text-decoration-none">
+                        <div class="rfi-news-card text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-newspaper fa-3x" style="color: var(--primary-accent);"></i>
+                            </div>
+                            <h5 class="fw-bold">Articles</h5>
+                            <p class="text-muted small">In-depth analysis & reports</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="actuality.html" class="text-decoration-none">
+                        <div class="rfi-news-card text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-bullhorn fa-3x" style="color: var(--primary-accent);"></i>
+                            </div>
+                            <h5 class="fw-bold">Actuality</h5>
+                            <p class="text-muted small">Latest news & updates</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="rfi-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>DFM Media</h5>
+                    <p style="opacity: 0.8;">Your reliable source for economic, political and social news. Delivering accurate and timely information since 2010.</p>
+                    <div class="social-icons-enhanced mt-4">
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Navigation</h5>
+                    <a href="index.html">Home</a>
+                    <a href="emmsion.html">Emission</a>
+                    <a href="economy.html">Economy</a>
+                    <a href="finance.html">Finance</a>
+                    <a href="articles.html">Articles</a>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5>Services</h5>
+                    <a href="#">Live Radio</a>
+                    <a href="#">Podcasts</a>
+                    <a href="#">Newsletter</a>
+                    <a href="#">Archives</a>
+                    <a href="#">Mobile App</a>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5>Contact</h5>
+                    <address style="opacity: 0.8;">
+                        <i class="fas fa-map-marker-alt me-2"></i> DFM Media<br>
+                        <span class="ms-4">Cameroon</span><br>
+                        <i class="fas fa-envelope me-2 mt-2"></i> contact@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-2 mt-2"></i> +237 650 155 155<br>
+                        <i class="fas fa-clock me-2 mt-2"></i> 24/7 Broadcasting
+                    </address>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <p class="mb-3 mb-md-0">&copy; 2025 DFM Media – All rights reserved.</p>
+                    <div class="d-flex">
+                        <a href="#" class="me-4">Privacy Policy</a>
+                        <a href="#" class="me-4">Terms of Use</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Configuration
+        const API_BASE = 'http://localhost:5000/api';
+
+        // Initialize Page
+        function initializePage() {
+            setupThemeToggle();
+            loadHomepageData();
+            setupAudioControls();
+        }
+
+        // Load all homepage data
+        async function loadHomepageData() {
+            try {
+                await Promise.all([
+                    loadBreakingNews(),
+                    loadFeaturedContent(),
+                    loadCurrentNews(),
+                    loadSideNews(),
+                    updateCurrentProgram()
+                ]);
+            } catch (error) {
+                console.error('Error loading homepage data:', error);
+                showNotification('Failed to load some content. Please refresh the page.', 'warning');
+            }
+        }
+
+        // Load breaking news
+        async function loadBreakingNews() {
+            try {
+                const response = await fetch(`${API_BASE}/homepage`);
+                const data = await response.json();
+                
+                const ticker = document.getElementById('breaking-news-ticker');
+                if (data.homepage?.breakingNews) {
+                    ticker.textContent = data.homepage.breakingNews;
+                } else {
+                    ticker.textContent = 'Stay tuned for the latest updates from DFM Media';
+                }
+            } catch (error) {
+                console.error('Error loading breaking news:', error);
+            }
+        }
+
+        // Load featured content
+        async function loadFeaturedContent() {
+            try {
+                const container = document.getElementById('featured-article-container');
+                
+                // Try to get homepage settings
+                const homepageResponse = await fetch(`${API_BASE}/homepage`);
+                const homepageData = await homepageResponse.json();
+                
+                if (homepageData.homepage?.featuredArticle) {
+                    const articleResponse = await fetch(`${API_BASE}/articles/${homepageData.homepage.featuredArticle}`);
+                    if (articleResponse.ok) {
+                        const article = await articleResponse.json();
+                        renderFeaturedArticle(article, container);
+                        return;
+                    }
+                }
+                
+                // Fallback: Get latest article
+                const articlesResponse = await fetch(`${API_BASE}/articles?limit=1&status=published`);
+                const articlesData = await articlesResponse.json();
+                
+                if (articlesData.items?.length > 0) {
+                    renderFeaturedArticle(articlesData.items[0], container);
+                } else {
+                    container.innerHTML = `
+                        <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=350&q=80" 
+                             alt="DFM Media" loading="lazy">
+                        <div class="rfi-featured-content">
+                            <span class="rfi-category-tag">WELCOME</span>
+                            <h2>Welcome to DFM Media</h2>
+                            <p class="rfi-summary">Your trusted source for news, economic analysis, and insightful reporting from Cameroon and beyond.</p>
+                            <a href="articles.html" class="rfi-read-more">
+                                Explore our content <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading featured content:', error);
+                document.getElementById('featured-article-container').innerHTML = `
+                    <div class="rfi-featured-content p-5 text-center">
+                        <h2 class="fw-bold mb-3" style="color: var(--primary-accent);">Welcome to DFM Media</h2>
+                        <p class="mb-4">Check back soon for the latest articles and news updates.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderFeaturedArticle(article, container) {
+            container.innerHTML = `
+                <img src="${article.image_url || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=350&q=80'}" 
+                     alt="${article.title}" loading="lazy">
+                <div class="rfi-featured-content">
+                    <span class="rfi-category-tag">${article.category?.toUpperCase() || 'FEATURED'}</span>
+                    <h2>${article.title}</h2>
+                    <p class="rfi-summary">${article.excerpt || article.content.substring(0, 250)}...</p>
+                    <a href="articles.html?id=${article._id || article.id}" class="rfi-read-more">
+                        Read full article <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            `;
+        }
+
+        // Load current news
+        async function loadCurrentNews() {
+            try {
+                const response = await fetch(`${API_BASE}/news?limit=6&status=published`);
+                const data = await response.json();
+                const container = document.getElementById('current-news-container');
+                
+                if (data.items && data.items.length > 0) {
+                    container.innerHTML = data.items.map(news => `
+                        <div class="col">
+                            <article class="rfi-news-card">
+                                <img src="${news.image_url || getDefaultImage(news.category)}" 
+                                     alt="${news.title}" loading="lazy">
+                                <div class="rfi-card-content">
+                                    <span class="badge" style="background: var(--primary-accent); color: var(--primary-dark);">${formatCategory(news.category)}</span>
+                                    <h3>${news.title}</h3>
+                                    <div class="rfi-date">${formatDate(news.created_at)}</div>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 15px;">
+                                        ${news.excerpt || news.content.substring(0, 120)}...
+                                    </p>
+                                    <a href="actuality.html?id=${news._id || news.id}" class="rfi-read-more">
+                                        Read more
+                                    </a>
+                                </div>
+                            </article>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading current news:', error);
+            }
+        }
+
+        // Load side news
+        async function loadSideNews() {
+            try {
+                const response = await fetch(`${API_BASE}/news?limit=5&status=published`);
+                const data = await response.json();
+                const container = document.getElementById('side-news-container');
+                
+                if (data.items && data.items.length > 0) {
+                    container.innerHTML = data.items.map(news => `
+                        <div class="side-news-item">
+                            <h4>${news.title}</h4>
+                            <div class="text-muted" style="font-size: 0.85rem;">${formatDate(news.created_at)}</div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading side news:', error);
+            }
+        }
+
+        // Update current program
+        async function updateCurrentProgram() {
+            try {
+                // Simulate program update
+                const programs = [
+                    { title: "Economic Debate", host: "Guest: Finance Minister", time: "10:00 AM - 11:00 AM" },
+                    { title: "Market Update", host: "Live: Stock Trends", time: "11:30 AM - 12:00 PM" },
+                    { title: "Banking Hour", host: "Live: Banking Projects", time: "2:00 PM - 3:00 PM" }
+                ];
+                
+                const randomProgram = programs[Math.floor(Math.random() * programs.length)];
+                document.getElementById('current-program').textContent = 
+                    `Now Playing: ${randomProgram.title} - ${randomProgram.host}`;
+            } catch (error) {
+                console.error('Error updating program:', error);
+            }
+        }
+
+        // Setup theme toggle
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+
+        // Setup audio controls
+        function setupAudioControls() {
+            const playBtn = document.getElementById('playButton');
+            const stopBtn = document.getElementById('stopButton');
+            const footerPlay = document.getElementById('footerPlayButton');
+            const footerStop = document.getElementById('footerStopButton');
+            
+            function playAudio() {
+                showNotification('DFM Radio is now playing live', 'info');
+            }
+            
+            function stopAudio() {
+                showNotification('Radio playback stopped', 'info');
+            }
+            
+            playBtn.addEventListener('click', playAudio);
+            stopBtn.addEventListener('click', stopAudio);
+            footerPlay.addEventListener('click', playAudio);
+            footerStop.addEventListener('click', stopAudio);
+        }
+
+        // Helper functions
+        function getDefaultImage(category) {
+            const images = {
+                'economy': 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
+                'agriculture': 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
+                'innovation': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
+                'finance': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
+                'politics': 'https://images.unsplash.com/photo-1551135049-8a33b2fb2f5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80'
+            };
+            return images[category] || images.economy;
+        }
+
+        function formatCategory(category) {
+            return category ? category.charAt(0).toUpperCase() + category.slice(1) : 'News';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = `
+                top: 20px;
+                right: 20px;
+                z-index: 1050;
+                min-width: 300px;
+                background: var(--card-bg);
+                border: 1px solid var(--primary-accent);
+                color: var(--text-primary);
+            `;
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-${type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2" style="color: var(--primary-accent);"></i>
+                    <div>${message}</div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializePage);
+
+        // Update program every minute
+        setInterval(updateCurrentProgram, 60000);
+        
+        // Refresh news every 5 minutes
+        setInterval(loadHomepageData, 300000);
+    </script>
+</body>
+</html>

@@ -104,7 +104,27 @@ const articleSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+// Add this virtual or pre-save middleware to your models
+articleSchema.virtual('full_image_url').get(function() {
+  if (!this.image_url) return null;
+  
+  // If it's already a full URL (Cloudinary), return as is
+  if (this.image_url.startsWith('http')) {
+    return this.image_url;
+  }
+  
+  // If it's a relative path, make it absolute
+  if (this.image_url.startsWith('/')) {
+    return `http://localhost:5000${this.image_url}`;
+  }
+  
+  // Default case (relative path without leading slash)
+  return `http://localhost:5000/uploads/${this.image_url}`;
+});
 
+// Ensure virtuals are included in JSON output
+articleSchema.set('toJSON', { virtuals: true });
+articleSchema.set('toObject', { virtuals: true });
 // Index for better performance
 articleSchema.index({ category: 1, featured: 1, createdAt: -1 });
 articleSchema.index({ status: 1, scheduled_publish: 1 });

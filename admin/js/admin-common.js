@@ -1,7 +1,26 @@
+
+
+
 // ==================== CONFIGURATION ====================
 const API_BASE = 'http://localhost:5000/api';
 let currentUser = null;
 
+function formatImageUrl(url) {
+  if (!url) return null;
+  
+  // Already full URL
+  if (url.startsWith('http')) {
+    return url;
+  }
+  
+  // Relative path with leading slash
+  if (url.startsWith('/')) {
+    return `http://localhost:5000${url}`;
+  }
+  
+  // Relative path without slash
+  return `http://localhost:5000/uploads/${url}`;
+}
 // ==================== UTILITY FUNCTIONS ====================
 function showToast(message, type = 'info') {
     const toastContainer = document.querySelector('.toast-container');
@@ -128,9 +147,44 @@ async function uploadFile(file, type = 'image') {
 }
 
 // Keep the old function for backward compatibility
+// In your admin-common.js or similar file
 async function uploadImage(file) {
-    return uploadFile(file, 'image');
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const token = localStorage.getItem('dfm_token');
+    
+    const response = await fetch(`${API_BASE}/media/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || 'Upload failed');
+    }
+    
+    // Ensure we have a proper URL
+    let imageUrl = data.url;
+    
+    // If it's a local upload, prepend the base URL
+    if (imageUrl && imageUrl.startsWith('/uploads/') && !imageUrl.startsWith('http')) {
+      imageUrl = `http://localhost:5000${imageUrl}`;
+    }
+    
+    return imageUrl;
+  } catch (error) {
+    console.error('Upload error:', error);
+    showToast(`Upload failed: ${error.message}`, 'danger');
+    throw error;
+  }
 }
+
 
 async function uploadAudio(file) {
     return uploadFile(file, 'audio');
@@ -243,4 +297,35 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
     }
+});
+
+function loadPrograms() {
+    // ... in your program rendering code ...
+    const imgElement = `<img src="${program.image}" ...>`;
+    console.log('Image path being used:', program.image);
+    // ...
+}
+
+function debugEndpoints() {
+    console.log('=== API Endpoint Debug ===');
+    console.log('API_BASE:', API_BASE);
+    console.log('Media upload URL:', `${API_BASE}/media/upload`);
+    console.log('Token available:', !!localStorage.getItem('dfm_token'));
+    
+    // Test the endpoint
+    fetch(`${API_BASE}/media/upload`, {
+        method: 'OPTIONS' // Preflight request
+    })
+    .then(response => {
+        console.log('OPTIONS response:', response.status, response.statusText);
+        console.log('Allowed methods:', response.headers.get('allow'));
+    })
+    .catch(error => {
+        console.error('OPTIONS request failed:', error);
+    });
+}
+
+// Run debug on page load
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(debugEndpoints, 1000);
 });

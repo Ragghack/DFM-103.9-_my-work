@@ -9,164 +9,136 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/admin-common.css">
     <style>
-        /* Emissions-specific CSS */
-        .episode-player-preview {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        /* Emission-specific styles */
+        .episode-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid var(--border-light);
         }
         
-        .episode-thumbnail {
+        .episode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-accent);
+        }
+        
+        .episode-thumb {
             width: 100%;
             height: 150px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .audio-preview-container {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid var(--border-light);
         }
         
         .guest-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .progress-container {
-            background: var(--border-light);
-            border-radius: 5px;
-            height: 8px;
-            margin: 15px 0;
-            cursor: pointer;
-        }
-        
-        .progress-bar {
-            background: var(--primary-accent);
-            border-radius: 5px;
-            height: 100%;
-            width: 30%;
-        }
-        
-        .time-display {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-        
-        .player-controls-emission {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .play-btn-admin {
-            background: var(--primary-accent);
-            color: var(--primary-dark);
-            border: none;
-            border-radius: 50%;
             width: 40px;
             height: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-light);
+        }
+        
+        .guest-avatar-preview {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--primary-accent);
+        }
+        
+        .guest-speaker-card {
             transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
         }
         
-        .play-btn-admin:hover {
-            transform: scale(1.1);
+        .guest-speaker-card:hover {
+            border-color: var(--primary-accent);
+            transform: translateY(-2px);
         }
         
-        .volume-control {
+        #guest-speakers-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .player-controls {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: 10px;
         }
         
-        .volume-slider {
-            width: 100px;
-            accent-color: var(--primary-accent);
+        .audio-upload-status {
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 0.9rem;
         }
-        .guest-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--border-light);
-}
-
-.guest-speaker-card {
-    transition: all 0.3s ease;
-    border: 1px solid var(--border-light);
-}
-
-.guest-speaker-card:hover {
-    border-color: var(--primary-accent);
-    transform: translateY(-2px);
-}
-
-#guest-speakers-list {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-#no-guests-message {
-    border: 2px dashed var(--border-light);
-    border-radius: 8px;
-    padding: 20px;
-}
-/* Guest Speakers Styles */
-.guest-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--border-light);
-}
-
-.guest-avatar-preview {
-    border: 2px solid var(--primary-accent);
-}
-
-.guest-speaker-card {
-    transition: all 0.3s ease;
-    border: 1px solid var(--border-light);
-}
-
-.guest-speaker-card:hover {
-    border-color: var(--primary-accent);
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-#guest-speakers-list {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-#no-guests-message {
-    border: 2px dashed var(--border-light);
-    border-radius: 8px;
-    padding: 20px;
-    background: rgba(0,0,0,0.02);
-}
-
-/* File input styling */
-#guest-avatar-file {
-    border: 1px dashed var(--border-light);
-    padding: 8px;
-    border-radius: 4px;
-}
-
-#guest-avatar-file:hover {
-    border-color: var(--primary-accent);
-}
+        
+        .audio-upload-status.uploading {
+            display: block;
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+        }
+        
+        .audio-upload-status.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .audio-upload-status.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .episode-status-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+        }
+        
+        .featured-badge {
+            background: linear-gradient(45deg, #ffd700, #ffaa00);
+            color: #000;
+            font-weight: 600;
+        }
+        
+        /* Form styling */
+        .form-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-light);
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .btn-gold {
+            background: linear-gradient(45deg, #D4AF37, #FFD700);
+            color: #000;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -248,7 +220,7 @@
                                 <button class="mobile-menu-btn me-3">
                                     <i class="fas fa-bars"></i>
                                 </button>
-                                <h3 class="mb-0 d-inline-block">Emission Management</h3>
+                                <h3 class="mb-0 d-inline-block">Radio Episode Management</h3>
                             </div>
                             <div class="col-auto">
                                 <div class="d-flex align-items-center">
@@ -274,328 +246,251 @@
                     </div>
                 </div>
 
-                <!-- Emissions Content -->
+                <!-- Main Emissions Content -->
                 <div class="container-fluid py-4">
                     <div class="content-section active" id="emission-section">
-                        <div class="section-header">
-                            <h4 class="section-title">Emission Management</h4>
-                            <div class="action-buttons">
-                                <button class="btn btn-outline-secondary me-2" id="manage-live-btn">
-                                    <i class="fas fa-video me-2"></i> Manage Live Stream
-                                </button>
-                                
-                                <button class="btn btn-gold" id="add-episode-btn">
-                                    <i class="fas fa-plus me-2"></i> Add New Episode
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Live Stream Management -->
-                        <div class="form-container form-section mb-4" id="live-stream-section">
-                            <h5 class="mb-3">Live Stream Management</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Stream Status</label>
-                                        <div class="d-flex align-items-center">
-                                            <span class="live-indicator" id="stream-indicator"></span>
-                                            <span class="me-3">Currently: <span id="current-stream-status" class="badge bg-danger">OFFLINE</span></span>
-                                            <button class="btn btn-sm btn-success" id="toggle-stream-btn-emission">Go Live</button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label class="form-label">Stream Title</label>
-                                        <input type="text" class="form-control" id="stream-title" value="DFM Media Studio">
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label class="form-label">Stream Description</label>
-                                        <textarea class="form-control" id="stream-description" rows="3">Watch our live studio sessions, interviews, and behind-the-scenes content.</textarea>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Upcoming Live Sessions</label>
-                                        <div class="mb-2">
-                                            <div class="d-flex justify-content-between">
-                                                <span>Economic Roundtable</span>
-                                                <span>Today 2:00 PM</span>
-                                            </div>
-                                            <small class="text-muted">Discussion on market trends with industry experts</small>
-                                        </div>
-                                        <div class="mb-2">
-                                            <div class="d-flex justify-content-between">
-                                                <span>Minister Interview</span>
-                                                <span>Tomorrow 10:00 AM</span>
-                                            </div>
-                                            <small class="text-muted">Exclusive interview with the Finance Minister</small>
-                                        </div>
-                                        <button class="btn btn-sm btn-outline-primary mt-2">Add New Session</button>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label class="form-label">Stream Settings</label>
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="allow-comments" checked>
-                                            <label class="form-check-label" for="allow-comments">
-                                                Allow live comments
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="record-stream" checked>
-                                            <label class="form-check-label" for="record-stream">
-                                                Record stream for archive
-                                            </label>
-                                        </div>
-                                    </div>
+                        <!-- Action Header -->
+                        <div class="section-header mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="section-title mb-0">Radio Episodes</h4>
+                                <div class="action-buttons">
+                                    <button class="btn btn-outline-secondary me-2" id="filter-toggle-btn">
+                                        <i class="fas fa-filter me-2"></i> Filter
+                                    </button>
+                                    <button class="btn btn-gold" id="add-new-episode-btn">
+                                        <i class="fas fa-plus me-2"></i> New Episode
+                                    </button>
                                 </div>
                             </div>
-                            
-                            <div class="stream-controls">
-                                <button class="btn btn-primary" id="save-stream-settings">Save Settings</button>
-                                <button class="btn btn-outline-secondary" id="test-stream">Test Stream</button>
+                        </div>
+
+                        <!-- Filter Bar -->
+                        <div class="filter-bar mb-4 p-3 bg-light rounded" id="filter-bar" style="display: none;">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <select class="form-select" id="filter-category">
+                                        <option value="">All Categories</option>
+                                        <option value="economy">Economy</option>
+                                        <option value="finance">Finance</option>
+                                        <option value="agriculture">Agriculture</option>
+                                        <option value="interview">Interview</option>
+                                        <option value="politics">Politics</option>
+                                        <option value="technology">Technology</option>
+                                        <option value="news">News</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="filter-status">
+                                        <option value="">All Status</option>
+                                        <option value="draft">Draft</option>
+                                        <option value="published">Published</option>
+                                        <option value="scheduled">Scheduled</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="filter-search" placeholder="Search episodes...">
+                                        <button class="btn btn-outline-secondary" type="button" id="clear-search">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary w-100" id="apply-filters-btn">
+                                        Apply Filters
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        
-                        <!-- Add/Edit Episode Form -->
-                        <div class="form-container form-section mb-4" id="episode-form">
-                            <h5 class="mb-3" id="episode-form-title">Add New Episode</h5>
+
+                        <!-- Episode Form (Initially hidden) -->
+                        <div class="form-container form-section mb-4" id="episode-form" style="display: none;">
+                            <h5 class="mb-3" id="episode-form-title">Add New Radio Episode</h5>
                             <form id="episode-form-data">
                                 <div class="row">
                                     <div class="col-md-8">
                                         <div class="mb-3">
-                                            <label class="form-label">Episode Title</label>
-                                            <input type="text" class="form-control" id="episode-title" placeholder="Enter episode title">
+                                            <label class="form-label">Episode Title *</label>
+                                            <input type="text" class="form-control" id="episode-title" 
+                                                   placeholder="Enter episode title" required>
                                         </div>
                                         
                                         <div class="mb-3">
-                                            <label class="form-label">Episode Description</label>
-                                            <textarea class="form-control" id="episode-description" rows="4" placeholder="Enter episode description"></textarea>
+                                            <label class="form-label">Episode Description *</label>
+                                            <textarea class="form-control" id="episode-description" rows="4" 
+                                                      placeholder="Enter episode description" required></textarea>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Detailed Content</label>
+                                            <textarea class="form-control" id="episode-content" rows="6" 
+                                                      placeholder="Enter detailed episode content..."></textarea>
                                         </div>
                                         
                                         <div class="row">
                                             <div class="col-md-6">
-    <div class="mb-3">
-        <label class="form-label">Category</label>
-        <select class="form-select" id="episode-category">
-            <option value="economy">Economy</option>
-            <option value="finance">Finance</option>
-            <option value="agriculture">Agriculture</option>
-            <option value="interview">Interview</option>
-            <option value="politics">Politics</option>
-            <option value="technology">Technology</option>
-            <option value="news">News</option>
-        </select>
-    </div>
-</div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Category</label>
+                                                    <select class="form-select" id="episode-category">
+                                                        <option value="economy">Economy</option>
+                                                        <option value="finance">Finance</option>
+                                                        <option value="agriculture">Agriculture</option>
+                                                        <option value="interview">Interview</option>
+                                                        <option value="politics">Politics</option>
+                                                        <option value="technology">Technology</option>
+                                                        <option value="news" selected>News</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Duration</label>
-                                                    <input type="text" class="form-control" id="episode-duration" placeholder="e.g., 45:32">
+                                                    <label class="form-label">Duration (HH:MM)</label>
+                                                    <input type="text" class="form-control" id="episode-duration" 
+                                                           placeholder="e.g., 45:32" pattern="[0-9]{2}:[0-9]{2}">
                                                 </div>
                                             </div>
                                         </div>
                                         
-                                        <div class="mb-3">
-                                            <label class="form-label">Audio File</label>
-                                            <input type="file" class="form-control" id="episode-audio" accept="audio/*">
+                                        <!-- Audio Upload Section -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Audio File *</label>
+                                            <div class="input-group">
+                                                <input type="file" class="form-control" id="episode-audio" 
+                                                       accept="audio/*" required>
+                                                <button class="btn btn-outline-secondary" type="button" id="preview-audio-btn">
+                                                    <i class="fas fa-play"></i> Preview
+                                                </button>
+                                            </div>
+                                            <div id="audio-upload-status" class="audio-upload-status"></div>
+                                            <audio id="audio-preview" class="mt-2 w-100" controls style="display: none;"></audio>
                                         </div>
                                         
+                                        <!-- Thumbnail Upload -->
                                         <div class="mb-3">
                                             <label class="form-label">Episode Thumbnail</label>
-                                            <input type="file" class="form-control" id="episode-thumbnail" accept="image/*">
+                                            <input type="file" class="form-control" id="episode-thumbnail" 
+                                                   accept="image/*">
                                             <div id="episode-thumbnail-preview" class="mt-2" style="display: none;">
-                                                <img id="episode-preview-img" src="" class="image-preview">
+                                                <img id="episode-preview-img" src="" class="img-fluid rounded" style="max-height: 200px;">
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label class="form-label">Featured Episode</label>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="episode-featured" role="switch">
-                                                <label class="form-check-label">Set as featured episode</label>
+                                        <!-- Status & Settings -->
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Episode Settings</h6>
+                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">Status</label>
+                                                    <select class="form-select" id="episode-status">
+                                                        <option value="draft">Draft</option>
+                                                        <option value="published">Published</option>
+                                                        <option value="scheduled">Scheduled</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">Publish Date & Time</label>
+                                                    <input type="datetime-local" class="form-control" id="episode-publish-date">
+                                                </div>
+                                                
+                                                <div class="form-check form-switch mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="episode-featured">
+                                                    <label class="form-check-label">Featured Episode</label>
+                                                </div>
                                             </div>
                                         </div>
                                         
-                                        <div class="mb-3">
-                                            <label class="form-label">Publish Date</label>
-                                            <input type="datetime-local" class="form-control" id="episode-publish-date">
+                                        <!-- Guest Speakers -->
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Guest Speakers</h6>
+                                                
+                                                <div id="guest-speakers-list" class="mb-3">
+                                                    <div class="text-muted text-center small py-2" id="no-guests-message">
+                                                        No guest speakers added yet
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Add Guest Form -->
+                                                <div class="border-top pt-3">
+                                                    <h6 class="small">Add Guest Speaker</h6>
+                                                    <div class="mb-2">
+                                                        <input type="text" class="form-control form-control-sm" 
+                                                               id="guest-name" placeholder="Guest name">
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <input type="text" class="form-control form-control-sm" 
+                                                               id="guest-role" placeholder="Role/Title">
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <input type="file" class="form-control form-control-sm" 
+                                                               id="guest-avatar-file" accept="image/*">
+                                                        <small class="text-muted">Avatar (optional)</small>
+                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-primary w-100" 
+                                                            id="add-guest-btn">
+                                                        <i class="fas fa-plus me-1"></i> Add Guest
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                         
-<div class="col-md-6">
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="episode-status">
-            <option value="draft">Draft</option>
-            <option value="published">Published</option>
-            <option value="scheduled">Scheduled</option>
-        </select>
-    </div>
-</div>
-                                        
-  <div class="col-md-4">
-    <div class="mb-3">
-        <label class="form-label">Guest Speakers</label>
-        
-        <!-- Guest Speakers List -->
-        <div id="guest-speakers-list" class="mb-3">
-            <div class="text-muted text-center small py-2" id="no-guests-message">
-                No guest speakers added yet
-            </div>
-        </div>
-        
-        <!-- Add Guest Speaker Form -->
-        <div class="card border-0 bg-light">
-            <div class="card-body">
-                <h6 class="card-title">Add Guest Speaker</h6>
-                
-                <div class="mb-2">
-                    <label class="form-label small">Name *</label>
-                    <input type="text" class="form-control form-control-sm" id="guest-name" placeholder="Guest name">
-                </div>
-                
-                <div class="mb-2">
-                    <label class="form-label small">Role *</label>
-                    <input type="text" class="form-control form-control-sm" id="guest-role" placeholder="Role/Title">
-                </div>
-                
-                <div class="mb-2">
-                    <label class="form-label small">Avatar Image</label>
-                    <input type="file" class="form-control form-control-sm" id="guest-avatar-file" accept="image/*">
-                    <small class="text-muted">Upload profile picture (optional)</small>
-                </div>
-                
-                <!-- Avatar Preview -->
-                <div class="mb-2 text-center">
-                    <img id="guest-avatar-preview" src="" class="guest-avatar-preview d-none" 
-                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; border: 2px solid #ddd;">
-                </div>
-                
-                <button type="button" class="btn btn-sm btn-primary w-100" id="add-guest-btn">
-                    <i class="fas fa-plus me-1"></i> Add Guest
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+                                        <!-- Key Topics -->
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Key Topics</h6>
+                                                <div id="key-topics-container">
+                                                    <input type="text" class="form-control form-control-sm mb-2" 
+                                                           id="new-topic" placeholder="Add topic and press Enter">
+                                                    <div id="topics-list">
+                                                        <span class="badge bg-light text-dark me-1 mb-1">Current Events</span>
+                                                        <span class="badge bg-light text-dark me-1 mb-1">Market Analysis</span>
+                                                        <span class="badge bg-light text-dark me-1 mb-1">Expert Insights</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-outline-secondary me-2" id="cancel-episode">Cancel</button>
-                                    <button type="submit" class="btn btn-gold">Save Episode</button>
+                                <!-- Form Actions -->
+                                <div class="d-flex justify-content-end border-top pt-3">
+                                    <button type="button" class="btn btn-outline-secondary me-2" 
+                                            id="cancel-episode-btn">Cancel</button>
+                                    <button type="submit" class="btn btn-gold" id="save-episode-btn">
+                                        <i class="fas fa-save me-2"></i>Save Episode
+                                    </button>
                                 </div>
                             </form>
                         </div>
 
-                        <!-- Episode Management Table -->
-                        <div class="table-container mb-4">
-                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">All Episodes</h5>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control me-2" placeholder="Search episodes...">
-                                    <select class="form-select" style="width: auto;">
-                                        <option>All Categories</option>
-                                        <option>Economy</option>
-                                        <option>Finance</option>
-                                        <option>Agriculture</option>
-                                        <option>Interview</option>
-                                    </select>
+                        <!-- Episodes Grid -->
+                        <div class="episodes-grid" id="episodes-grid">
+                            <div class="row g-4" id="episodes-container">
+                                <!-- Episodes will be loaded here -->
+                                <div class="col-12 text-center py-5">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                    <p class="mt-3">Loading episodes...</p>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th width="40">
-                                                <input type="checkbox" class="form-check-input">
-                                            </th>
-                                            <th>Thumbnail</th>
-                                            <th>Title</th>
-                                            <th>Category</th>
-                                            <th>Date</th>
-                                            <th>Duration</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="episodes-table-body">
-                                        <tr>
-                                            <td colspan="8" class="text-center text-muted py-4">
-                                                <div class="spinner-border spinner-border-sm me-2"></div>
-                                                Loading episodes...
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="p-3 border-top d-flex justify-content-between align-items-center">
-                                <div>
-                                    <select class="form-select d-inline-block me-2" style="width: auto;">
-                                        <option>Bulk Actions</option>
-                                        <option>Publish</option>
-                                        <option>Move to Draft</option>
-                                        <option>Delete</option>
-                                    </select>
-                                    <button class="btn btn-outline-secondary">Apply</button>
-                                </div>
-                                <nav>
-                                    <ul class="pagination mb-0">
-                                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="col-12">
-    <div class="mb-3">
-        <label class="form-label">Episode Content</label>
-        <textarea class="form-control" id="episode-content" rows="6" placeholder="Enter detailed episode content..."></textarea>
-    </div>
-</div>
-                        <!-- Episode Preview -->
-                        <div class="episode-player-preview">
-                            <h5>Episode Preview</h5>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" class="episode-thumbnail" alt="Episode Thumbnail">
-                                </div>
-                                <div class="col-md-8">
-                                    <h6>Economic Outlook 2025: Opportunities & Challenges</h6>
-                                    <p class="text-muted">Aired: June 15, 2025 | Duration: 45:32</p>
-                                    
-                                    <div class="time-display">
-                                        <span>0:00</span>
-                                        <span>45:32</span>
-                                    </div>
-                                    
-                                    <div class="progress-container">
-                                        <div class="progress-bar"></div>
-                                    </div>
-                                    
-                                    <div class="player-controls-emission">
-                                        <button class="play-btn-admin">
-                                            <i class="fas fa-backward-step"></i>
-                                        </button>
-                                        <button class="play-btn-admin">
-                                            <i class="fas fa-play"></i>
-                                        </button>
-                                        <button class="play-btn-admin">
-                                            <i class="fas fa-forward-step"></i>
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="volume-control">
-                                        <i class="fas fa-volume-up"></i>
-                                        <input type="range" class="volume-slider" min="0" max="100" value="80">
-                                    </div>
-                                </div>
-                            </div>
+                            
+                            <!-- Pagination -->
+                            <nav class="mt-4" id="pagination-container" style="display: none;">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled" id="prev-page">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item" id="next-page">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -605,1045 +500,669 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/admin-common.js"></script>
-    <script>// ==================== EMISSIONS MANAGEMENT ====================
-let currentEditingId = null;
-let currentLiveStream = null;
+    <script>
+        // ==================== EMISSIONS MANAGEMENT ====================
+        let currentEditingId = null;
+        let guestSpeakers = [];
+        let keyTopics = ["Current Events", "Market Analysis", "Expert Insights"];
+        let currentPage = 1;
+        let currentFilters = {};
 
-async function loadEmissions() {
-    try {
-        const tbody = document.getElementById('episodes-table-body');
-        if (!tbody) return;
-        
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading episodes...</td></tr>';
-        
-        const data = await apiCall('/emissions/admin/emissions?limit=50');
-        
-        if (!data || !data.emissions || data.emissions.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="8" class="text-center text-muted py-4">
-                        <i class="fas fa-podcast fa-2x mb-3 d-block"></i>
-                        No emissions found
-                        <div class="mt-2">
-                            <button class="btn btn-sm btn-gold" onclick="showEmissionForm()">
-                                <i class="fas fa-plus me-1"></i>Create Your First Emission
+        // Initialize the page
+        function initializePage() {
+            console.log('Initializing emissions page...');
+            
+            // Load episodes
+            loadEmissions();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            console.log('Page initialized successfully');
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            console.log('Setting up event listeners...');
+            
+            // New Episode Button - FIXED
+            const newEpisodeBtn = document.getElementById('add-new-episode-btn');
+            if (newEpisodeBtn) {
+                console.log('Found new episode button');
+                newEpisodeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('New episode button clicked');
+                    showEpisodeForm();
+                });
+            } else {
+                console.error('New episode button not found!');
+            }
+            
+            // Filter toggle button
+            const filterBtn = document.getElementById('filter-toggle-btn');
+            if (filterBtn) {
+                filterBtn.addEventListener('click', function() {
+                    const filterBar = document.getElementById('filter-bar');
+                    if (filterBar) {
+                        filterBar.style.display = filterBar.style.display === 'none' ? 'block' : 'none';
+                    }
+                });
+            }
+            
+            // Apply filters button
+            const applyFiltersBtn = document.getElementById('apply-filters-btn');
+            if (applyFiltersBtn) {
+                applyFiltersBtn.addEventListener('click', function() {
+                    applyFilters();
+                });
+            }
+            
+            // Form submission
+            const episodeForm = document.getElementById('episode-form-data');
+            if (episodeForm) {
+                episodeForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveEpisode();
+                });
+            }
+            
+            // Cancel button
+            const cancelBtn = document.getElementById('cancel-episode-btn');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    hideEpisodeForm();
+                });
+            }
+            
+            // Audio preview button
+            const previewAudioBtn = document.getElementById('preview-audio-btn');
+            if (previewAudioBtn) {
+                previewAudioBtn.addEventListener('click', previewAudio);
+            }
+            
+            // Add guest button
+            const addGuestBtn = document.getElementById('add-guest-btn');
+            if (addGuestBtn) {
+                addGuestBtn.addEventListener('click', addGuestSpeaker);
+            }
+            
+            // Key topics input
+            const newTopicInput = document.getElementById('new-topic');
+            if (newTopicInput) {
+                newTopicInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addTopic();
+                    }
+                });
+            }
+            
+            // Clear search button
+            const clearSearchBtn = document.getElementById('clear-search');
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener('click', function() {
+                    document.getElementById('filter-search').value = '';
+                    applyFilters();
+                });
+            }
+            
+            console.log('Event listeners setup complete');
+        }
+
+        // Load all episodes
+        async function loadEmissions(page = 1, filters = {}) {
+            try {
+                currentPage = page;
+                currentFilters = filters;
+                
+                const container = document.getElementById('episodes-container');
+                if (!container) {
+                    console.error('Episodes container not found');
+                    return;
+                }
+                
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-3">Loading episodes...</p>
+                    </div>
+                `;
+
+                let query = `/emissions/admin/emissions?page=${page}&limit=12`;
+                
+                if (filters.category) query += `&category=${filters.category}`;
+                if (filters.status) query += `&status=${filters.status}`;
+                if (filters.search) query += `&search=${encodeURIComponent(filters.search)}`;
+
+                console.log('Loading episodes with query:', query);
+                
+                const data = await apiCall(query);
+                
+                if (data.success && data.emissions && data.emissions.length > 0) {
+                    console.log(`Loaded ${data.emissions.length} episodes`);
+                    renderEpisodes(data.emissions);
+                    setupPagination(data.pagination);
+                } else {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-podcast fa-3x text-muted mb-3"></i>
+                            <h5>No episodes found</h5>
+                            <p class="text-muted">Create your first radio episode to get started</p>
+                            <button class="btn btn-gold mt-2" onclick="showEpisodeForm()">
+                                <i class="fas fa-plus me-2"></i>Create First Episode
                             </button>
                         </div>
-                    </td>
-                </tr>
-            `;
-            return;
-        }
-        
-        tbody.innerHTML = data.emissions.map(emission => `
-            <tr>
-                <td>
-                    <input type="checkbox" class="form-check-input emission-checkbox" value="${emission._id}">
-                </td>
-                <td>
-                    ${emission.thumbnail ? 
-                        `<img src="${emission.thumbnail}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${emission.title}">` : 
-                        '<i class="fas fa-image text-muted"></i>'
-                    }
-                </td>
-                <td>
-                    <div class="fw-bold">${emission.title}</div>
-                    <small class="text-muted">${emission.description.substring(0, 60)}...</small>
-                </td>
-                <td><span class="badge bg-secondary">${emission.category}</span></td>
-                <td>${new Date(emission.publish_date).toLocaleDateString()}</td>
-                <td>${emission.duration}</td>
-                <td>
-                    <span class="badge bg-${emission.status === 'published' ? 'success' : emission.status === 'scheduled' ? 'warning' : 'secondary'}">
-                        ${emission.status}
-                    </span>
-                    ${emission.featured ? '<span class="badge bg-warning ms-1">Featured</span>' : ''}
-                </td>
-                <td>
-                    <div class="btn-group btn-group-sm">
-                        <button class="btn btn-outline-primary" onclick="editEmission('${emission._id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-danger" onclick="deleteEmission('${emission._id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `).join('');
-        
-    } catch (error) {
-        console.error('Error loading emissions:', error);
-        const tbody = document.getElementById('episodes-table-body');
-        if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-4">Failed to load episodes</td></tr>';
-        }
-    }
-}
-
-function showEmissionForm(emission = null) {
-    const formSection = document.getElementById('episode-form');
-    const formTitle = document.getElementById('episode-form-title');
-    
-    if (emission) {
-        formTitle.textContent = 'Edit Emission';
-        document.getElementById('episode-title').value = emission.title || '';
-        document.getElementById('episode-description').value = emission.description || '';
-        document.getElementById('episode-duration').value = emission.duration || '';
-        document.getElementById('episode-category').value = emission.category || '';
-        document.getElementById('episode-status').value = emission.status || 'draft';
-        document.getElementById('episode-featured').checked = emission.featured || false;
-        
-        if (emission.publish_date) {
-            const publishDate = new Date(emission.publish_date).toISOString().slice(0, 16);
-            document.getElementById('episode-publish-date').value = publishDate;
-        }
-        
-        currentEditingId = emission._id;
-
-        if (emission.thumbnail) {
-            const preview = document.getElementById('episode-thumbnail-preview');
-            preview.style.display = 'block';
-            document.getElementById('episode-preview-img').src = emission.thumbnail;
-        }
-    } else {
-        formTitle.textContent = 'Add New Emission';
-        document.getElementById('episode-form-data').reset();
-        currentEditingId = null;
-        document.getElementById('episode-thumbnail-preview').style.display = 'none';
-    }
-    
-    formSection.style.display = 'block';
-    formSection.scrollIntoView({ behavior: 'smooth' });
-}
-
-async function saveEmission(formData) {
-    try {
-        const saveBtn = document.querySelector('#episode-form-data .btn-gold');
-        setLoading(saveBtn, true);
-
-        // Sample audio URLs that work
-        const sampleAudioUrls = [
-            "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
-            "https://www.soundjay.com/communication/sounds/telephone-ring-03.wav",
-            "https://www.soundjay.com/mechanical/sounds/camera-shutter-click-05.wav"
-        ];
-
-        // Sample image URLs
-        const sampleImageUrls = [
-            "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
-            "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80",
-            "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80"
-        ];
-
-        // Use random sample URLs
-        let audioUrl = sampleAudioUrls[Math.floor(Math.random() * sampleAudioUrls.length)];
-        let thumbnailUrl = sampleImageUrls[Math.floor(Math.random() * sampleImageUrls.length)];
-
-        // Get form values
-        const payload = {
-            title: document.getElementById('episode-title').value,
-            description: document.getElementById('episode-description').value,
-            duration: document.getElementById('episode-duration').value || "30:00",
-            audio_url: audioUrl,
-            thumbnail: thumbnailUrl,
-            category: document.getElementById('episode-category').value.toLowerCase(),
-            status: document.getElementById('episode-status').value.toLowerCase(),
-            featured: document.getElementById('episode-featured').checked,
-            publish_date: document.getElementById('episode-publish-date').value,
-            content: document.getElementById('episode-content')?.value || "Episode content details...",
-            key_topics: ["Current Events", "Market Analysis", "Expert Insights"],
-            guest_speakers: [
-                {
-                    name: "Dr. Marie Ngassa",
-                    role: "Economist, University of Yaoundé",
-                    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80"
+                    `;
                 }
-            ]
-        };
-
-        console.log('Saving emission:', payload);
-
-        let response;
-        if (currentEditingId) {
-            response = await apiCall(`/emissions/admin/emissions/${currentEditingId}`, {
-                method: 'PUT',
-                body: JSON.stringify(payload)
-            });
-        } else {
-            response = await apiCall('/emissions/admin/emissions', {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-        }
-
-        showToast(`Emission ${currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
-        hideEmissionForm();
-        await loadEmissions();
-
-    } catch (error) {
-        console.error('Error saving emission:', error);
-        showToast('Failed to save emission: ' + error.message, 'danger');
-    } finally {
-        setLoading(document.querySelector('#episode-form-data .btn-gold'), false);
-    }
-}
-// Updated upload function to handle both images and audio
-async function uploadFile(file, type = 'image') {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await fetch(`${API_BASE}/media/upload`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('dfm_token')}`
-            },
-            body: formData
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Upload failed');
-        }
-        
-        const data = await response.json();
-        return data.url;
-    } catch (error) {
-        console.error('File upload error:', error);
-        showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} upload failed: ${error.message}`, 'danger');
-        return null;
-    }
-}
-
-
-function hideEmissionForm() {
-    document.getElementById('episode-form').style.display = 'none';
-}
-
-async function editEmission(id) {
-    try {
-        const response = await apiCall(`/emissions/${id}`);
-        if (response?.emission) {
-            showEmissionForm(response.emission);
-        }
-    } catch (error) {
-        console.error('Error loading emission for edit:', error);
-        showToast('Failed to load emission', 'danger');
-    }
-}
-
-async function deleteEmission(id) {
-    if (!confirm('Are you sure you want to delete this emission?')) return;
-    
-    try {
-        await apiCall(`/emissions/admin/emissions/${id}`, { method: 'DELETE' });
-        showToast('Emission deleted successfully!', 'success');
-        await loadEmissions();
-    } catch (error) {
-        console.error('Error deleting emission:', error);
-        showToast('Failed to delete emission', 'danger');
-    }
-}
-
-// Live stream management
-async function loadLiveStream() {
-    try {
-        const response = await apiCall('/emissions/stream/status');
-        if (response?.success) {
-            currentLiveStream = response.stream;
-            updateStreamUI(response.stream);
-        }
-    } catch (error) {
-        console.error('Error loading live stream:', error);
-        showToast('Failed to load stream status', 'danger');
-    }
-}
-
-function updateStreamUI(stream) {
-    const statusElement = document.getElementById('current-stream-status');
-    const indicator = document.getElementById('stream-indicator');
-    const toggleBtn = document.getElementById('toggle-stream-btn-emission');
-    
-    if (statusElement) {
-        statusElement.textContent = stream.status.toUpperCase();
-        statusElement.className = `badge bg-${stream.status === 'live' ? 'success' : 'danger'}`;
-    }
-    
-    if (indicator) {
-        indicator.className = `live-indicator ${stream.status === 'live' ? 'pulsing' : ''}`;
-    }
-    
-    if (toggleBtn) {
-        toggleBtn.textContent = stream.status === 'live' ? 'End Stream' : 'Go Live';
-        toggleBtn.className = `btn btn-sm ${stream.status === 'live' ? 'btn-danger' : 'btn-success'}`;
-    }
-    
-    // Update stream settings
-    if (stream.title) {
-        document.getElementById('stream-title').value = stream.title;
-    }
-    if (stream.description) {
-        document.getElementById('stream-description').value = stream.description;
-    }
-    if (stream.settings) {
-        document.getElementById('allow-comments').checked = stream.settings.allow_comments;
-        document.getElementById('record-stream').checked = stream.settings.record_stream;
-    }
-}
-
-async function toggleLiveStream() {
-    try {
-        const response = await apiCall('/emissions/admin/stream/toggle', {
-            method: 'POST'
-        });
-        
-        if (response?.success) {
-            currentLiveStream = response.stream;
-            updateStreamUI(response.stream);
-            showToast(`Stream ${response.stream.status === 'live' ? 'started' : 'stopped'} successfully!`, 'success');
-        }
-    } catch (error) {
-        console.error('Error toggling stream:', error);
-        showToast('Failed to toggle stream', 'danger');
-    }
-}
-
-async function saveStreamSettings() {
-    try {
-        const payload = {
-            title: document.getElementById('stream-title').value,
-            description: document.getElementById('stream-description').value,
-            settings: {
-                allow_comments: document.getElementById('allow-comments').checked,
-                record_stream: document.getElementById('record-stream').checked
+            } catch (error) {
+                console.error('Error loading episodes:', error);
+                showToast('Failed to load episodes: ' + error.message, 'danger');
             }
-        };
-
-        const response = await apiCall('/emissions/admin/stream', {
-            method: 'PUT',
-            body: JSON.stringify(payload)
-        });
-
-        if (response?.success) {
-            currentLiveStream = response.stream;
-            showToast('Stream settings saved successfully!', 'success');
         }
-    } catch (error) {
-        console.error('Error saving stream settings:', error);
-        showToast('Failed to save stream settings', 'danger');
-    }
-}
 
-function testStream() {
-    showToast('Stream test initiated. Checking connection...', 'info');
-    setTimeout(() => {
-        showToast('Stream test completed successfully!', 'success');
-    }, 2000);
-}
-
-// Show live stream management modal
-function showLiveStreamModal() {
-    // Create and show modal for live stream management
-    const modalHTML = `
-        <div class="modal fade" id="liveStreamModal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Manage Live Stream</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Stream URL</label>
-                            <input type="text" class="form-control" id="modal-stream-url" 
-                                   placeholder="Enter stream URL (RTMP, HLS, etc.)">
+        // Render episodes grid
+        function renderEpisodes(emissions) {
+            const container = document.getElementById('episodes-container');
+            if (!container) return;
+            
+            container.innerHTML = emissions.map(emission => `
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="card episode-card h-100">
+                        <div class="position-relative">
+                            <img src="${formatImageUrl(emission.thumbnail) || 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80'}" 
+                                 class="episode-thumb" alt="${emission.title}">
+                            ${emission.featured ? '<span class="position-absolute top-0 start-0 m-2 badge featured-badge">Featured</span>' : ''}
+                            <span class="position-absolute top-0 end-0 m-2 badge ${getStatusBadgeClass(emission.status)}">
+                                ${emission.status}
+                            </span>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Add Scheduled Session</label>
-                            <div class="row mb-2">
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="Session title" id="session-title">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="datetime-local" class="form-control" id="session-time">
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-sm btn-primary w-100" onclick="addScheduledSession()">Add</button>
+                        
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold mb-2">${emission.title}</h6>
+                            <p class="card-text small text-muted mb-2">${emission.description ? emission.description.substring(0, 80) + '...' : 'No description'}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-secondary">${emission.category || 'news'}</span>
+                                <small class="text-muted">
+                                    <i class="far fa-clock me-1"></i>${emission.duration || '00:00'}
+                                </small>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="far fa-calendar me-1"></i>
+                                    ${emission.publish_date ? new Date(emission.publish_date).toLocaleDateString() : 'No date'}
+                                </small>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary" onclick="editEmission('${emission._id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger" onclick="deleteEmission('${emission._id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Add Studio Personnel</label>
-                            <div class="row mb-2">
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" placeholder="Name" id="personnel-name">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" placeholder="Role" id="personnel-role">
-                                </div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-sm btn-primary w-100" onclick="addStudioPersonnel()">Add</button>
-                                </div>
+                            
+                            <div class="mt-2">
+                                <small class="text-muted">
+                                    <i class="far fa-eye me-1"></i>${emission.views || 0} views
+                                    <i class="far fa-comment ms-3 me-1"></i>${emission.comments_count || 0} comments
+                                </small>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="saveLiveStreamConfig()">Save Configuration</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    `;
-    
-    // Add modal to DOM if not exists
-    if (!document.getElementById('liveStreamModal')) {
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-    }
-    
-    // Show modal
-    const modal = new bootstrap.Modal(document.getElementById('liveStreamModal'));
-    modal.show();
-}
-
-async function saveLiveStreamConfig() {
-    try {
-        const streamUrl = document.getElementById('modal-stream-url').value;
-        
-        const payload = {
-            stream_url: streamUrl
-        };
-
-        const response = await apiCall('/emissions/admin/stream', {
-            method: 'PUT',
-            body: JSON.stringify(payload)
-        });
-
-        if (response?.success) {
-            showToast('Live stream configuration saved!', 'success');
-            const modal = bootstrap.Modal.getInstance(document.getElementById('liveStreamModal'));
-            modal.hide();
+            `).join('');
         }
-    } catch (error) {
-        console.error('Error saving stream config:', error);
-        showToast('Failed to save configuration', 'danger');
-    }
-}
 
-// Emissions event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Setup image previews
-    setupImagePreview('episode-thumbnail', 'episode-thumbnail-preview');
-    
-    // Emission form
-    document.getElementById('episode-form-data')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveEmission(new FormData(this));
-    });
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'published': return 'bg-success';
+                case 'scheduled': return 'bg-warning text-dark';
+                case 'draft': return 'bg-secondary';
+                default: return 'bg-light text-dark';
+            }
+        }
 
-    // Buttons
-    document.getElementById('add-episode-btn')?.addEventListener('click', function() {
-        showEmissionForm();
-    });
+        // Show episode form
+        function showEpisodeForm(emission = null) {
+            console.log('Showing episode form', emission ? 'for edit' : 'for new');
+            
+            const form = document.getElementById('episode-form');
+            const title = document.getElementById('episode-form-title');
+            
+            if (!form || !title) {
+                console.error('Episode form elements not found');
+                return;
+            }
+            
+            if (emission) {
+                title.textContent = 'Edit Episode';
+                currentEditingId = emission._id;
+                
+                // Fill form with emission data
+                document.getElementById('episode-title').value = emission.title || '';
+                document.getElementById('episode-description').value = emission.description || '';
+                document.getElementById('episode-content').value = emission.content || '';
+                document.getElementById('episode-duration').value = emission.duration || '';
+                document.getElementById('episode-category').value = emission.category || 'news';
+                document.getElementById('episode-status').value = emission.status || 'draft';
+                document.getElementById('episode-featured').checked = emission.featured || false;
+                
+                if (emission.publish_date) {
+                    const date = new Date(emission.publish_date);
+                    document.getElementById('episode-publish-date').value = 
+                        date.toISOString().slice(0, 16);
+                } else {
+                    const now = new Date();
+                    document.getElementById('episode-publish-date').value = 
+                        now.toISOString().slice(0, 16);
+                }
+                
+                // Load guest speakers
+                guestSpeakers = emission.guest_speakers || [];
+                renderGuestSpeakers();
+                
+                // Load key topics
+                keyTopics = emission.key_topics || keyTopics;
+                renderKeyTopics();
+                
+                // Show thumbnail if exists
+                if (emission.thumbnail) {
+                    const preview = document.getElementById('episode-thumbnail-preview');
+                    const previewImg = document.getElementById('episode-preview-img');
+                    if (preview && previewImg) {
+                        preview.style.display = 'block';
+                        previewImg.src = formatImageUrl(emission.thumbnail);
+                    }
+                }
+            } else {
+                title.textContent = 'Add New Episode';
+                currentEditingId = null;
+                resetForm();
+            }
+            
+            form.style.display = 'block';
+            form.scrollIntoView({ behavior: 'smooth' });
+        }
 
-    document.getElementById('cancel-episode')?.addEventListener('click', function() {
-        hideEmissionForm();
-    });
+        // Hide episode form
+        function hideEpisodeForm() {
+            const form = document.getElementById('episode-form');
+            if (form) {
+                form.style.display = 'none';
+            }
+            resetForm();
+        }
 
-    document.getElementById('manage-live-btn')?.addEventListener('click', showLiveStreamModal);
-    document.getElementById('toggle-stream-btn-emission')?.addEventListener('click', toggleLiveStream);
-    document.getElementById('save-stream-settings')?.addEventListener('click', saveStreamSettings);
-    document.getElementById('test-stream')?.addEventListener('click', testStream);
-    
-    // Load initial data
-    loadEmissions();
-    loadLiveStream();
-});
-// ==================== GUEST SPEAKERS MANAGEMENT ====================
-let guestSpeakers = [];
-let currentGuestAvatarFile = null;
+        // Reset form
+        function resetForm() {
+            const form = document.getElementById('episode-form-data');
+            if (form) {
+                form.reset();
+            }
+            
+            document.getElementById('episode-thumbnail-preview').style.display = 'none';
+            document.getElementById('audio-preview').style.display = 'none';
+            document.getElementById('audio-upload-status').className = 'audio-upload-status';
+            
+            // Set default publish date to now
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('episode-publish-date').value = now.toISOString().slice(0, 16);
+            
+            guestSpeakers = [];
+            renderGuestSpeakers();
+            
+            keyTopics = ["Current Events", "Market Analysis", "Expert Insights"];
+            renderKeyTopics();
+        }
 
-// Handle guest avatar file selection
-function setupGuestAvatarPreview() {
-    const avatarFileInput = document.getElementById('guest-avatar-file');
-    const avatarPreview = document.getElementById('guest-avatar-preview');
-    
-    if (avatarFileInput && avatarPreview) {
-        avatarFileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
+        // Save episode
+        async function saveEpisode() {
+            const saveBtn = document.getElementById('save-episode-btn');
+            if (!saveBtn) {
+                console.error('Save button not found');
+                return;
+            }
+            
+            setLoading(saveBtn, true);
+            
+            try {
+                // Validate required fields
+                const title = document.getElementById('episode-title').value.trim();
+                const description = document.getElementById('episode-description').value.trim();
+                
+                if (!title || !description) {
+                    showToast('Title and description are required', 'warning');
+                    setLoading(saveBtn, false);
+                    return;
+                }
+                
+                // Upload files if selected
+                let audioUrl = '';
+                let thumbnailUrl = '';
+                
+                // Upload audio file
+                const audioInput = document.getElementById('episode-audio');
+                if (audioInput.files.length > 0) {
+                    showUploadStatus('Uploading audio...', 'uploading');
+                    audioUrl = await uploadFile(audioInput.files[0], 'audio');
+                    if (!audioUrl) {
+                        setLoading(saveBtn, false);
+                        return;
+                    }
+                    showUploadStatus('Audio uploaded successfully!', 'success');
+                } else if (!currentEditingId) {
+                    // Require audio for new episodes
+                    showToast('Audio file is required for new episodes', 'warning');
+                    setLoading(saveBtn, false);
+                    return;
+                }
+                
+                // Upload thumbnail
+                const thumbnailInput = document.getElementById('episode-thumbnail');
+                if (thumbnailInput.files.length > 0) {
+                    thumbnailUrl = await uploadFile(thumbnailInput.files[0], 'image');
+                    if (!thumbnailUrl) {
+                        setLoading(saveBtn, false);
+                        return;
+                    }
+                }
+                
+                // Prepare payload
+                const payload = {
+                    title: title,
+                    description: description,
+                    content: document.getElementById('episode-content').value || '',
+                    duration: document.getElementById('episode-duration').value || '00:00',
+                    audio_url: audioUrl,
+                    thumbnail: thumbnailUrl,
+                    category: document.getElementById('episode-category').value,
+                    status: document.getElementById('episode-status').value,
+                    featured: document.getElementById('episode-featured').checked,
+                    publish_date: document.getElementById('episode-publish-date').value,
+                    guest_speakers: guestSpeakers,
+                    key_topics: keyTopics
+                };
+                
+                console.log('Saving episode payload:', payload);
+                
+                let response;
+                if (currentEditingId) {
+                    response = await apiCall(`/emissions/admin/emissions/${currentEditingId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(payload)
+                    });
+                } else {
+                    response = await apiCall('/emissions/admin/emissions', {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    });
+                }
+                
+                if (response.success) {
+                    showToast(`Episode ${currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
+                    hideEpisodeForm();
+                    await loadEmissions(currentPage, currentFilters);
+                } else {
+                    throw new Error(response.message || 'Failed to save episode');
+                }
+                
+            } catch (error) {
+                console.error('Error saving episode:', error);
+                showToast('Failed to save episode: ' + error.message, 'danger');
+            } finally {
+                setLoading(saveBtn, false);
+            }
+        }
+
+        // Show upload status
+        function showUploadStatus(message, type) {
+            const statusDiv = document.getElementById('audio-upload-status');
+            if (statusDiv) {
+                statusDiv.textContent = message;
+                statusDiv.className = `audio-upload-status ${type}`;
+                setTimeout(() => {
+                    statusDiv.className = 'audio-upload-status';
+                }, 3000);
+            }
+        }
+
+        // Guest speakers management
+        function renderGuestSpeakers() {
+            const container = document.getElementById('guest-speakers-list');
+            if (!container) return;
+            
+            if (guestSpeakers.length === 0) {
+                container.innerHTML = '<div class="text-muted text-center small py-2" id="no-guests-message">No guest speakers added yet</div>';
+                return;
+            }
+            
+            container.innerHTML = guestSpeakers.map((guest, index) => `
+                <div class="d-flex align-items-center mb-2 p-2 border rounded guest-speaker-card">
+                    <img src="${guest.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(guest.name) + '&background=random&size=100'}" 
+                         class="guest-avatar me-2" alt="${guest.name}">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0 small">${guest.name}</h6>
+                        <small class="text-muted">${guest.role}</small>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                            onclick="removeGuestSpeaker(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addGuestSpeaker() {
+            const name = document.getElementById('guest-name').value.trim();
+            const role = document.getElementById('guest-role').value.trim();
+            const avatarFile = document.getElementById('guest-avatar-file');
+            
+            if (!name || !role) {
+                showToast('Please enter guest name and role', 'warning');
+                return;
+            }
+            
+            const guest = {
+                name: name,
+                role: role,
+                avatar: ''
+            };
+            
+            // If avatar file is selected, create data URL for preview
+            if (avatarFile.files.length > 0) {
+                const file = avatarFile.files[0];
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    avatarPreview.src = e.target.result;
-                    avatarPreview.classList.remove('d-none');
-                    currentGuestAvatarFile = file;
+                    guest.avatar = e.target.result;
+                    guestSpeakers.push(guest);
+                    renderGuestSpeakers();
+                    clearGuestForm();
+                    showToast('Guest speaker added', 'success');
                 };
                 reader.readAsDataURL(file);
             } else {
-                avatarPreview.classList.add('d-none');
-                currentGuestAvatarFile = null;
+                guestSpeakers.push(guest);
+                renderGuestSpeakers();
+                clearGuestForm();
+                showToast('Guest speaker added', 'success');
             }
-        });
-    }
-}
-
-// Upload guest avatar image
-async function uploadGuestAvatar(file) {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await fetch(`${API_BASE}/media/upload`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('dfm_token')}`
-            },
-            body: formData
-        });
-        
-        if (!response.ok) {
-            throw new Error('Avatar upload failed');
         }
-        
-        const data = await response.json();
-        return data.url;
-    } catch (error) {
-        console.error('Guest avatar upload error:', error);
-        // Fallback: Use data URL for preview (not saved to backend)
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(file);
-        });
-    }
-}
 
-// Add guest speaker
-async function addGuestSpeaker() {
-    const name = document.getElementById('guest-name').value.trim();
-    const role = document.getElementById('guest-role').value.trim();
-
-    if (!name || !role) {
-        showToast('Please fill in guest name and role', 'warning');
-        return;
-    }
-
-    let avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&size=100`;
-    
-    // Upload avatar if file was selected
-    if (currentGuestAvatarFile) {
-        try {
-            showToast('Uploading guest avatar...', 'info');
-            avatarUrl = await uploadGuestAvatar(currentGuestAvatarFile);
-        } catch (error) {
-            console.error('Failed to upload avatar:', error);
-            showToast('Using default avatar (upload failed)', 'warning');
+        function clearGuestForm() {
+            document.getElementById('guest-name').value = '';
+            document.getElementById('guest-role').value = '';
+            document.getElementById('guest-avatar-file').value = '';
         }
-    }
 
-    const guest = {
-        id: Date.now().toString(),
-        name: name,
-        role: role,
-        avatar: avatarUrl
-    };
-
-    guestSpeakers.push(guest);
-    renderGuestSpeakers();
-    
-    // Clear form
-    clearGuestForm();
-    showToast('Guest speaker added successfully!', 'success');
-}
-
-// Clear guest form
-function clearGuestForm() {
-    document.getElementById('guest-name').value = '';
-    document.getElementById('guest-role').value = '';
-    document.getElementById('guest-avatar-file').value = '';
-    document.getElementById('guest-avatar-preview').classList.add('d-none');
-    currentGuestAvatarFile = null;
-}
-
-// Remove guest speaker
-function removeGuestSpeaker(guestId) {
-    guestSpeakers = guestSpeakers.filter(guest => guest.id !== guestId);
-    renderGuestSpeakers();
-    showToast('Guest speaker removed', 'info');
-}
-
-// Render guest speakers list
-function renderGuestSpeakers() {
-    const container = document.getElementById('guest-speakers-list');
-    const noGuestsMessage = document.getElementById('no-guests-message');
-    
-    if (guestSpeakers.length === 0) {
-        container.innerHTML = '<div class="text-muted text-center small py-2" id="no-guests-message">No guest speakers added yet</div>';
-        return;
-    }
-    
-    noGuestsMessage?.remove();
-    
-    container.innerHTML = guestSpeakers.map(guest => `
-        <div class="d-flex align-items-center mb-3 p-2 border rounded bg-white guest-speaker-card" data-guest-id="${guest.id}">
-            <img src="${guest.avatar}" 
-                 class="guest-avatar me-2" 
-                 alt="${guest.name}"
-                 style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
-            <div class="flex-grow-1">
-                <h6 class="mb-0 small text-dark">${guest.name}</h6>
-                <small class="text-muted">${guest.role}</small>
-            </div>
-            <button type="button" 
-                    class="btn btn-sm btn-outline-danger ms-2" 
-                    onclick="removeGuestSpeaker('${guest.id}')"
-                    title="Remove guest">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    `).join('');
-}
-
-// Load guest speakers when editing an emission
-function loadGuestSpeakersForEdit(emission) {
-    if (emission.guest_speakers && emission.guest_speakers.length > 0) {
-        guestSpeakers = emission.guest_speakers.map((guest, index) => ({
-            id: guest._id || `guest-${index}-${Date.now()}`,
-            name: guest.name,
-            role: guest.role,
-            avatar: guest.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(guest.name)}&background=random&size=100`
-        }));
-        renderGuestSpeakers();
-    } else {
-        guestSpeakers = [];
-        renderGuestSpeakers();
-    }
-}
-
-// Clear guest speakers when adding new emission
-function clearGuestSpeakers() {
-    guestSpeakers = [];
-    renderGuestSpeakers();
-}
-
-// Update the showEmissionForm function
-function showEmissionForm(emission = null) {
-    const formSection = document.getElementById('episode-form');
-    const formTitle = document.getElementById('episode-form-title');
-    
-    if (emission) {
-        formTitle.textContent = 'Edit Emission';
-        document.getElementById('episode-title').value = emission.title || '';
-        document.getElementById('episode-description').value = emission.description || '';
-        document.getElementById('episode-duration').value = emission.duration || '';
-        document.getElementById('episode-category').value = emission.category || '';
-        document.getElementById('episode-status').value = emission.status || 'draft';
-        document.getElementById('episode-featured').checked = emission.featured || false;
-        document.getElementById('episode-content').value = emission.content || '';
-        
-        if (emission.publish_date) {
-            const publishDate = new Date(emission.publish_date).toISOString().slice(0, 16);
-            document.getElementById('episode-publish-date').value = publishDate;
+        function removeGuestSpeaker(index) {
+            guestSpeakers.splice(index, 1);
+            renderGuestSpeakers();
+            showToast('Guest speaker removed', 'info');
         }
-        
-        currentEditingId = emission._id;
 
-        if (emission.thumbnail) {
-            const preview = document.getElementById('episode-thumbnail-preview');
-            preview.style.display = 'block';
-            document.getElementById('episode-preview-img').src = emission.thumbnail;
+        // Key topics management
+        function renderKeyTopics() {
+            const container = document.getElementById('topics-list');
+            if (!container) return;
+            
+            container.innerHTML = keyTopics.map(topic => `
+                <span class="badge bg-light text-dark me-1 mb-1">${topic}
+                    <button type="button" class="btn-close btn-close-sm ms-1" 
+                            onclick="removeTopic('${topic}')"></button>
+                </span>
+            `).join('');
         }
-        
-        // Load guest speakers for editing
-        loadGuestSpeakersForEdit(emission);
-    } else {
-        formTitle.textContent = 'Add New Emission';
-        document.getElementById('episode-form-data').reset();
-        currentEditingId = null;
-        document.getElementById('episode-thumbnail-preview').style.display = 'none';
-        
-        // Clear guest speakers for new emission
-        clearGuestSpeakers();
-        clearGuestForm();
-    }
-    
-    formSection.style.display = 'block';
-    formSection.scrollIntoView({ behavior: 'smooth' });
-}
 
-// Update the saveEmission function to include guest speakers
-async function saveEmission(formData) {
-    try {
-        const saveBtn = document.querySelector('#episode-form-data .btn-gold');
-        setLoading(saveBtn, true);
-
-        // Use external audio URLs or local placeholder
-        let audioUrl = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
-        let thumbnailUrl = "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80";
-
-        // Optional: Try to get uploaded files, but fallback to URLs
-        try {
-            const thumbnailFile = document.getElementById('episode-thumbnail').files[0];
-            if (thumbnailFile) {
-                const uploadedThumbnail = await uploadFile(thumbnailFile, 'image');
-                if (uploadedThumbnail) thumbnailUrl = uploadedThumbnail;
+        function addTopic() {
+            const input = document.getElementById('new-topic');
+            const topic = input.value.trim();
+            
+            if (topic && !keyTopics.includes(topic)) {
+                keyTopics.push(topic);
+                renderKeyTopics();
+                input.value = '';
             }
-
-            const audioFile = document.getElementById('episode-audio').files[0];
-            if (audioFile) {
-                const uploadedAudio = await uploadFile(audioFile, 'audio');
-                if (uploadedAudio) audioUrl = uploadedAudio;
-            }
-        } catch (uploadError) {
-            console.log('Using fallback URLs due to upload error:', uploadError.message);
         }
 
-        // Get form values and ensure proper formatting
-        const payload = {
-            title: document.getElementById('episode-title').value,
-            description: document.getElementById('episode-description').value,
-            duration: document.getElementById('episode-duration').value || "30:00",
-            audio_url: audioUrl,
-            thumbnail: thumbnailUrl,
-            category: document.getElementById('episode-category').value.toLowerCase(),
-            status: document.getElementById('episode-status').value.toLowerCase(),
-            featured: document.getElementById('episode-featured').checked,
-            publish_date: document.getElementById('episode-publish-date').value,
-            content: document.getElementById('episode-content')?.value || "Episode content details...",
-            key_topics: ["Current Events", "Market Analysis", "Expert Insights"],
-            guest_speakers: guestSpeakers.map(guest => ({
-                name: guest.name,
-                role: guest.role,
-                avatar: guest.avatar
-            }))
-        };
-
-        console.log('Saving emission with guests:', payload);
-
-        let response;
-        if (currentEditingId) {
-            response = await apiCall(`/emissions/admin/emissions/${currentEditingId}`, {
-                method: 'PUT',
-                body: JSON.stringify(payload)
-            });
-        } else {
-            response = await apiCall('/emissions/admin/emissions', {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
+        function removeTopic(topic) {
+            keyTopics = keyTopics.filter(t => t !== topic);
+            renderKeyTopics();
         }
 
-        showToast(`Emission ${currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
-        hideEmissionForm();
-        await loadEmissions();
-
-    } catch (error) {
-        console.error('Error saving emission:', error);
-        showToast('Failed to save emission: ' + error.message, 'danger');
-    } finally {
-        setLoading(document.querySelector('#episode-form-data .btn-gold'), false);
-    }
-}
-
-// Update the event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Setup image previews
-    setupImagePreview('episode-thumbnail', 'episode-thumbnail-preview');
-    setupGuestAvatarPreview();
-    
-    // Emission form
-    document.getElementById('episode-form-data')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveEmission(new FormData(this));
-    });
-
-    // Buttons
-    document.getElementById('add-episode-btn')?.addEventListener('click', function() {
-        showEmissionForm();
-    });
-
-    document.getElementById('cancel-episode')?.addEventListener('click', function() {
-        hideEmissionForm();
-    });
-
-    document.getElementById('manage-live-btn')?.addEventListener('click', showLiveStreamModal);
-    document.getElementById('toggle-stream-btn-emission')?.addEventListener('click', toggleLiveStream);
-    document.getElementById('save-stream-settings')?.addEventListener('click', saveStreamSettings);
-    document.getElementById('test-stream')?.addEventListener('click', testStream);
-    
-    // Guest management
-    document.getElementById('add-guest-btn')?.addEventListener('click', addGuestSpeaker);
-    
-    // Allow pressing Enter in guest form fields
-    ['guest-name', 'guest-role'].forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) {
-            field.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addGuestSpeaker();
+        // Edit episode - FIXED
+        async function editEmission(id) {
+            console.log('Editing emission with ID:', id);
+            try {
+                const response = await apiCall(`/emissions/${id}`);
+                if (response.success && response.emission) {
+                    showEpisodeForm(response.emission);
+                } else {
+                    showToast('Failed to load episode for editing', 'danger');
                 }
-            });
+            } catch (error) {
+                console.error('Error loading episode:', error);
+                showToast('Failed to load episode: ' + error.message, 'danger');
+            }
         }
-    });
-    
-    // Load initial data
-    loadEmissions();
-    loadLiveStream();
-});
 
-// Make guest functions globally available
-window.addGuestSpeaker = addGuestSpeaker;
-window.removeGuestSpeaker = removeGuestSpeaker;
-// Make functions globally available
-window.editEmission = editEmission;
-window.deleteEmission = deleteEmission;
-window.showEmissionForm = showEmissionForm;
-window.showLiveStreamModal = showLiveStreamModal;
-</script>
-    <script src="/js/economy-frontend.js"></script>
-<!-- Live Stream Management Modal -->
-<div class="modal fade" id="liveStreamModal" tabindex="-1" aria-labelledby="liveStreamModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="liveStreamModalLabel">
-                    <i class="fas fa-video me-2"></i>Live Stream Management
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Stream Status -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-container">
-                            <h6 class="mb-3">Stream Status</h6>
-                            <div class="d-flex align-items-center mb-3">
-                                <span class="live-indicator" id="modal-stream-indicator"></span>
-                                <span class="me-3">Currently:</span>
-                                <span id="modal-current-stream-status" class="badge bg-danger">OFFLINE</span>
-                            </div>
-                            <button class="btn btn-success w-100" id="modal-toggle-stream-btn">
-                                <i class="fas fa-video me-2"></i> Go Live
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-container">
-                            <h6 class="mb-3">Stream Statistics</h6>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Current Viewers:</span>
-                                <span id="modal-current-viewers" class="fw-bold">0</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Total Views:</span>
-                                <span id="modal-total-views" class="fw-bold">0</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>Stream Duration:</span>
-                                <span id="modal-stream-duration" class="fw-bold">--:--</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        // Delete episode
+        async function deleteEmission(id) {
+            if (!confirm('Are you sure you want to delete this episode? This action cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                const response = await apiCall(`/emissions/admin/emissions/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.success) {
+                    showToast('Episode deleted successfully', 'success');
+                    await loadEmissions(currentPage, currentFilters);
+                } else {
+                    throw new Error(response.message || 'Failed to delete episode');
+                }
+            } catch (error) {
+                console.error('Error deleting episode:', error);
+                showToast('Failed to delete episode: ' + error.message, 'danger');
+            }
+        }
 
-                <!-- Stream Configuration -->
-                <div class="form-container mb-4">
-                    <h6 class="mb-3">Stream Configuration</h6>
-                    <form id="modal-stream-form">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Stream Title</label>
-                                    <input type="text" class="form-control" id="modal-stream-title" 
-                                           value="DFM Media Studio" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Stream URL</label>
-                                    <input type="url" class="form-control" id="modal-stream-url" 
-                                           placeholder="rtmp://your-stream-server/live/stream-key">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Stream Description</label>
-                                    <textarea class="form-control" id="modal-stream-description" rows="3">
-Watch our live studio sessions, interviews, and behind-the-scenes content.
-                                    </textarea>
-                                </div>
-                            </div>
-                        </div>
+        // Audio preview
+        function previewAudio() {
+            const audioInput = document.getElementById('episode-audio');
+            const audioPreview = document.getElementById('audio-preview');
+            
+            if (audioInput.files.length > 0) {
+                const file = audioInput.files[0];
+                const url = URL.createObjectURL(file);
+                audioPreview.src = url;
+                audioPreview.style.display = 'block';
+                audioPreview.load();
+                showToast('Audio loaded for preview', 'info');
+            } else {
+                showToast('Please select an audio file first', 'warning');
+            }
+        }
 
-                        <!-- Stream Settings -->
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Stream Settings</label>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" id="modal-allow-comments" checked>
-                                        <label class="form-check-label" for="modal-allow-comments">
-                                            Allow live comments
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" id="modal-record-stream" checked>
-                                        <label class="form-check-label" for="modal-record-stream">
-                                            Record stream for archive
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="modal-is-public" checked>
-                                        <label class="form-check-label" for="modal-is-public">
-                                            Public stream
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Stream Quality</label>
-                                    <select class="form-select" id="modal-stream-quality">
-                                        <option value="720p">720p HD</option>
-                                        <option value="1080p">1080p Full HD</option>
-                                        <option value="480p">480p SD</option>
-                                        <option value="360p">360p Low</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        // Apply filters
+        function applyFilters() {
+            const category = document.getElementById('filter-category').value;
+            const status = document.getElementById('filter-status').value;
+            const search = document.getElementById('filter-search').value.trim();
+            
+            const filters = {};
+            if (category) filters.category = category;
+            if (status) filters.status = status;
+            if (search) filters.search = search;
+            
+            loadEmissions(1, filters);
+        }
 
-                <!-- Scheduled Sessions -->
-                <div class="form-container mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0">Scheduled Live Sessions</h6>
-                        <button type="button" class="btn btn-sm btn-gold" id="add-session-btn">
-                            <i class="fas fa-plus me-1"></i> Add Session
-                        </button>
-                    </div>
-                    
-                    <div id="scheduled-sessions-container">
-                        <!-- Sessions will be dynamically added here -->
-                        <div class="text-center text-muted py-3" id="no-sessions-message">
-                            <i class="fas fa-calendar-plus fa-2x mb-2"></i>
-                            <p>No scheduled sessions</p>
-                        </div>
-                    </div>
-                </div>
+        // Setup pagination
+        function setupPagination(pagination) {
+            const container = document.getElementById('pagination-container');
+            if (!container || !pagination || pagination.pages <= 1) {
+                if (container) container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            
+            // Create pagination links
+            let paginationHTML = '';
+            
+            // Previous button
+            paginationHTML += `
+                <li class="page-item ${pagination.page === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="loadPage(${pagination.page - 1})">Previous</a>
+                </li>
+            `;
+            
+            // Page numbers
+            for (let i = 1; i <= pagination.pages; i++) {
+                if (i === pagination.page) {
+                    paginationHTML += `<li class="page-item active"><span class="page-link">${i}</span></li>`;
+                } else if (i === 1 || i === pagination.pages || (i >= pagination.page - 2 && i <= pagination.page + 2)) {
+                    paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="loadPage(${i})">${i}</a></li>`;
+                } else if (i === pagination.page - 3 || i === pagination.page + 3) {
+                    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                }
+            }
+            
+            // Next button
+            paginationHTML += `
+                <li class="page-item ${pagination.page === pagination.pages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="loadPage(${pagination.page + 1})">Next</a>
+                </li>
+            `;
+            
+            container.querySelector('ul').innerHTML = paginationHTML;
+        }
 
-                <!-- Studio Personnel -->
-                <div class="form-container">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0">Studio Personnel</h6>
-                        <button type="button" class="btn btn-sm btn-gold" id="add-personnel-btn">
-                            <i class="fas fa-plus me-1"></i> Add Personnel
-                        </button>
-                    </div>
-                    
-                    <div id="studio-personnel-container">
-                        <!-- Personnel will be dynamically added here -->
-                        <div class="text-center text-muted py-3" id="no-personnel-message">
-                            <i class="fas fa-users fa-2x mb-2"></i>
-                            <p>No studio personnel added</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="modal-save-stream-settings">
-                    <i class="fas fa-save me-2"></i>Save Settings
-                </button>
-                <button type="button" class="btn btn-gold" id="modal-test-stream">
-                    <i class="fas fa-broadcast-tower me-2"></i>Test Stream
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+        // Load specific page
+        function loadPage(page) {
+            loadEmissions(page, currentFilters);
+        }
 
-<!-- Add Session Modal -->
-<div class="modal fade" id="addSessionModal" tabindex="-1" aria-labelledby="addSessionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addSessionModalLabel">Add Scheduled Session</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="session-form">
-                    <div class="mb-3">
-                        <label class="form-label">Session Title</label>
-                        <input type="text" class="form-control" id="session-title" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" id="session-description" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Scheduled Time</label>
-                        <input type="datetime-local" class="form-control" id="session-time" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Duration (minutes)</label>
-                        <input type="number" class="form-control" id="session-duration" value="60" min="15" max="240">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Guest Speakers (comma separated)</label>
-                        <input type="text" class="form-control" id="session-guests" 
-                               placeholder="John Doe, Economist; Jane Smith, Analyst">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-gold" id="save-session-btn">Save Session</button>
-            </div>
-        </div>
-    </div>
-</div>
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing emissions page...');
+            initializePage();
+        });
 
-<!-- Add Personnel Modal -->
-<div class="modal fade" id="addPersonnelModal" tabindex="-1" aria-labelledby="addPersonnelModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addPersonnelModalLabel">Add Studio Personnel</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="personnel-form">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" id="personnel-name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Role</label>
-                        <input type="text" class="form-control" id="personnel-role" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Avatar URL</label>
-                        <input type="url" class="form-control" id="personnel-avatar" 
-                               placeholder="https://example.com/avatar.jpg">
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="personnel-active" checked>
-                            <label class="form-check-label" for="personnel-active">
-                                Currently active in studio
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-gold" id="save-personnel-btn">Save Personnel</button>
-            </div>
-        </div>
-    </div>
-</div>
+        // Make functions globally available
+        window.editEmission = editEmission;
+        window.deleteEmission = deleteEmission;
+        window.removeGuestSpeaker = removeGuestSpeaker;
+        window.removeTopic = removeTopic;
+        window.showEpisodeForm = showEpisodeForm;
+        window.loadPage = loadPage;
+        window.addGuestSpeaker = addGuestSpeaker;
+        window.addTopic = addTopic;
+    </script>
 </body>
 </html>

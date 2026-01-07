@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Radio Station</title>
+    <meta name="description" content="DFM Media: Your trusted source for economic, political, and social news with live radio streaming.">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-dark: #1a1814;
+            --primary-accent: #D4AF37;
+            --secondary-dark: #2d2b24;
+            --light-bg: #F8F5F0;
+            --card-bg: #ffffff;
+            --text-primary: #1a1814;
+            --text-secondary: #333333;
+            --border-light: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --box-text-color: #1a1814;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+        }
+        
+        [data-theme="dark"] {
+            --light-bg: #121212;
+            --card-bg: #1a1a1a;
+            --text-primary: #D4AF37;
+            --text-secondary: #ffffff;
+            --border-light: #333333;
+            --glass-bg: rgba(26, 24, 20, 0.9);
+            --glass-border: rgba(212, 175, 55, 0.1);
+            --box-text-color: #f8f3c9;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--light-bg);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--secondary-dark);
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            margin-left: 15px;
+            border: none;
+            outline: none;
+        }
+        
+        .theme-toggle-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-accent);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        [data-theme="dark"] .theme-toggle-handle {
+            transform: translateX(24px);
+        }
+        
+        .theme-toggle i {
+            font-size: 12px;
+            z-index: 1;
+            color: var(--primary-dark);
+            pointer-events: none;
+        }
+        
+        .theme-toggle .fa-sun {
+            margin-right: auto;
+            padding-left: 4px;
+        }
+        
+        .theme-toggle .fa-moon {
+            margin-left: auto;
+            padding-right: 4px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: white;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .navbar-brand .logo-text {
+            background: linear-gradient(90deg, var(--primary-accent), #fff 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-img {
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: var(--shadow-md);
+            padding: 2px;
+            background: var(--card-bg);
+        }
+        
+        .nav-link {
+            position: relative;
+            margin: 0 8px;
+            font-weight: 500;
+            padding: 10px 16px !important;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-dark) !important;
+            transform: translateY(-2px);
+            background: linear-gradient(45deg, var(--primary-accent), rgba(212, 175, 55, 0.6));
+        }
+        
+        /* Breaking News Ticker */
+        .breaking-news {
+            background: linear-gradient(270deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            color: var(--primary-dark);
+            padding: 12px 0;
+            overflow: hidden;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .breaking-news-badge {
+            background: var(--primary-dark);
+            color: var(--primary-accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Cards */
+        .news-card {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .news-card img {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .news-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), rgba(212, 175, 55, 0.3));
+            border-radius: 2px;
+        }
+        
+        /* Radio Player */
+        .live-player {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 16px 0;
+            position: relative;
+            margin-top: auto;
+        }
+        
+        .live-player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-accent), #f8e14d, var(--primary-accent));
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .play-btn {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: var(--primary-accent);
+            padding: 40px 0 20px;
+        }
+        
+        .social-icons a {
+            color: var(--primary-accent) !important;
+            font-size: 1.4rem;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: #fff200 !important;
+            transform: translateY(-3px);
+        }
+        
+        /* Loading States */
+        .loading-placeholder {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        /* Quick Links */
+        .quick-link-card {
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+        }
+        
+        .quick-link-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            
+            .section-header {
+                font-size: 1.5rem;
+            }
+            
+            .news-card img {
+                height: 160px;
+            }
+            
+            .quick-link-icon {
+                width: 50px;
+                height: 50px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .nav-link {
+                margin: 4px 0;
+                text-align: center;
+            }
+            
+            .breaking-news-badge {
+                font-size: 0.8rem;
+                padding: 4px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img class="logo-img me-2" src="Logo.png" alt="DFM Media Logo" width="50" height="50">
+                    <i class="fas fa-microphone-alt me-2" style="color:#D4AF37; font-size:1.8rem;"></i>
+                    <span class="logo-text">DFM MEDIA</span>
+                </a>
+                
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                    <div class="theme-toggle-handle"></div>
+                </button>
+                
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Navigation -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">
+                                <i class="fas fa-home me-1"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="emmsion.html">
+                                <i class="fas fa-broadcast-tower me-1"></i> Emission
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-chart-line me-1"></i> Economy
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="economy.html">Economy</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-africa">Eco Africa</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-agriculture">Eco Agriculture</a></li>
+                                <li><a class="dropdown-item" href="economy.html#eco-innovation">Eco Innovation</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-coins me-1"></i> Finance
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="finance.html">Finance Market</a></li>
+                                <li><a class="dropdown-item" href="finance.html#budget">National Budget</a></li>
+                                <li><a class="dropdown-item" href="finance.html#banking">Bank Projects</a></li>
+                                <li><a class="dropdown-item" href="finance.html#statistics">Statistics of the Day</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-newspaper me-1"></i> Articles
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="articles.html">Articles</a></li>
+                                <li><a class="dropdown-item" href="articles.html#newsletter">Newsletter</a></li>
+                                <li><a class="dropdown-item" href="articles.html#blog">Blog</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="actuality.html">
+                                <i class="fas fa-bullhorn me-1"></i> Actuality
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breaking News -->
+    <div class="breaking-news">
+        <div class="container d-flex align-items-center">
+            <span class="breaking-news-badge">
+                <i class="fas fa-bolt me-2"></i>BREAKING
+            </span>
+            <div class="marquee-container flex-grow-1 ms-3">
+                <div class="marquee" id="breaking-news-ticker">
+                    Loading breaking news...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Featured Content -->
+        <section class="mb-5">
+            <div class="row g-4">
+                <!-- Featured Article -->
+                <div class="col-lg-8">
+                    <div class="card news-card h-100">
+                        <div id="featured-article-container" class="loading-placeholder">
+                            <div class="spinner-border text-warning"></div>
+                            <p class="mt-2 text-muted">Loading featured content...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trending Programs -->
+                <div class="col-lg-4">
+                    <div class="card news-card h-100">
+                        <div class="card-body">
+                            <h3 class="section-header mb-3">Our Programs</h3>
+                            <ul class="list-group list-group-flush" id="trending-list">
+                                <li class="list-group-item">
+                                    <div class="spinner-border spinner-border-sm text-warning me-2"></div>
+                                    Loading programs...
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current News -->
+        <section class="mb-5">
+            <h2 class="section-header">Current News</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="current-news-container">
+                <!-- News cards will be loaded here -->
+                <div class="col">
+                    <div class="card news-card h-100">
+                        <div class="card-body loading-placeholder">
+                            <div class="spinner-border text-warning"></div>
+                            <p class="mt-2 text-muted">Loading news...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="mb-5">
+            <h2 class="section-header">Explore Our Content</h2>
+            <div class="row g-4" id="quick-links-container">
+                <div class="col-md-3 col-6">
+                    <a href="economy.html" class="quick-link-card">
+                        <div class="card news-card h-100 text-center">
+                            <div class="card-body">
+                                <div class="quick-link-icon bg-warning rounded-circle">
+                                    <i class="fas fa-chart-line fa-2x text-dark"></i>
+                                </div>
+                                <h5 class="card-title">Economy</h5>
+                                <p class="card-text text-muted">Market insights & analysis</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="finance.html" class="quick-link-card">
+                        <div class="card news-card h-100 text-center">
+                            <div class="card-body">
+                                <div class="quick-link-icon bg-warning rounded-circle">
+                                    <i class="fas fa-coins fa-2x text-dark"></i>
+                                </div>
+                                <h5 class="card-title">Finance</h5>
+                                <p class="card-text text-muted">Financial news & updates</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="articles.html" class="quick-link-card">
+                        <div class="card news-card h-100 text-center">
+                            <div class="card-body">
+                                <div class="quick-link-icon bg-warning rounded-circle">
+                                    <i class="fas fa-newspaper fa-2x text-dark"></i>
+                                </div>
+                                <h5 class="card-title">Articles</h5>
+                                <p class="card-text text-muted">In-depth articles & blogs</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="actuality.html" class="quick-link-card">
+                        <div class="card news-card h-100 text-center">
+                            <div class="card-body">
+                                <div class="quick-link-icon bg-warning rounded-circle">
+                                    <i class="fas fa-bullhorn fa-2x text-dark"></i>
+                                </div>
+                                <h5 class="card-title">Actuality</h5>
+                                <p class="card-text text-muted">Latest news & updates</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Radio Programs -->
+        <section class="mb-5">
+            <h2 class="section-header">Live Radio Programs</h2>
+            <div class="row g-4" id="radio-programs-container">
+                <div class="col-md-4">
+                    <div class="card news-card h-100 text-center">
+                        <div class="card-body">
+                            <div class="spinner-border text-warning"></div>
+                            <p class="mt-2 text-muted">Loading programs...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Comments -->
+        <section class="mb-5">
+            <h2 class="section-header">From Our Blog</h2>
+            <div class="row g-4" id="blog-comments-container">
+                <div class="col-md-4">
+                    <div class="card news-card h-100">
+                        <div class="card-body loading-placeholder">
+                            <div class="spinner-border text-warning"></div>
+                            <p class="mt-2 text-muted">Loading comments...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Live Radio Player -->
+    <div class="live-player">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <span class="fw-bold">🎙️ DFM Radio Live</span>
+                </div>
+                <div class="col-md-4 text-center">
+                    <button class="play-btn me-3" id="playButton" title="Play radio">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="play-btn" id="stopButton" title="Stop radio">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+                <div class="col-md-4 text-end">
+                    <small id="current-program">Loading program info...</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>DFM Media</h5>
+                    <p class="mt-3">Your reliable source for economic, political and social news.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Connect With Us</h5>
+                    <div class="social-icons mt-3">
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" target="_blank" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" target="_blank" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="tel:+237650155155" aria-label="Phone">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact</h5>
+                    <address class="mt-3">
+                        DFM Media<br>
+                        Cameroon<br>
+                        <i class="fas fa-envelope me-2"></i> contact@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-2"></i> +237 650 155 155
+                    </address>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center pt-3">
+                <p>&copy; 2025 DFM Media – All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Main JavaScript -->
+    <script>
+        // Configuration
+        const API_BASE = 'http://localhost:5000/api';
+        const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
+        
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme') || 
+                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+        }
+        
+        // Theme toggle handler
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
+        // Audio Player
+        const audio = new Audio(STREAM_URL);
+        audio.preload = "none";
+        let isPlaying = false;
+        
+        const playButton = document.getElementById('playButton');
+        const stopButton = document.getElementById('stopButton');
+        
+        playButton.addEventListener('click', async () => {
+            try {
+                if (!isPlaying) {
+                    await audio.play();
+                    isPlaying = true;
+                    playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                    playButton.setAttribute('title', 'Pause radio');
+                    showNotification('Radio is now playing', 'success');
+                } else {
+                    audio.pause();
+                    isPlaying = false;
+                    playButton.innerHTML = '<i class="fas fa-play"></i>';
+                    playButton.setAttribute('title', 'Play radio');
+                }
+            } catch (error) {
+                console.error('Error playing audio:', error);
+                showNotification('Could not start radio stream', 'error');
+            }
+        });
+        
+        stopButton.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            isPlaying = false;
+            playButton.innerHTML = '<i class="fas fa-play"></i>';
+            playButton.setAttribute('title', 'Play radio');
+            showNotification('Radio stopped', 'info');
+        });
+        
+        // Data Loading Functions
+        async function loadBreakingNews() {
+            try {
+                const response = await fetch(`${API_BASE}/homepage`);
+                const data = await response.json();
+                const ticker = document.getElementById('breaking-news-ticker');
+                
+                if (data.homepage?.breakingNews) {
+                    ticker.textContent = data.homepage.breakingNews;
+                } else {
+                    ticker.textContent = 'Stay tuned for the latest updates from DFM Media';
+                }
+            } catch (error) {
+                console.error('Error loading breaking news:', error);
+            }
+        }
+        
+        async function loadFeaturedContent() {
+            try {
+                const container = document.getElementById('featured-article-container');
+                const response = await fetch(`${API_BASE}/articles?featured=true&limit=1`);
+                const data = await response.json();
+                
+                if (data.items?.length > 0) {
+                    const article = data.items[0];
+                    container.innerHTML = `
+                        <img src="${article.image_url || getDefaultImage(article.category)}" 
+                             class="card-img-top" alt="${article.title}" style="height: 300px; object-fit: cover;">
+                        <div class="card-body">
+                            <div class="card-overlay">FEATURED</div>
+                            <h2 class="card-title h3 mb-3">${article.title}</h2>
+                            <p class="card-text mb-4">${article.excerpt || article.content.substring(0, 150)}...</p>
+                            <a href="articles.html?id=${article._id}" class="btn btn-warning">Read Full Article</a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading featured content:', error);
+            }
+        }
+        
+        async function loadCurrentNews() {
+            try {
+                const container = document.getElementById('current-news-container');
+                const response = await fetch(`${API_BASE}/news?limit=3&status=published`);
+                const data = await response.json();
+                
+                if (data.items?.length > 0) {
+                    container.innerHTML = data.items.map(news => `
+                        <div class="col">
+                            <div class="card news-card h-100">
+                                <img src="${news.image_url || getDefaultImage(news.category)}" 
+                                     class="card-img-top" alt="${news.title}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <span class="badge ${getCategoryBadge(news.category)} mb-2">
+                                        ${formatCategory(news.category)}
+                                    </span>
+                                    <h5 class="card-title">${news.title}</h5>
+                                    <p class="card-text">${news.excerpt || news.content.substring(0, 100)}...</p>
+                                    <a href="actuality.html?id=${news._id}" class="btn btn-sm btn-outline-warning mt-auto">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading current news:', error);
+            }
+        }
+        
+        async function loadTrendingPrograms() {
+            try {
+                const container = document.getElementById('trending-list');
+                // This would typically come from your emissions API
+                const programs = [
+                    "Economic Debate with Finance Minister",
+                    "Market Update: Stock Trends",
+                    "Banking Projects Analysis",
+                    "Agriculture Innovation Show",
+                    "Technology & Business Forum"
+                ];
+                
+                container.innerHTML = programs.map(program => `
+                    <li class="list-group-item">
+                        <i class="fas fa-play-circle text-warning me-2"></i>
+                        <a href="emmsion.html" class="text-decoration-none">${program}</a>
+                    </li>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading programs:', error);
+            }
+        }
+        
+        async function loadRadioPrograms() {
+            try {
+                const container = document.getElementById('radio-programs-container');
+                const programs = [
+                    { title: "Morning Brief", time: "7:00 AM", host: "John Doe" },
+                    { title: "Market Watch", time: "12:00 PM", host: "Jane Smith" },
+                    { title: "Evening Review", time: "6:00 PM", host: "Robert Johnson" }
+                ];
+                
+                container.innerHTML = programs.map(program => `
+                    <div class="col-md-4">
+                        <div class="card news-card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${program.title}</h5>
+                                <p class="text-muted mb-3">
+                                    <i class="fas fa-clock me-1"></i> ${program.time}
+                                </p>
+                                <p class="small">Host: ${program.host}</p>
+                                <button class="play-btn" onclick="playProgram('${program.title}')">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Update current program
+                document.getElementById('current-program').textContent = `Now: ${programs[0].title}`;
+            } catch (error) {
+                console.error('Error loading radio programs:', error);
+            }
+        }
+        
+        async function loadBlogComments() {
+            try {
+                const container = document.getElementById('blog-comments-container');
+                const comments = [
+                    { 
+                        name: "Alex Johnson", 
+                        comment: "Excellent analysis on the economic trends!",
+                        date: "2 hours ago"
+                    },
+                    { 
+                        name: "Sarah Williams", 
+                        comment: "The agricultural segment was very informative.",
+                        date: "5 hours ago"
+                    },
+                    { 
+                        name: "Michael Brown", 
+                        comment: "Keep up the great work with market updates!",
+                        date: "1 day ago"
+                    }
+                ];
+                
+                container.innerHTML = comments.map(comment => `
+                    <div class="col-md-4">
+                        <div class="card news-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle bg-warning p-2 me-3">
+                                        <i class="fas fa-user text-dark"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">${comment.name}</h6>
+                                        <small class="text-muted">${comment.date}</small>
+                                    </div>
+                                </div>
+                                <p class="card-text">"${comment.comment}"</p>
+                                <a href="articles.html#comments" class="btn btn-sm btn-outline-warning">View Discussion</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading comments:', error);
+            }
+        }
+        
+        // Helper Functions
+        function getDefaultImage(category) {
+            const images = {
+                'economy': 'https://images.unsplash.com/photo-1586769852044-692ebda4e9e5?w=400&h=250&fit=crop',
+                'finance': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w-400&h=250&fit=crop',
+                'agriculture': 'https://images.unsplash.com/photo-1551836026-d5d88e9218df?w=400&h=250&fit=crop',
+                'innovation': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=250&fit=crop'
+            };
+            return images[category] || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=400&h=250&fit=crop';
+        }
+        
+        function getCategoryBadge(category) {
+            const badges = {
+                'economy': 'bg-warning text-dark',
+                'finance': 'bg-info text-white',
+                'agriculture': 'bg-success text-white',
+                'innovation': 'bg-primary text-white'
+            };
+            return badges[category] || 'bg-secondary text-white';
+        }
+        
+        function formatCategory(category) {
+            return category.charAt(0).toUpperCase() + category.slice(1);
+        }
+        
+        function playProgram(title) {
+            showNotification(`Playing: ${title}`, 'info');
+        }
+        
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} position-fixed`;
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '9999';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load all data
+            loadBreakingNews();
+            loadFeaturedContent();
+            loadCurrentNews();
+            loadTrendingPrograms();
+            loadRadioPrograms();
+            loadBlogComments();
+            
+            // Auto-refresh breaking news every minute
+            setInterval(loadBreakingNews, 60000);
+            
+            // Update current time
+            setInterval(() => {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const dateElement = document.querySelector('.current-time');
+                if (dateElement) {
+                    dateElement.textContent = timeString;
+                }
+            }, 60000);
+        });
+        
+        // Handle page visibility
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isPlaying) {
+                audio.pause();
+            }
+        });
+    </script>
+</body>
+</html>

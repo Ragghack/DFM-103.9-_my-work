@@ -251,6 +251,15 @@ EconomyArticleSchema.virtual('formatted_published_date').get(function() {
     day: 'numeric'
   });
 });
+// Add this pre-save middleware
+/*EconomyArticleSchema.pre('save', function(next) {
+  // Convert relative URLs to full URLs before saving
+  if (this.image_url && this.image_url.startsWith('/uploads/') && !this.image_url.startsWith('http')) {
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+    this.image_url = baseUrl + this.image_url;
+  }
+  next();
+});*/
 
 // Virtual for is_scheduled
 EconomyArticleSchema.virtual('is_scheduled').get(function() {
@@ -261,6 +270,21 @@ EconomyArticleSchema.virtual('is_scheduled').get(function() {
 EconomyArticleSchema.virtual('is_published').get(function() {
   return this.status === 'published' && 
          (!this.scheduled_publish || this.scheduled_publish <= new Date());
+});
+
+// Virtual for properly formatted image URL
+EconomyArticleSchema.virtual('full_image_url').get(function() {
+  if (!this.image_url) return null;
+  
+  // If it's already a full URL (Cloudinary or external), return as is
+  if (this.image_url.startsWith('http://') || this.image_url.startsWith('https://')) {
+    return this.image_url;
+  }
+  
+  // For local uploads (relative paths starting with /uploads/)
+  // Add the base URL - you can configure this based on environment
+  const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+  return `${baseUrl}${this.image_url}`;
 });
 
 // Instance method to increment views
@@ -342,8 +366,24 @@ EconomyArticleSchema.statics.processScheduled = function() {
   );
 };
 
-// Ensure virtual fields are serialized
-EconomyArticleSchema.set('toJSON', { virtuals: true });
+// Ensure virtual fields are serialized with proper URL transformation
+EconomyArticleSchema.set('toJSON', { 
+  virtuals: true,
+  transform: function(doc, ret) {
+    // Transform the image_url to full URL when serializing to JSON
+    // This ensures the frontend always gets full URLs
+    if (ret.image_url) {
+      // Use the virtual field to get the full URL
+      ret.image_url = doc.full_image_url;
+    }
+    
+    // Keep the virtual field for debugging if needed
+    ret.full_image_url = doc.full_image_url;
+    
+    return ret;
+  }
+});
+
 EconomyArticleSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model('EconomyArticle', EconomyArticleSchema);

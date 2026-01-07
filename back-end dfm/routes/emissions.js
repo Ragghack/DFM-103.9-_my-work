@@ -380,22 +380,33 @@ router.post('/admin/stream/toggle', auth, adminAuth, async (req, res) => {
     });
   }
 });
+// Create emission - Fix this route
 router.post('/admin/emissions', auth, adminAuth, async (req, res) => {
   try {
-    // Ensure required fields are present with defaults
+    console.log('Creating emission with data:', req.body);
+    
+    // Set defaults for missing fields
     const emissionData = {
-      ...req.body,
-      content: req.body.content || "Content coming soon...",
-      duration: req.body.duration || "00:00",
-      audio_url: req.body.audio_url || "/uploads/default-audio.mp3",
-      // Convert category to lowercase to match enum
+      title: req.body.title || 'Untitled Emission',
+      description: req.body.description || 'No description provided',
+      content: req.body.content || 'Content coming soon...',
+      duration: req.body.duration || '30:00',
+      audio_url: req.body.audio_url || '',
+      thumbnail: req.body.thumbnail || '',
       category: req.body.category ? req.body.category.toLowerCase() : 'news',
-      // Convert status to lowercase to match enum
-      status: req.body.status ? req.body.status.toLowerCase() : 'draft'
+      status: req.body.status ? req.body.status.toLowerCase() : 'draft',
+      featured: req.body.featured || false,
+      publish_date: req.body.publish_date || new Date(),
+      guest_speakers: req.body.guest_speakers || [],
+      key_topics: req.body.key_topics || ['Current Events', 'Market Analysis']
     };
+
+    console.log('Processed emission data:', emissionData);
 
     const emission = new Emission(emissionData);
     await emission.save();
+
+    console.log('Emission created successfully:', emission._id);
 
     res.status(201).json({
       success: true,
@@ -404,9 +415,19 @@ router.post('/admin/emissions', auth, adminAuth, async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating emission:', error);
+    
+    // Provide more detailed error messages
+    let errorMessage = 'Error creating emission';
+    if (error.name === 'ValidationError') {
+      errorMessage = 'Validation Error: ' + Object.values(error.errors).map(e => e.message).join(', ');
+    } else if (error.code === 11000) {
+      errorMessage = 'Duplicate emission found';
+    }
+    
     res.status(500).json({
       success: false,
-      message: 'Error creating emission: ' + error.message
+      message: errorMessage,
+      error: error.message
     });
   }
 });
@@ -445,6 +466,79 @@ router.put('/admin/emissions/:id', auth, adminAuth, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error updating emission: ' + error.message
+    });
+  }
+});
+// In emissions.js, update the route handlers to ensure proper URLs:
+
+// Get all emissions (public)
+router.get('/', async (req, res) => {
+  try {
+    const { 
+      category, 
+      limit = 10, 
+      page = 1, 
+      featured,
+      search 
+    } = req.query;
+
+    let query = { status: 'published' };
+    if (category && category !== 'all') query.category = category;
+    if (featured === 'true') query.featured = true;
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const emissions = await Emission.find(query)
+      .sort({ publish_date: -1 })
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit));
+
+    // Process emissions to ensure proper URLs
+    const processedEmissions = emissions.map(emission => {
+      const emissionObj = emission.toObject();
+      
+      // Ensure audio_url is properly formatted
+      if (emissionObj.audio_url && !emissionObj.audio_url.startsWith('http')) {
+        if (emissionObj.audio_url.startsWith('uploads/')) {
+          emissionObj.audio_url = `/${emissionObj.audio_url}`;
+        } else if (!emissionObj.audio_url.startsWith('/uploads/')) {
+          emissionObj.audio_url = `/uploads/${emissionObj.audio_url}`;
+        }
+      }
+      
+      // Ensure thumbnail is properly formatted
+      if (emissionObj.thumbnail && !emissionObj.thumbnail.startsWith('http')) {
+        if (emissionObj.thumbnail.startsWith('uploads/')) {
+          emissionObj.thumbnail = `/${emissionObj.thumbnail}`;
+        } else if (!emissionObj.thumbnail.startsWith('/uploads/')) {
+          emissionObj.thumbnail = `/uploads/${emissionObj.thumbnail}`;
+        }
+      }
+      
+      return emissionObj;
+    });
+
+    const total = await Emission.countDocuments(query);
+
+    res.json({
+      success: true,
+      emissions: processedEmissions,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / parseInt(limit))
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching emissions:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching emissions'
     });
   }
 });

@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFM Media - Broadcasts & Emissions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #111223;
+            --secondary-color: #e3cb3e;
+            --accent-color: #FFD700;
+            --light-bg: #f8f9fa;
+            --dark-text: #040402;
+            --light-text: #6c757d;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+        }
+        
+        /* 1. TOP LOGO BAR */
+        .top-logo-bar {
+            background-color: #ffffff;
+            padding: 1rem 0;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-logo {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 20px;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .episode-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        
+        .episode-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .episode-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .episode-content {
+            padding: 1.5rem;
+        }
+        
+        .episode-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+        
+        .episode-excerpt {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+        
+        .episode-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--light-text);
+            font-size: 0.85rem;
+        }
+        
+        .section-header {
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .badge-category {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--light-text);
+            font-weight: 600;
+            border: none;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            background: transparent;
+        }
+        
+        .featured-episode {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 400px;
+            margin-bottom: 2rem;
+            cursor: pointer;
+        }
+        
+        .featured-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 2rem;
+        }
+        
+        .featured-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal Custom Styling */
+        .modal-body img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .section-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stat-item-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-item-label {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+        
+        /* Audio Player Styles */
+        .audio-player-modal {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .audio-player-modal::-webkit-media-controls-panel {
+            background-color: var(--secondary-color);
+        }
+        
+        .guest-avatar-small {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-light);
+            margin-right: 5px;
+        }
+        
+        .guest-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .guest-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        /* LIKE BUTTON STYLES */
+        .like-button {
+            background: none;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .like-button:hover {
+            background: rgba(255, 0, 0, 0.05);
+            color: #ff4757;
+        }
+        
+        .like-button.liked {
+            color: #ff4757;
+        }
+        
+        .like-button.liked i {
+            animation: likeAnimation 0.3s ease;
+        }
+        
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        /* COMMENTS SECTION STYLES */
+        .comments-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .comments-count {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .comments-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            padding-right: 10px;
+        }
+        
+        .comment-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--secondary-color);
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .comment-text {
+            color: var(--dark-text);
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+        
+        .comment-date {
+            font-size: 0.75rem;
+            color: var(--light-text);
+        }
+        
+        .comment-form {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .comment-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .comment-submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .comment-submit-btn:hover {
+            background-color: #0a0b1a;
+        }
+        
+        .no-comments {
+            text-align: center;
+            color: var(--light-text);
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        /* Interaction stats */
+        .interaction-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .interaction-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--light-text);
+            font-size: 0.85rem;
+        }
+        
+        .interaction-stat i {
+            color: var(--secondary-color);
+        }
+        
+        /* ENHANCED GUEST SPEAKER STYLES */
+        .guests-featured-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .guest-card-featured {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .guest-card-featured:hover {
+            transform: translateX(5px);
+        }
+
+        .guest-avatar-featured {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary-color);
+            margin-right: 12px;
+        }
+
+        .guest-info-featured h6 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            color: var(--primary-color);
+        }
+
+        .guest-info-featured p {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-bottom: 0;
+        }
+
+        .guest-role-badge {
+            background: linear-gradient(45deg, var(--secondary-color), #FFD700);
+            color: var(--primary-color);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* ENHANCED MODAL STYLES */
+        .modal-guest-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .modal-guest-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .modal-guest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .modal-guest-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .modal-guest-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .modal-guest-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .modal-guest-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .modal-guest-role {
+            color: var(--light-text);
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
+        }
+
+        .toast {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .featured-episode {
+                height: 300px;
+            }
+            .featured-title { font-size: 1.25rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .comments-list {
+                max-height: 200px;
+            }
+            
+            /* Responsive featured player */
+            .featured-player .row {
+                flex-direction: column;
+            }
+            
+            .featured-player .col-md-4 {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .guest-avatar-featured {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .modal-guest-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Floating Pill Navigation - Matching economy.html */
+        .pill-nav-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            background: rgba(17, 18, 35, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(227, 203, 62, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .pill-nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .pill-nav-item i {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        .pill-nav-item span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .pill-nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .pill-nav-item.active {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .pill-nav-item.active i {
+            color: var(--primary-color);
+        }
+
+        .pill-nav-separator {
+            width: 1px;
+            height: 24px;
+            background: rgba(255,255,255,0.2);
+            margin: 0 10px;
+        }
+
+        /* Show labels on hover or larger screens */
+        @media (min-width: 768px) {
+            .pill-nav-item span {
+                display: inline;
+            }
+        }
+        
+        /* Featured Player in Header */
+        .featured-player {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a1c3a 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .player-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .player-description {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .featured-badge {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: 800;
+            padding: 5px 15px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Logo Bar -->
+    <div class="top-logo-bar">
+        <div class="container">
+            <img src="WhatsApp Image 2025-08-11 à 10.12.00_e3ecde60.jpg" alt="DFM Radio" class="main-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
+            <div id="logo-fallback" class="logo-text-fallback" style="display: none;">
+                DFM RADIO <span style="color:white; font-size: 1rem; display:block; letter-spacing: 5px;">103.9 FM</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-4 fw-bold mb-3">Radio Broadcasts & Emissions</h1>
+                    <p class="lead mb-0">Listen to latest radio episodes, interviews, and special broadcasts from DFM radio</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="d-inline-block px-3 py-2 rounded" style="background: rgba(255,255,255,0.1);">
+                        <small class="d-block">Now Playing</small>
+                        <strong id="now-playing">Loading...</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Featured Player Section (ENHANCED) -->
+    <div class="container">
+        <div class="featured-player" id="featured-player">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <div class="position-relative">
+                        <img src="" id="featured-thumbnail" class="img-fluid rounded shadow" style="max-height: 200px; width: 100%; object-fit: cover;" 
+                             onerror="this.src='https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400'">
+                        <span class="featured-badge">Featured</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h2 class="player-title" id="featured-title">Loading featured episode...</h2>
+                    <p class="player-description" id="featured-description">Latest radio broadcast from DFM</p>
+                    
+                    <div class="mt-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="far fa-clock me-2"></i>
+                            <span id="featured-duration">00:00</span>
+                            <span class="mx-2">•</span>
+                            <i class="far fa-calendar me-2"></i>
+                            <span id="featured-date">Just added</span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <audio controls class="audio-player-modal w-100" id="featured-audio">
+                                <source src="" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3">
+                                <i class="fas fa-user-friends me-2"></i>Guest Speakers
+                            </h6>
+                            <div class="guests-featured-container" id="featured-guests">
+                                <div class="text-center py-4">
+                                    <i class="fas fa-microphone-alt fa-2x text-muted mb-2"></i>
+                                    <p class="text-muted small mb-0">Loading guest speakers...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="container">
+        <ul class="nav nav-tabs mb-4" id="sectionTabs">
+            <li class="nav-item">
+                <button class="nav-link active" data-section="all">All Episodes</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-section="economy">Economy</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-section="interview">Interviews</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-section="news">News</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-section="politics">Politics</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-section="technology">Technology</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-section="finance">Finance</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-section="agriculture">Agriculture</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div id="loading" class="loading-spinner">
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading radio episodes...</p>
+            </div>
+        </div>
+
+        <div id="content" style="display: none;">
+            <!-- Statistics Section -->
+            <div class="row mb-4">
+                <div class="col-12"><h2 class="section-header">Broadcast Statistics</h2></div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-value" id="total-episodes">0</div>
+                        <div class="stat-label">Total Episodes</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-value" id="total-hours">0</div>
+                        <div class="stat-label">Hours of Content</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-value" id="total-guests">0</div>
+                        <div class="stat-label">Guest Speakers</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center">
+                        <div class="stat-value" id="total-views">0</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Episodes Grid -->
+            <div id="episodes-container" class="row"></div>
+
+            <!-- No Episodes Message -->
+            <div id="no-episodes" class="text-center py-5" style="display: none;">
+                <i class="fas fa-podcast fa-4x text-muted mb-3"></i>
+                <h3>No Episodes Available</h3>
+                <p class="text-muted">Check back later for new radio broadcasts</p>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="alert alert-danger text-center" style="display: none;">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <span id="error-text">Failed to load episodes. Please try again later.</span>
+        </div>
+    </div>
+
+    <!-- Episode Detail Modal (ENHANCED) -->
+    <div class="modal fade" id="episodeModal" tabindex="-1" aria-labelledby="episodeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="episodeModalLabel">Episode Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="modal-body-content" class="modal-body">
+                    <!-- Episode content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="shareCurrentEpisode()">
+                        <i class="fas fa-share-alt me-1"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4" style="background: #f8f9fa; border-top: 1px solid #dee2e6;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>DFM Media</h5>
+                    <p class="text-muted">Your reliable source for radio broadcasts, interviews and special emissions.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">Broadcast frequency: 103.9 FM</p>
+                    <p class="text-muted small">Last updated: <span id="data-timestamp">--:--:--</span></p>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank" class="me-3">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank" class="me-3">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz" title="LinkedIn" target="_blank" class="me-3">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" title="Phone" class="me-3">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <address class="mb-0">
+                        DFM Media | Cameroon<br>
+                        <i class="fas fa-envelope me-1"></i> contact@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-1"></i> +237 650 155 155
+                    </address>
+                </div>
+            </div>
+            <hr class="my-3">
+            <p class="mb-0 text-center">&copy; 2025 DFM Media – All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Pill Navigation (Same as economy.html) -->
+    <nav class="pill-nav-container">
+        <a href="index.html" class="pill-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <div class="pill-nav-separator"></div>
+        <a href="emissions.html" class="pill-nav-item active">
+            <i class="fas fa-broadcast-tower"></i>
+            <span>Emissions</span>
+        </a>
+        <a href="economy.html" class="pill-nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Economy</span>
+        </a>
+        <a href="finance.html" class="pill-nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>Finance</span>
+        </a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let episodes = [];
+        let currentEpisodeId = null;
+        const episodeModal = new bootstrap.Modal(document.getElementById('episodeModal'));
+        
+        // Store likes and comments in localStorage
+        let likesData = JSON.parse(localStorage.getItem('dfm_episode_likes')) || {};
+        let commentsData = JSON.parse(localStorage.getItem('dfm_episode_comments')) || {};
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Setup tab navigation
+            document.querySelectorAll('[data-section]').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    // Update active UI state
+                    document.querySelectorAll('[data-section]').forEach(t => t.classList.toggle('active', t === this));
+                    loadEpisodes(section);
+                });
+            });
+            
+            await loadAllData();
+        });
+
+        /**
+         * Helper to fix file paths.
+         * Checks if the path already contains 'uploads/' to prevent double-prefixing.
+         */
+        function getFullUrl(url, type = 'image') {
+            if (!url) {
+                return type === 'image' 
+                    ? 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80' 
+                    : '';
+            }
+            if (url.startsWith('http')) return url;
+            
+            // Remove leading slash if exists
+            const cleanPath = url.startsWith('/') ? url.substring(1) : url;
+            
+            // If the path already includes 'uploads/', don't add it again
+            if (cleanPath.startsWith('uploads/')) {
+                return `http://localhost:5000/${cleanPath}`;
+            }
+            return `http://localhost:5000/uploads/${cleanPath}`;
+        }
+
+        async function loadAllData() {
+            const loadingEl = document.getElementById('loading');
+            const contentEl = document.getElementById('content');
+            try {
+                await loadEpisodes('all');
+                updateDataTimestamp();
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+            } catch (error) {
+                console.error("Error loading data:", error);
+                loadingEl.style.display = 'none';
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('error-text').textContent = "Connection error: Make sure the server is running on port 5000.";
+            }
+        }
+
+        async function loadEpisodes(section = 'all') {
+            let url = `${API_BASE_URL}/emissions?status=published`;
+            if (section !== 'all') url += `&category=${section}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    episodes = data.emissions || [];
+                    const container = document.getElementById('episodes-container');
+                    const noEpisodes = document.getElementById('no-episodes');
+
+                    if (episodes.length === 0) {
+                        container.innerHTML = '';
+                        noEpisodes.style.display = 'block';
+                        return;
+                    }
+
+                    noEpisodes.style.display = 'none';
+                    updateStatistics(episodes);
+                    
+                    // Set featured (first published or explicitly flagged)
+                    const featured = episodes.find(e => e.featured) || episodes[0];
+                    displayFeaturedEpisode(featured);
+                    
+                    // Display the rest in the grid
+                    displayEpisodesGrid(episodes);
+                }
+            } catch (e) {
+                console.error("Fetch error:", e);
+                throw e;
+            }
+        }
+
+        function displayFeaturedEpisode(episode) {
+            if (!episode) return;
+            
+            document.getElementById('featured-title').textContent = episode.title;
+            document.getElementById('featured-description').textContent = episode.description || '';
+            
+            // Update thumbnail
+            const thumbnailImg = document.getElementById('featured-thumbnail');
+            if (thumbnailImg && episode.thumbnail) {
+                thumbnailImg.src = getFullUrl(episode.thumbnail);
+            }
+            
+            document.getElementById('now-playing').textContent = episode.title;
+            
+            const audioElement = document.getElementById('featured-audio');
+            if (episode.audio_url) {
+                audioElement.src = getFullUrl(episode.audio_url, 'audio');
+                audioElement.load();
+            }
+            
+            document.getElementById('featured-duration').textContent = episode.duration || '00:00';
+            document.getElementById('featured-date').textContent = formatDate(episode.publish_date);
+            
+            // Display guest speakers in featured section
+            const guestsContainer = document.getElementById('featured-guests');
+            if (episode.guest_speakers && episode.guest_speakers.length > 0) {
+                guestsContainer.innerHTML = `
+                    <div class="guests-featured-container">
+                        ${episode.guest_speakers.map(guest => `
+                            <div class="guest-card-featured">
+                                <img src="${guest.avatar ? getFullUrl(guest.avatar) : `https://ui-avatars.com/api/?name=${encodeURIComponent(guest.name)}&background=${encodeURIComponent(guest.role ? guest.role.split(' ')[0] : 'DFM')}&color=fff&size=100`}" 
+                                     class="guest-avatar-featured" alt="${guest.name}">
+                                <div class="guest-info-featured">
+                                    <h6>${guest.name}</h6>
+                                    <p>${guest.role || 'Guest Speaker'}</p>
+                                </div>
+                                <span class="guest-role-badge">Guest</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                guestsContainer.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-microphone-alt fa-2x text-muted mb-2"></i>
+                        <p class="text-muted small mb-0">No guest speakers listed</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayEpisodesGrid(list) {
+            const container = document.getElementById('episodes-container');
+            container.innerHTML = list.map(episode => `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="episode-card" onclick="openEpisode('${episode._id}')">
+                        <img src="${getFullUrl(episode.thumbnail)}" class="episode-image" 
+                             onerror="this.src='https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400'"
+                             alt="${episode.title}">
+                        <div class="episode-content">
+                            <span class="badge-category">${episode.category || 'General'}</span>
+                            ${episode.featured ? '<span class="badge bg-warning text-dark float-end">Featured</span>' : ''}
+                            <h3 class="episode-title">${episode.title}</h3>
+                            <p class="episode-excerpt">${episode.description ? episode.description.substring(0, 80) + '...' : ''}</p>
+                            <div class="episode-meta">
+                                <span><i class="far fa-clock me-1"></i> ${episode.duration || '--:--'}</span>
+                                <div class="interaction-stats">
+                                    <div class="interaction-stat"><i class="fas fa-heart"></i> ${getLikeCount(episode._id)}</div>
+                                    <div class="interaction-stat"><i class="fas fa-comment"></i> ${getCommentCount(episode._id)}</div>
+                                </div>
+                            </div>
+                            <!-- Guest Speakers Preview -->
+                            ${episode.guest_speakers && episode.guest_speakers.length > 0 ? `
+                                <div class="mt-2">
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="fas fa-user-friends me-1"></i>${episode.guest_speakers.length} guest(s)
+                                    </small>
+                                    <div class="d-flex">
+                                        ${episode.guest_speakers.slice(0, 3).map(guest => `
+                                            <div class="me-1" title="${guest.name}">
+                                                <img src="${guest.avatar ? getFullUrl(guest.avatar) : `https://ui-avatars.com/api/?name=${encodeURIComponent(guest.name)}&background=random&size=100`}" 
+                                                     class="guest-avatar-small" alt="${guest.name}">
+                                            </div>
+                                        `).join('')}
+                                        ${episode.guest_speakers.length > 3 ? `<small class="text-muted ms-1">+${episode.guest_speakers.length - 3} more</small>` : ''}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openEpisode(id) {
+            const episode = episodes.find(e => e._id === id);
+            if (!episode) return;
+            
+            currentEpisodeId = id;
+            const modalBody = document.getElementById('modal-body-content');
+            const comments = getComments(id);
+
+            // Build guest speakers HTML
+            let guestsHTML = '';
+            if (episode.guest_speakers && episode.guest_speakers.length > 0) {
+                guestsHTML = `
+                    <div class="modal-guest-section">
+                        <h5 class="mb-3">
+                            <i class="fas fa-user-friends me-2"></i>Guest Speakers
+                            <span class="badge bg-secondary ms-2">${episode.guest_speakers.length}</span>
+                        </h5>
+                        <div class="modal-guest-grid">
+                            ${episode.guest_speakers.map(guest => `
+                                <div class="modal-guest-card">
+                                    <img src="${guest.avatar ? getFullUrl(guest.avatar) : `https://ui-avatars.com/api/?name=${encodeURIComponent(guest.name)}&background=${encodeURIComponent(guest.role ? guest.role.split(' ')[0] : 'DFM')}&color=fff&size=100`}" 
+                                         class="modal-guest-avatar" alt="${guest.name}">
+                                    <div class="modal-guest-info">
+                                        <h6 class="modal-guest-name">${guest.name}</h6>
+                                        <p class="modal-guest-role">${guest.role || 'Guest Speaker'}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                guestsHTML = `
+                    <div class="modal-guest-section text-center py-4">
+                        <i class="fas fa-microphone-alt fa-2x text-muted mb-3"></i>
+                        <h6>No Guest Speakers</h6>
+                        <p class="text-muted small">This episode doesn't have guest speakers listed.</p>
+                    </div>
+                `;
+            }
+
+            // Build key topics HTML
+            let topicsHTML = '';
+            if (episode.key_topics && episode.key_topics.length > 0) {
+                topicsHTML = `
+                    <div class="mt-4">
+                        <h6><i class="fas fa-tags me-2"></i>Key Topics</h6>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            ${episode.key_topics.map(topic => `
+                                <span class="badge bg-light text-dark border px-3 py-2">
+                                    <i class="fas fa-hashtag me-1"></i>${topic}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            modalBody.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="${getFullUrl(episode.thumbnail)}" class="img-fluid rounded shadow mb-3" 
+                             style="max-height: 300px; width: 100%; object-fit: cover;"
+                             onerror="this.src='https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400'">
+                        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title"><i class="fas fa-info-circle me-2"></i>Episode Details</h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Duration</small>
+                                        <strong>${episode.duration || '--:--'}</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Category</small>
+                                        <span class="badge bg-secondary">${episode.category || 'General'}</span>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <small class="text-muted d-block">Published</small>
+                                        <strong>${formatDate(episode.publish_date)}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <span class="badge bg-warning text-dark">${episode.featured ? 'FEATURED EPISODE' : 'REGULAR EPISODE'}</span>
+                        </div>
+                        
+                        <h3 class="mb-3">${episode.title}</h3>
+                        
+                        <div class="mb-4">
+                            <audio controls class="audio-player-modal w-100" id="modal-player">
+                                <source src="${getFullUrl(episode.audio_url, 'audio')}" type="audio/mpeg">
+                            </audio>
+                        </div>
+                        
+                        <div class="episode-description mb-4">
+                            <h5 class="mb-3">Description</h5>
+                            <p>${episode.description || 'No description available.'}</p>
+                        </div>
+                        
+                        ${guestsHTML}
+                        ${topicsHTML}
+                        
+                        <div class="d-flex gap-3 mb-4 mt-4 pt-3 border-top">
+                            <button class="like-button ${isLiked(id) ? 'liked' : ''}" onclick="toggleLike('${id}', true)" data-id="${id}">
+                                <i class="fas fa-heart"></i> <span>${getLikeCount(id)}</span> Like
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="shareEpisode('${id}')">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                        </div>
+
+                        <div class="comments-section">
+                            <h5 class="comments-count mb-3">Comments (${comments.length})</h5>
+                            <div class="comments-list" id="modal-comments-list">
+                                ${comments.length ? comments.map(c => `
+                                    <div class="comment-item">
+                                        <div class="comment-author">${c.author}</div>
+                                        <div class="comment-text">${c.text}</div>
+                                        <div class="comment-date">${formatCommentDate(c.date)}</div>
+                                    </div>
+                                `).join('') : '<p class="no-comments text-center py-4">No comments yet. Be the first to comment!</p>'}
+                            </div>
+                            
+                            <div class="comment-form mt-3">
+                                <input type="text" id="c-name" class="form-control mb-2" placeholder="Your Name" value="${localStorage.getItem('dfm_user_name') || ''}">
+                                <textarea id="c-text" class="form-control mb-2" placeholder="Add a comment..." rows="3"></textarea>
+                                <button class="comment-submit-btn" onclick="submitComment('${id}')">Post Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            episodeModal.show();
+            const player = document.getElementById('modal-player');
+            if (player) player.load();
+        }
+
+        function shareCurrentEpisode() {
+            if (currentEpisodeId) {
+                shareEpisode(currentEpisodeId);
+            }
+        }
+
+        function shareEpisode(id) {
+            const episode = episodes.find(e => e._id === id);
+            if (!episode) return;
+            
+            const shareUrl = window.location.href.split('#')[0] + `?episode=${id}`;
+            const shareText = `Check out this episode from DFM Radio: "${episode.title}"`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: episode.title,
+                    text: shareText,
+                    url: shareUrl,
+                }).then(() => {
+                    showToast('Episode shared successfully!', 'success');
+                }).catch(err => {
+                    console.error('Share failed:', err);
+                    copyToClipboard(shareUrl);
+                });
+            } else {
+                copyToClipboard(shareUrl);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Link copied to clipboard!', 'success');
+            }).catch(err => {
+                console.error('Copy failed:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Link copied to clipboard!', 'success');
+            });
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.querySelector('.toast-container');
+            container.appendChild(toast);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+
+        // --- Interaction Logic (Likes/Comments) ---
+
+        function toggleLike(id, inModal = false) {
+            const userId = getUserIdentifier();
+            if (!likesData[id]) likesData[id] = [];
+            
+            const index = likesData[id].indexOf(userId);
+            if (index > -1) likesData[id].splice(index, 1);
+            else likesData[id].push(userId);
+            
+            localStorage.setItem('dfm_episode_likes', JSON.stringify(likesData));
+            
+            // Update UI
+            if (inModal) {
+                const btn = document.querySelector(`.like-button[data-id="${id}"]`);
+                btn.classList.toggle('liked');
+                btn.querySelector('span').textContent = getLikeCount(id);
+            }
+            displayEpisodesGrid(episodes); // Refresh main grid counts
+        }
+
+        function submitComment(id) {
+            const name = document.getElementById('c-name').value.trim();
+            const text = document.getElementById('c-text').value.trim();
+            if (!name || !text) return showToast("Please fill in both fields", "warning");
+
+            localStorage.setItem('dfm_user_name', name);
+            if (!commentsData[id]) commentsData[id] = [];
+            
+            commentsData[id].unshift({ author: name, text, date: new Date().toISOString() });
+            localStorage.setItem('dfm_episode_comments', JSON.stringify(commentsData));
+            
+            showToast('Comment posted successfully!', 'success');
+            openEpisode(id); // Refresh modal view
+        }
+
+        // --- Utilities ---
+
+        function getLikeCount(id) { return likesData[id] ? likesData[id].length : 0; }
+        function getCommentCount(id) { return commentsData[id] ? commentsData[id].length : 0; }
+        function getComments(id) { return commentsData[id] || []; }
+        function isLiked(id) { return likesData[id] && likesData[id].includes(getUserIdentifier()); }
+        
+        function getUserIdentifier() {
+            let id = localStorage.getItem('dfm_user_id');
+            if (!id) {
+                id = 'user_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('dfm_user_id', id);
+            }
+            return id;
+        }
+
+        function updateStatistics(list) {
+            document.getElementById('total-episodes').textContent = list.length;
+            
+            // Calculate total hours
+            const totalMinutes = list.reduce((sum, e) => {
+                if (e.duration) {
+                    const [hours, minutes] = e.duration.split(':').map(Number);
+                    return sum + (hours * 60) + (minutes || 0);
+                }
+                return sum;
+            }, 0);
+            const totalHours = Math.round(totalMinutes / 60);
+            document.getElementById('total-hours').textContent = totalHours;
+            
+            // Count unique guest speakers
+            const allGuests = list.reduce((guests, e) => {
+                if (e.guest_speakers) {
+                    e.guest_speakers.forEach(g => {
+                        if (g.name && !guests.includes(g.name)) guests.push(g.name);
+                    });
+                }
+                return guests;
+            }, []);
+            document.getElementById('total-guests').textContent = allGuests.length;
+            
+            const totalViews = list.reduce((sum, e) => sum + (e.views || 0), 0);
+            document.getElementById('total-views').textContent = totalViews.toLocaleString();
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Recent';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function formatCommentDate(dateStr) {
+            const diff = Math.floor((new Date() - new Date(dateStr)) / 60000);
+            if (diff < 1) return 'Just now';
+            if (diff < 60) return `${diff}m ago`;
+            if (diff < 1440) return `${Math.floor(diff / 60)}h ago`;
+            return new Date(dateStr).toLocaleDateString();
+        }
+
+        function updateDataTimestamp() { 
+            document.getElementById('data-timestamp').textContent = new Date().toLocaleTimeString(); 
+        }
+
+        window.openEpisode = openEpisode;
+        window.toggleLike = toggleLike;
+        window.submitComment = submitComment;
+        window.shareEpisode = shareEpisode;
+        window.shareCurrentEpisode = shareCurrentEpisode;
+    </script>
+</body>
+</html>

@@ -982,7 +982,7 @@ input, select, textarea {
     const API_BASE = 'http://localhost:5000/api';
     let authToken = localStorage.getItem('dfm_token');
     let currentUser = JSON.parse(localStorage.getItem('dfm_user') || 'null');
-    const articlesData = await apiCall('/articles?featured=true&limit=3');
+   // const articlesData = await apiCall('/articles?featured=true&limit=3');
 
     // ==================== UTILITY FUNCTIONS ====================
     function showToast(message, type = 'info') {
@@ -1008,38 +1008,50 @@ input, select, textarea {
         }, 4000);
     }
 
-    async function apiCall(endpoint, options = {}) {
-        try {
-            const headers = {
-                'Content-Type': 'application/json',
-                ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
-                ...options.headers
-            };
+async function apiCall(endpoint, options = {}) {
+    try {
+        const headers = {
+            'Content-Type': 'application/json',
+            ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+            ...options.headers
+        };
 
-            const config = {
-                headers,
-                ...options
-            };
+        const config = {
+            headers,
+            method: options.method || 'GET',
+            ...options
+        };
 
-            // Remove headers from body if it's FormData
-            if (options.body instanceof FormData) {
-                delete config.headers['Content-Type'];
-            }
-
-            const response = await fetch(`${API_BASE}${endpoint}`, config);
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('API call failed:', error);
-            showToast(error.message || 'Failed to load data. Please try again.', 'danger');
-            throw error;
+        // Remove headers from body if it's FormData
+        if (options.body && typeof options.body === 'string') {
+            config.body = options.body;
+        } else if (options.body) {
+            config.body = JSON.stringify(options.body);
         }
+
+        console.log(`API Call: ${endpoint}`, config); // Debug log
+
+        const response = await fetch(`${API_BASE}${endpoint}`, config);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API Error Response:', errorText);
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+            } catch {
+                errorData = { message: errorText || `HTTP error! status: ${response.status}` };
+            }
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('API call failed:', error);
+        showToast(error.message || 'Failed to load data. Please try again.', 'danger');
+        throw error;
     }
+}
 
     function formatDate(dateString) {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -1109,51 +1121,86 @@ input, select, textarea {
     }
 
     // ==================== ARTICLE FUNCTIONS ====================
-    async function loadFeaturedArticles() {
-        try {
-            // Load featured articles
-            const articlesData = await apiCall('/articles?featured=true&limit=3');
+async function loadFeaturedArticles() {
+    try {
+        const featuredContainer = document.getElementById('featured-article-container');
+        const sideContainer = document.getElementById('side-articles-container');
+        
+        if (featuredContainer) {
+            featuredContainer.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading featured article...</p>
+                </div>
+            `;
+        }
+        
+        // Load featured articles
+        const data = await apiCall('/articles?featured=true&limit=3');
+        
+        if (data.articles && data.articles.length > 0) {
+            // Featured article (first one)
+            const featuredArticle = data.articles[0];
+            if (featuredContainer) {
+                featuredContainer.innerHTML = createArticleHTML(featuredArticle, true);
+            }
             
-            if (articlesData.articles && articlesData.articles.length > 0) {
-                // Featured article (first one)
-                const featuredArticle = articlesData.articles[0];
-                document.getElementById('featured-article-container').innerHTML = createArticleHTML(featuredArticle, true);
-                
-                // Side articles (rest)
-                const sideArticles = articlesData.articles.slice(1);
-                document.getElementById('side-articles-container').innerHTML = sideArticles.map(article => 
+            // Side articles (rest)
+            const sideArticles = data.articles.slice(1);
+            if (sideContainer) {
+                sideContainer.innerHTML = sideArticles.map(article => 
                     createArticleHTML(article, false)
                 ).join('');
-            } else {
-                document.getElementById('featured-article-container').innerHTML = `
-                    <div class="alert alert-info">
-                        <p>No featured articles available at the moment.</p>
-                    </div>
-                `;
             }
             
             // Load breaking news ticker
             const allArticles = await apiCall('/articles?limit=5');
             if (allArticles.articles && allArticles.articles.length > 0) {
-                const tickerContent = allArticles.articles.map(article => article.title).join(' | ');
-                document.getElementById('breakingNewsTicker').textContent = tickerContent;
+                const tickerElement = document.getElementById('breakingNewsTicker');
+                if (tickerElement) {
+                    const tickerContent = allArticles.articles.map(article => article.title).join(' | ');
+                    tickerElement.textContent = tickerContent;
+                }
             }
-            
-        } catch (error) {
-            document.getElementById('featured-article-container').innerHTML = `
+        } else {
+            if (featuredContainer) {
+                featuredContainer.innerHTML = `
+                    <div class="alert alert-info">
+                        <p>No featured articles available at the moment.</p>
+                    </div>
+                `;
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error loading featured articles:', error);
+        const featuredContainer = document.getElementById('featured-article-container');
+        if (featuredContainer) {
+            featuredContainer.innerHTML = `
                 <div class="alert alert-warning">
                     <p>Unable to load articles. Please try again later.</p>
                 </div>
             `;
         }
     }
+}
 
-    function createArticleHTML(article, isFeatured) {
-        const imageUrl = article.image_url || 'https://via.placeholder.com/400x200/1a1814/D4AF37?text=DFM+Media';
-        const authorAvatar = article.author?.avatar || 'https://via.placeholder.com/40x40/1a1814/D4AF37?text=U';
-        const isLiked = currentUser && article.likes?.includes(currentUser.id);
-        const isSaved = currentUser && currentUser.savedArticles?.includes(article._id);
-        
+function createArticleHTML(article, isFeatured) {
+    // Fix image URL - check if it's a relative path
+    let imageUrl = article.image_url || 'https://via.placeholder.com/400x200/1a1814/D4AF37?text=DFM+Media';
+    
+    // If it's a relative URL, prepend the base URL
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('//')) {
+        // Check if it starts with uploads
+        if (imageUrl.startsWith('uploads/') || imageUrl.startsWith('/uploads/')) {
+            imageUrl = `http://localhost:5000/${imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl}`;
+        }
+    }
+    
+    const authorAvatar = article.author?.avatar || 'https://via.placeholder.com/40x40/1a1814/D4AF37?text=U';
+    const isLiked = currentUser && article.likes?.includes(currentUser.id);
+    const isSaved = currentUser && currentUser.savedArticles?.includes(article._id);
+    
         if (isFeatured) {
             return `
                 <article class="card news-card" data-article-id="${article._id}">
@@ -1413,38 +1460,51 @@ input, select, textarea {
         }
     }
 
-    async function submitCommunityPost(event) {
-        event.preventDefault();
-        
-        if (!authToken) {
-            showToast('Please login to submit posts', 'warning');
+async function submitCommunityPost(event) {
+    event.preventDefault();
+    
+    if (!authToken) {
+        showToast('Please login to submit posts', 'warning');
+        return;
+    }
+
+    try {
+        const title = document.getElementById('blogTitle').value.trim();
+        const content = document.getElementById('blogContent').value.trim();
+        const category = document.getElementById('blogCategory').value;
+
+        // Validation
+        if (!title || !content || !category) {
+            showToast('Title, content, and category are required', 'warning');
             return;
         }
 
-        try {
-            const formData = {
-                title: document.getElementById('blogTitle').value,
-                content: document.getElementById('blogContent').value,
-                category: document.getElementById('blogCategory').value
-            };
+        const formData = {
+            title: title,
+            content: content,
+            category: category
+        };
 
-            const response = await apiCall('/community', {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            });
+        console.log('Submitting community post:', formData); // Debug log
 
-            if (response.success) {
-                document.getElementById('communityPostForm').reset();
-                showToast('Post submitted for approval!', 'success');
-                
-                // Reload community posts
-                await loadCommunityPosts();
-            }
+        const response = await apiCall('/community', {
+            method: 'POST',
+            body: JSON.stringify(formData)
+        });
+
+        if (response.success) {
+            document.getElementById('communityPostForm').reset();
+            showToast('Post submitted for approval!', 'success');
             
-        } catch (error) {
-            console.error('Error submitting community post:', error);
+            // Reload community posts
+            await loadCommunityPosts();
         }
+        
+    } catch (error) {
+        console.error('Error submitting community post:', error);
+        showToast('Error submitting post. Please try again.', 'danger');
     }
+}
 
     function viewPostComments(postId) {
         showToast('Opening post comments...', 'info');
@@ -1511,8 +1571,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load data
     loadFeaturedArticles();
     loadCommunityPosts();
-    loadRecentArticles(1); // Load first page of articles
-    addCategoryFilters(); // Add filter buttons
     
     // Event listeners
     document.getElementById('newsletterForm').addEventListener('submit', subscribeNewsletter);
@@ -1913,7 +1971,26 @@ async function filterByCategory(category) {
         console.error('Error filtering articles:', error);
     }
 }
-
+function debugForm() {
+    const form = document.getElementById('communityPostForm');
+    const title = document.getElementById('blogTitle');
+    const category = document.getElementById('blogCategory');
+    const content = document.getElementById('blogContent');
+    
+    console.log('Form elements:', {
+        title: title ? title.value : 'NOT FOUND',
+        category: category ? category.value : 'NOT FOUND',
+        content: content ? content.value : 'NOT FOUND',
+        formExists: !!form
+    });
+    
+    // Test setting values
+    if (title) title.value = 'Test Title ' + Date.now();
+    if (category) category.value = 'opinion';
+    if (content) content.value = 'Test content for debugging purposes. This should submit correctly.';
+    
+    showToast('Form debug values set. Try submitting now.', 'info');
+}
 
 // Call this to test if you can programmatically interact with inputs
 // testInputAccess();

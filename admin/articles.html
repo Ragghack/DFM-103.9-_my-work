@@ -331,20 +331,24 @@ async function loadEmissions() {
             return;
         }
         
-        tbody.innerHTML = data.emissions.map(emission => `
-            <tr>
+tbody.innerHTML = data.articles.map(article => `
+  <tr>
+    <td>
+      <input type="checkbox" class="form-check-input article-checkbox" value="${article._id}">
+    </td>
+    <td>
+                   ${article.image_url ? 
+        `<img src="${formatImageUrl(article.image_url)}" class="rounded" 
+              style="width: 40px; height: 40px; object-fit: cover;" 
+              onerror="this.src='https://via.placeholder.com/40'"
+              alt="${article.title}">` : 
+        '<i class="fas fa-image text-muted"></i>'
+      }
+    </td>
+
                 <td>
-                    <input type="checkbox" class="form-check-input emission-checkbox" value="${emission._id}">
-                </td>
-                <td>
-                    ${emission.thumbnail ? 
-                        `<img src="${emission.thumbnail}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${emission.title}">` : 
-                        '<i class="fas fa-image text-muted"></i>'
-                    }
-                </td>
-                <td>
-                    <div class="fw-bold">${emission.title}</div>
-                    <small class="text-muted">${emission.description.substring(0, 60)}...</small>
+                    <div class="fw-bold">${article.title}</div>
+                    <small class="text-muted">${article.description.substring(0, 60)}...</small>
                 </td>
                 <td><span class="badge bg-secondary">${emission.category}</span></td>
                 <td>${new Date(emission.publish_date).toLocaleDateString()}</td>

@@ -1,36 +1,39 @@
-
 const mongoose = require('mongoose');
 
 const EmissionSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
-    trim: true
+    required: [true, 'Title is required'],
+    trim: true,
+    minlength: 3,
+    maxlength: 200
   },
   description: {
     type: String,
-    required: true
+    required: [true, 'Description is required'],
+    minlength: 10,
+    maxlength: 2000
   },
   content: {
     type: String,
-    default: "" // Made optional with default value
+    default: "Content coming soon..."
   },
   duration: {
     type: String,
-    required: true
+    default: "00:00"
   },
   audio_url: {
     type: String,
-    required: true
+    default: ""
   },
   thumbnail: {
     type: String,
-    default: null
+    default: ""
   },
   category: {
     type: String,
-    required: true,
-    enum: ['economy', 'finance', 'agriculture', 'interview', 'politics', 'technology', 'news'] // Fixed enum values
+    enum: ['economy', 'finance', 'agriculture', 'interview', 'politics', 'technology', 'news'],
+    default: 'news'
   },
   status: {
     type: String,
@@ -50,7 +53,10 @@ const EmissionSchema = new mongoose.Schema({
     role: String,
     avatar: String
   }],
-  key_topics: [String],
+  key_topics: {
+    type: [String],
+    default: ["Current Events", "Market Analysis", "Expert Insights"]
+  },
   views: {
     type: Number,
     default: 0
@@ -63,9 +69,10 @@ const EmissionSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for efficient queries
+// Create indexes
 EmissionSchema.index({ status: 1, publish_date: -1 });
 EmissionSchema.index({ featured: 1, status: 1 });
 EmissionSchema.index({ category: 1 });
+EmissionSchema.index({ title: 'text', description: 'text' });
 
 module.exports = mongoose.model('Emission', EmissionSchema);

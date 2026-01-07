@@ -589,21 +589,22 @@ async function saveProgram(formData) {
             imageUrl = await uploadImage(imageFile);
         }
 
-        const payload = {
-            title: document.getElementById('program-title').value,
-            description: document.getElementById('program-description').value,
-            host: document.getElementById('program-host').value,
-            schedule: document.getElementById('program-schedule').value,
-            startDate: document.getElementById('program-start-date').value,
-            category: document.getElementById('program-category').value,
-            status: document.getElementById('program-status').value,
-            featured: document.getElementById('program-featured').checked,
-            image: imageUrl,
-            reminderSettings: {
-                email: document.getElementById('email-reminders').checked,
-                push: document.getElementById('push-notifications').checked
-            }
-        };
+// In actuality.html, around line 602
+const payload = {
+    title: document.getElementById('program-title').value,
+    description: document.getElementById('program-description').value,
+    host: document.getElementById('program-host').value,
+    schedule: document.getElementById('program-schedule').value,
+    startDate: document.getElementById('program-start-date').value,
+    category: document.getElementById('program-category').value.toLowerCase(), // Convert to lowercase
+    status: document.getElementById('program-status').value.toLowerCase(), // Convert to lowercase
+    featured: document.getElementById('program-featured').checked,
+    image: imageUrl,
+    reminderSettings: {
+        email: document.getElementById('email-reminders').checked,
+        push: document.getElementById('push-notifications').checked
+    }
+};
 
         let response;
         if (currentEditingId) {

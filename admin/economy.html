@@ -33,6 +33,42 @@
             font-weight: 700;
             color: var(--primary-accent);
         }
+        
+        /* Section tabs */
+        .section-tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .section-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .section-tab:hover {
+            color: var(--primary-accent);
+        }
+        
+        .section-tab.active {
+            color: var(--primary-accent);
+            border-bottom-color: var(--primary-accent);
+        }
+        
+        .section-content {
+            display: none;
+        }
+        
+        .section-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -142,37 +178,316 @@
 
                 <!-- Economy Content -->
                 <div class="container-fluid py-4">
-                    <div class="content-section active" id="economy-section">
+                    <!-- Section Tabs -->
+                    <div class="section-tabs">
+                        <button class="section-tab active" data-section="overview">Economic Overview</button>
+                        <button class="section-tab" data-section="eco-africa">Eco Africa</button>
+                        <button class="section-tab" data-section="eco-agriculture">Eco Agriculture</button>
+                        <button class="section-tab" data-section="eco-innovation">Eco Innovation</button>
+                        <button class="section-tab" data-section="articles">Economy Articles</button>
+                    </div>
+
+                    <!-- Economic Overview Section -->
+                    <div class="section-content active" id="overview-section">
                         <div class="section-header">
-                            <h4 class="section-title">Economy Content Management</h4>
+                            <h4 class="section-title">Economic Statistics Overview</h4>
+                        </div>
+                        
+                        <div class="economy-summary-admin mb-4">
+                            <h5 class="mb-3">Current Economic Indicators</h5>
+                            <div class="economy-indicator-admin">
+                                <span>GDP Growth</span>
+                                <span class="indicator-value-admin" id="gdp-growth-display">3.2%</span>
+                            </div>
+                            <div class="economy-indicator-admin">
+                                <span>Industrial Growth</span>
+                                <span class="indicator-value-admin" id="industrial-growth-display">4.5%</span>
+                            </div>
+                            <div class="economy-indicator-admin">
+                                <span>Unemployment Rate</span>
+                                <span class="indicator-value-admin" id="unemployment-rate-display">5.8%</span>
+                            </div>
+                            <div class="economy-indicator-admin">
+                                <span>Inflation Rate</span>
+                                <span class="indicator-value-admin" id="inflation-rate-display">2.1%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Update Economic Statistics</h5>
+                                    <form id="economy-stats-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">GDP Growth (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-gdp-growth" value="3.2">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Industrial Growth (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-industrial-growth" value="4.5">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Unemployment Rate (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-unemployment-rate" value="5.8">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Inflation Rate (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-inflation-rate" value="2.1">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Period</label>
+                                            <input type="text" class="form-control" id="update-period" value="Q2 2023" placeholder="e.g., Q2 2023">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Statistics</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Additional Indicators</h5>
+                                    <form id="additional-stats-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Interest Rate (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-interest-rate" value="3.5">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Currency Stability</label>
+                                            <input type="number" step="0.1" class="form-control" id="update-currency-stability" value="582.50">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Source</label>
+                                            <select class="form-select" id="update-source">
+                                                <option value="National Statistics Institute" selected>National Statistics Institute</option>
+                                                <option value="Central Bank">Central Bank</option>
+                                                <option value="World Bank">World Bank</option>
+                                                <option value="IMF">IMF</option>
+                                                <option value="African Development Bank">African Development Bank</option>
+                                                <option value="Ministry of Economy">Ministry of Economy</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Additional Stats</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eco Africa Section -->
+                    <div class="section-content" id="eco-africa-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Eco Africa Statistics</h4>
                             <div class="action-buttons">
-                                <button class="btn btn-gold" id="add-economy-article-btn">
+                                <button class="btn btn-outline-primary me-2" onclick="loadAfricaArticles()">
+                                    <i class="fas fa-sync-alt me-1"></i> Refresh Articles
+                                </button>
+                                <button class="btn btn-gold" onclick="showAfricaArticleForm()">
+                                    <i class="fas fa-plus me-2"></i> Add Africa Article
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Update Eco Africa Statistics</h5>
+                                    <form id="africa-stats-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Africa's Total GDP</label>
+                                            <input type="text" class="form-control" id="africa-total-gdp" value="$2.4T">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Intra-African Trade</label>
+                                            <input type="text" class="form-control" id="africa-intra-trade" value="$140B">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Urbanization Rate (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="africa-urbanization" value="43">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Africa's Population</label>
+                                            <input type="text" class="form-control" id="africa-population" value="1.3B">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Africa Stats</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom">
+                                        <h5 class="mb-0">Recent Eco Africa Articles</h5>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="africa-articles-table">
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted py-4">
+                                                        Loading Africa articles...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eco Agriculture Section -->
+                    <div class="section-content" id="eco-agriculture-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Eco Agriculture Statistics</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-primary me-2" onclick="loadAgricultureArticles()">
+                                    <i class="fas fa-sync-alt me-1"></i> Refresh Articles
+                                </button>
+                                <button class="btn btn-gold" onclick="showAgricultureArticleForm()">
+                                    <i class="fas fa-plus me-2"></i> Add Agriculture Article
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Update Eco Agriculture Statistics</h5>
+                                    <form id="agriculture-stats-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Workforce in Agriculture (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="agriculture-workforce" value="42">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Organic Farming Growth (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="agriculture-organic-growth" value="18">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Crop Yield Increase (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="agriculture-yield-increase" value="30">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Water Efficiency Improvement (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="agriculture-water-efficiency" value="45">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Agriculture Stats</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom">
+                                        <h5 class="mb-0">Recent Eco Agriculture Articles</h5>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="agriculture-articles-table">
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted py-4">
+                                                        Loading agriculture articles...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eco Innovation Section -->
+                    <div class="section-content" id="eco-innovation-section">
+                        <div class="section-header">
+                            <h4 class="section-title">Eco Innovation Statistics</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-primary me-2" onclick="loadInnovationArticles()">
+                                    <i class="fas fa-sync-alt me-1"></i> Refresh Articles
+                                </button>
+                                <button class="btn btn-gold" onclick="showInnovationArticleForm()">
+                                    <i class="fas fa-plus me-2"></i> Add Innovation Article
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-container">
+                                    <h5 class="mb-3">Update Eco Innovation Statistics</h5>
+                                    <form id="innovation-stats-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Patent Applications Increase (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="innovation-patent-increase" value="35">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Renewable Energy Growth (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="innovation-renewable-growth" value="300">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Recycling Rate Improvement (%)</label>
+                                            <input type="number" step="0.1" class="form-control" id="innovation-recycling-improvement" value="65">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Wind Power Capacity</label>
+                                            <input type="text" class="form-control" id="innovation-wind-power" value="120MW">
+                                        </div>
+                                        <button type="submit" class="btn btn-gold">Update Innovation Stats</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom">
+                                        <h5 class="mb-0">Recent Eco Innovation Articles</h5>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="innovation-articles-table">
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted py-4">
+                                                        Loading innovation articles...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Articles Management Section -->
+                    <div class="section-content" id="articles-section">
+                        <div class="section-header">
+                            <h4 class="section-title">All Economy Articles</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-gold" onclick="showEconomyArticleForm()">
                                     <i class="fas fa-plus me-2"></i> Add Economy Article
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="economy-summary-admin mb-4">
-                            <h5 class="mb-3">Economic Indicators Summary</h5>
-                            <div class="economy-indicator-admin">
-                                <span>GDP Growth</span>
-                                <span class="indicator-value-admin" id="gdp-growth">3.2%</span>
-                            </div>
-                            <div class="economy-indicator-admin">
-                                <span>Industrial Growth</span>
-                                <span class="indicator-value-admin" id="industrial-growth">4.5%</span>
-                            </div>
-                            <div class="economy-indicator-admin">
-                                <span>Unemployment Rate</span>
-                                <span class="indicator-value-admin" id="unemployment-rate">5.8%</span>
-                            </div>
-                            <div class="economy-indicator-admin">
-                                <span>Inflation Rate</span>
-                                <span class="indicator-value-admin" id="inflation-rate">2.1%</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Add Economy Article Form -->
+                        <!-- Add Economy Article Form (Hidden by default) -->
                         <div class="form-container form-section mb-4" id="economy-article-form-section" style="display: none;">
                             <h5 class="mb-3" id="economy-article-form-title">Add New Economy Article</h5>
                             <form id="economy-article-form">
@@ -263,65 +578,46 @@
                             </form>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-container">
-                                    <h5 class="mb-3">Update Economic Statistics</h5>
-                                    <form id="economy-stats-form">
-                                        <div class="mb-3">
-                                            <label class="form-label">GDP Growth (%)</label>
-                                            <input type="number" step="0.1" class="form-control" id="update-gdp-growth" value="3.2">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Industrial Growth (%)</label>
-                                            <input type="number" step="0.1" class="form-control" id="update-industrial-growth" value="4.5">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Unemployment Rate (%)</label>
-                                            <input type="number" step="0.1" class="form-control" id="update-unemployment-rate" value="5.8">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Inflation Rate (%)</label>
-                                            <input type="number" step="0.1" class="form-control" id="update-inflation-rate" value="2.1">
-                                        </div>
-                                        <button type="submit" class="btn btn-gold">Update Statistics</button>
-                                    </form>
+                        <div class="table-container">
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">All Economy Articles</h5>
+                                <div>
+                                    <select class="form-select form-select-sm d-inline-block w-auto me-2" id="article-filter-section">
+                                        <option value="">All Sections</option>
+                                        <option value="economy">Economy</option>
+                                        <option value="eco-africa">Eco Africa</option>
+                                        <option value="eco-agriculture">Eco Agriculture</option>
+                                        <option value="eco-innovation">Eco Innovation</option>
+                                    </select>
+                                    <button class="btn btn-sm btn-outline-primary" id="refresh-economy-articles">
+                                        <i class="fas fa-sync-alt me-1"></i> Refresh
+                                    </button>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="table-container">
-                                    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">Recent Economy Articles</h5>
-                                        <button class="btn btn-sm btn-outline-primary" id="refresh-economy-articles">
-                                            <i class="fas fa-sync-alt me-1"></i> Refresh
-                                        </button>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Image</th>
-                                                    <th>Title</th>
-                                                    <th>Section</th>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="economy-articles-table-body">
-                                                <tr>
-                                                    <td colspan="6" class="text-center text-muted py-4">
-                                                        <div class="spinner-border spinner-border-sm me-2"></div>
-                                                        Loading economy articles...
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>Section</th>
+                                            <th>Category</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="economy-articles-table-body">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted py-4">
+                                                <div class="spinner-border spinner-border-sm me-2"></div>
+                                                Loading economy articles...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -330,15 +626,128 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/admin-common.js"></script>
-    <script>// ==================== ECONOMY MANAGEMENT ====================
+    <script>
+// ==================== ECONOMY MANAGEMENT ====================
 let currentEditingId = null;
+let currentSection = 'overview';
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Economy admin page loaded');
+    
+    // Setup section tabs
+    document.querySelectorAll('.section-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const section = this.dataset.section;
+            switchSection(section);
+        });
+    });
+
+    // Setup image preview
+    setupImagePreview('economy-article-image', 'economy-article-image-preview');
+    
+    // Economy article form
+    document.getElementById('economy-article-form')?.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        console.log('Economy article form submitted');
+        await saveEconomyArticle();
+    });
+
+    // Economy stats form
+    document.getElementById('economy-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveEconomicIndicators();
+    });
+
+    // Additional stats form
+    document.getElementById('additional-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveAdditionalIndicators();
+    });
+
+    // Africa stats form
+    document.getElementById('africa-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveSectionStats('eco-africa');
+    });
+
+    // Agriculture stats form
+    document.getElementById('agriculture-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveSectionStats('eco-agriculture');
+    });
+
+    // Innovation stats form
+    document.getElementById('innovation-stats-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveSectionStats('eco-innovation');
+    });
+
+    // Buttons
+    document.getElementById('cancel-economy-article')?.addEventListener('click', function() {
+        hideEconomyArticleForm();
+    });
+
+    document.getElementById('refresh-economy-articles')?.addEventListener('click', function() {
+        loadEconomyArticles();
+    });
+
+    document.getElementById('article-filter-section')?.addEventListener('change', function() {
+        loadEconomyArticles(1, this.value);
+    });
+    
+    // Load initial data
+    loadEconomyData();
+});
+
+function switchSection(section) {
+    console.log('Switching to section:', section);
+    // Update active tab
+    document.querySelectorAll('.section-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.section === section);
+    });
+    
+    // Show active section
+    document.querySelectorAll('.section-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${section}-section`);
+    });
+    
+    currentSection = section;
+    
+    // Load section-specific data
+    switch(section) {
+        case 'overview':
+            loadEconomicIndicators();
+            break;
+        case 'eco-africa':
+            loadAfricaStats();
+            loadAfricaArticles();
+            break;
+        case 'eco-agriculture':
+            loadAgricultureStats();
+            loadAgricultureArticles();
+            break;
+        case 'eco-innovation':
+            loadInnovationStats();
+            loadInnovationArticles();
+            break;
+        case 'articles':
+            loadEconomyArticles();
+            break;
+    }
+}
 
 async function loadEconomyData() {
+    console.log('Loading economy data...');
     try {
         await Promise.all([
             loadEconomicIndicators(),
-            loadEconomyArticles()
+            loadEconomyArticles(),
+            loadAfricaStats(),
+            loadAgricultureStats(),
+            loadInnovationStats()
         ]);
+        console.log('Economy data loaded successfully');
     } catch (error) {
         console.error('Error loading economy data:', error);
         showToast('Failed to load economy data', 'danger');
@@ -347,41 +756,98 @@ async function loadEconomyData() {
 
 async function loadEconomicIndicators() {
     try {
+        console.log('Loading economic indicators...');
         const data = await apiCall('/economy/indicators');
+        console.log('Economic indicators data:', data);
+        
         if (data) {
             // Update form fields
-            document.getElementById('update-gdp-growth').value = data.gdp_growth || '';
-            document.getElementById('update-industrial-growth').value = data.industrial_growth || '';
-            document.getElementById('update-unemployment-rate').value = data.unemployment_rate || '';
-            document.getElementById('update-inflation-rate').value = data.inflation_rate || '';
+            document.getElementById('update-gdp-growth').value = data.gdp_growth || 3.2;
+            document.getElementById('update-industrial-growth').value = data.industrial_growth || 4.5;
+            document.getElementById('update-unemployment-rate').value = data.unemployment_rate || 5.8;
+            document.getElementById('update-inflation-rate').value = data.inflation_rate || 2.1;
+            document.getElementById('update-period').value = data.period || 'Q2 2023';
+            document.getElementById('update-interest-rate').value = data.interest_rate || 3.5;
+            document.getElementById('update-currency-stability').value = data.currency_stability || 582.50;
+            document.getElementById('update-source').value = data.source || 'National Statistics Institute';
             
             // Update summary display
-            document.getElementById('gdp-growth').textContent = `${data.gdp_growth}%` || '3.2%';
-            document.getElementById('industrial-growth').textContent = `${data.industrial_growth}%` || '4.5%';
-            document.getElementById('unemployment-rate').textContent = `${data.unemployment_rate}%` || '5.8%';
-            document.getElementById('inflation-rate').textContent = `${data.inflation_rate}%` || '2.1%';
+            document.getElementById('gdp-growth-display').textContent = `${data.gdp_growth || 3.2}%`;
+            document.getElementById('industrial-growth-display').textContent = `${data.industrial_growth || 4.5}%`;
+            document.getElementById('unemployment-rate-display').textContent = `${data.unemployment_rate || 5.8}%`;
+            document.getElementById('inflation-rate-display').textContent = `${data.inflation_rate || 2.1}%`;
         }
     } catch (error) {
         console.error('Error loading economic indicators:', error);
     }
 }
 
+async function loadAfricaStats() {
+    try {
+        const data = await apiCall('/economy/admin/section-stats/eco-africa');
+        console.log('Africa stats data:', data);
+        
+        if (data && data.stats) {
+            const stats = data.stats;
+            document.getElementById('africa-total-gdp').value = stats.total_gdp || '$2.4T';
+            document.getElementById('africa-intra-trade').value = stats.intra_african_trade || '$140B';
+            document.getElementById('africa-urbanization').value = parseFloat(stats.urbanization_rate) || 43;
+            document.getElementById('africa-population').value = stats.population || '1.3B';
+        }
+    } catch (error) {
+        console.error('Error loading Africa stats:', error);
+    }
+}
+
+async function loadAgricultureStats() {
+    try {
+        const data = await apiCall('/economy/admin/section-stats/eco-agriculture');
+        if (data && data.stats) {
+            const stats = data.stats;
+            document.getElementById('agriculture-workforce').value = parseFloat(stats.workforce_percentage) || 42;
+            document.getElementById('agriculture-organic-growth').value = parseFloat(stats.organic_growth) || 18;
+            document.getElementById('agriculture-yield-increase').value = parseFloat(stats.yield_increase) || 30;
+            document.getElementById('agriculture-water-efficiency').value = parseFloat(stats.water_efficiency) || 45;
+        }
+    } catch (error) {
+        console.error('Error loading agriculture stats:', error);
+    }
+}
+
+async function loadInnovationStats() {
+    try {
+        const data = await apiCall('/economy/admin/section-stats/eco-innovation');
+        if (data && data.stats) {
+            const stats = data.stats;
+            document.getElementById('innovation-patent-increase').value = parseFloat(stats.patent_increase) || 35;
+            document.getElementById('innovation-renewable-growth').value = parseFloat(stats.renewable_energy_growth) || 300;
+            document.getElementById('innovation-recycling-improvement').value = parseFloat(stats.recycling_improvement) || 65;
+            document.getElementById('innovation-wind-power').value = stats.wind_power_capacity || '120MW';
+        }
+    } catch (error) {
+        console.error('Error loading innovation stats:', error);
+    }
+}
+
 async function loadEconomyArticles(page = 1, section = '') {
     try {
+        console.log(`Loading economy articles - page: ${page}, section: ${section}`);
         const tbody = document.getElementById('economy-articles-table-body');
         if (!tbody) return;
         
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading economy articles...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Loading economy articles...</td></tr>';
         
         let endpoint = `/economy/admin/articles?page=${page}&limit=10`;
         if (section) endpoint += `&section=${section}`;
         
+        console.log('Fetching from endpoint:', endpoint);
         const data = await apiCall(endpoint);
+        console.log('Economy articles response:', data);
         
         if (!data || !data.items || data.items.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-4">
+                    <td colspan="7" class="text-center text-muted py-4">
                         <i class="fas fa-chart-line fa-2x mb-3 d-block"></i>
                         No economy articles found
                         <div class="mt-2">
@@ -395,28 +861,145 @@ async function loadEconomyArticles(page = 1, section = '') {
             return;
         }
         
+        // Render the articles table
+        renderEconomyArticlesTable(data.items);
+        
+    } catch (error) {
+        console.error('Error loading economy articles:', error);
+        const tbody = document.getElementById('economy-articles-table-body');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">Failed to load economy articles</td></tr>';
+        }
+    }
+}
+
+// SINGLE function to render economy articles table
+function renderEconomyArticlesTable(articles) {
+  console.log('Rendering economy articles:', articles);
+  const tbody = document.getElementById('economy-articles-table-body');
+  if (!tbody || !articles || articles.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">No economy articles found</td></tr>';
+    return;
+  }
+
+  let html = '';
+  articles.forEach(article => {
+    console.log('Processing article:', {
+      title: article.title,
+      image_url: article.image_url,
+      full_image_url: article.full_image_url
+    });
+    
+    // SIMPLIFIED: Use image_url which should already be the full URL from virtual field
+    // The database virtual field transforms relative URLs to absolute ones
+    let imageUrl = article.image_url || article.full_image_url;
+    
+    // Safety check: if somehow we still have a relative URL
+    if (imageUrl && imageUrl.startsWith('/') && !imageUrl.startsWith('http')) {
+      console.warn('Found relative URL in frontend:', imageUrl);
+      imageUrl = 'http://localhost:5000' + imageUrl;
+    }
+    
+    // Get the status badge color
+    let statusBadgeClass = 'secondary';
+    if (article.status === 'published') statusBadgeClass = 'success';
+    if (article.status === 'draft') statusBadgeClass = 'warning';
+    
+    html += `
+      <tr>
+        <td>
+          ${imageUrl ? 
+            `<img src="${imageUrl}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" 
+                 onerror="handleImageError(this, '${article.title}')" 
+                 alt="${article.image_alt || article.title}" 
+                 title="${article.image_alt || article.title}">` : 
+            '<div class="text-center"><i class="fas fa-image text-muted" style="font-size: 1.5rem;"></i></div>'
+          }
+        </td>
+        <td>
+          <div class="fw-bold">${article.title}</div>
+          <small class="text-muted">${article.excerpt ? article.excerpt.substring(0, 60) + '...' : ''}</small>
+        </td>
+        <td>
+          <span class="badge bg-primary">${article.section}</span>
+        </td>
+        <td>
+          <span class="badge bg-secondary">${article.category}</span>
+        </td>
+        <td>${new Date(article.createdAt).toLocaleDateString()}</td>
+        <td>
+          <span class="badge bg-${statusBadgeClass}">
+            ${article.status}
+          </span>
+          ${article.featured ? '<span class="badge bg-warning ms-1">Featured</span>' : ''}
+        </td>
+        <td>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary" onclick="editEconomyArticle('${article._id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-outline-danger" onclick="deleteEconomyArticle('${article._id}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+  
+  tbody.innerHTML = html;
+}
+
+// Add this helper function for image error handling
+function handleImageError(imgElement, title) {
+  console.error('Image failed to load:', imgElement.src);
+  imgElement.src = 'https://via.placeholder.com/40?text=' + encodeURIComponent(title.substring(0, 10));
+  imgElement.alt = 'Image failed to load: ' + title;
+}
+
+async function loadAfricaArticles() {
+    await loadSectionArticles('eco-africa', 'africa-articles-table');
+}
+
+async function loadAgricultureArticles() {
+    await loadSectionArticles('eco-agriculture', 'agriculture-articles-table');
+}
+
+async function loadInnovationArticles() {
+    await loadSectionArticles('eco-innovation', 'innovation-articles-table');
+}
+
+async function loadSectionArticles(section, tableId) {
+    try {
+        const tbody = document.getElementById(tableId);
+        if (!tbody) return;
+        
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Loading articles...</td></tr>';
+        
+        const data = await apiCall(`/economy/admin/articles?section=${section}&limit=5`);
+        
+        if (!data || !data.items || data.items.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                        No ${section.replace('eco-', '')} articles found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
         tbody.innerHTML = data.items.map(article => `
             <tr>
                 <td>
-                    ${article.image_url ? 
-                        `<img src="${article.image_url}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" alt="${article.image_alt || article.title}">` : 
-                        '<i class="fas fa-image text-muted"></i>'
-                    }
-                </td>
-                <td>
                     <div class="fw-bold">${article.title}</div>
                     <small class="text-muted">${article.excerpt ? article.excerpt.substring(0, 60) + '...' : ''}</small>
-                </td>
-                <td>
-                    <span class="badge bg-primary">${article.section}</span>
-                    <span class="badge bg-secondary ms-1">${article.category}</span>
                 </td>
                 <td>${new Date(article.createdAt).toLocaleDateString()}</td>
                 <td>
                     <span class="badge bg-${article.status === 'published' ? 'success' : 'warning'}">
                         ${article.status}
                     </span>
-                    ${article.featured ? '<span class="badge bg-warning ms-1">Featured</span>' : ''}
                 </td>
                 <td>
                     <div class="btn-group btn-group-sm">
@@ -432,23 +1015,48 @@ async function loadEconomyArticles(page = 1, section = '') {
         `).join('');
         
     } catch (error) {
-        console.error('Error loading economy articles:', error);
-        const tbody = document.getElementById('economy-articles-table-body');
+        console.error(`Error loading ${section} articles:`, error);
+        const tbody = document.getElementById(tableId);
         if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Failed to load economy articles</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger py-4">Failed to load articles</td></tr>`;
         }
     }
 }
 
-async function saveEconomicIndicators(formData) {
+async function saveEconomicIndicators() {
     try {
+        console.log('Saving economic indicators...');
         const payload = {
             gdp_growth: parseFloat(document.getElementById('update-gdp-growth').value),
             industrial_growth: parseFloat(document.getElementById('update-industrial-growth').value),
             unemployment_rate: parseFloat(document.getElementById('update-unemployment-rate').value),
             inflation_rate: parseFloat(document.getElementById('update-inflation-rate').value),
-            period: 'Current',
+            period: document.getElementById('update-period').value,
             year: new Date().getFullYear()
+        };
+        
+        console.log('Saving payload:', payload);
+        const response = await apiCall('/economy/indicators', {
+            method: 'PUT',
+            body: JSON.stringify(payload)
+        });
+        
+        console.log('Save response:', response);
+        showToast('Economic indicators updated successfully!', 'success');
+        await loadEconomicIndicators();
+        
+    } catch (error) {
+        console.error('Error saving economic indicators:', error);
+        showToast('Failed to update economic indicators: ' + error.message, 'danger');
+    }
+}
+
+async function saveAdditionalIndicators() {
+    try {
+        const payload = {
+            interest_rate: parseFloat(document.getElementById('update-interest-rate').value),
+            currency_stability: parseFloat(document.getElementById('update-currency-stability').value),
+            source: document.getElementById('update-source').value
         };
         
         const response = await apiCall('/economy/indicators', {
@@ -456,24 +1064,86 @@ async function saveEconomicIndicators(formData) {
             body: JSON.stringify(payload)
         });
         
-        showToast('Economic indicators updated successfully!', 'success');
-        await loadEconomicIndicators();
+        showToast('Additional indicators updated successfully!', 'success');
         
     } catch (error) {
-        console.error('Error saving economic indicators:', error);
-        showToast('Failed to update economic indicators', 'danger');
+        console.error('Error saving additional indicators:', error);
+        showToast('Failed to update additional indicators', 'danger');
     }
 }
 
-async function saveEconomyArticle(formData) {
+async function saveSectionStats(section) {
     try {
+        let stats = {};
+        
+        switch(section) {
+            case 'eco-africa':
+                stats = {
+                    total_gdp: document.getElementById('africa-total-gdp').value,
+                    intra_african_trade: document.getElementById('africa-intra-trade').value,
+                    urbanization_rate: document.getElementById('africa-urbanization').value,
+                    population: document.getElementById('africa-population').value
+                };
+                break;
+            case 'eco-agriculture':
+                stats = {
+                    workforce_percentage: document.getElementById('agriculture-workforce').value,
+                    organic_growth: document.getElementById('agriculture-organic-growth').value,
+                    yield_increase: document.getElementById('agriculture-yield-increase').value,
+                    water_efficiency: document.getElementById('agriculture-water-efficiency').value
+                };
+                break;
+            case 'eco-innovation':
+                stats = {
+                    patent_increase: document.getElementById('innovation-patent-increase').value,
+                    renewable_energy_growth: document.getElementById('innovation-renewable-growth').value,
+                    recycling_improvement: document.getElementById('innovation-recycling-improvement').value,
+                    wind_power_capacity: document.getElementById('innovation-wind-power').value
+                };
+                break;
+        }
+        
+        console.log(`Saving ${section} stats:`, stats);
+        const response = await apiCall(`/economy/section-stats/${section}`, {
+            method: 'PUT',
+            body: JSON.stringify(stats)
+        });
+        
+        console.log('Save response:', response);
+        showToast(`${section.replace('eco-', '')} statistics updated successfully!`, 'success');
+        
+    } catch (error) {
+        console.error(`Error saving ${section} stats:`, error);
+        showToast(`Failed to update ${section.replace('eco-', '')} statistics`, 'danger');
+    }
+}
+
+async function saveEconomyArticle() {
+    try {
+        console.log('Saving economy article...');
         const saveBtn = document.getElementById('save-economy-article');
         setLoading(saveBtn, true);
         
         let imageUrl = null;
         const imageFile = document.getElementById('economy-article-image').files[0];
+        console.log('Image file:', imageFile);
+        
         if (imageFile) {
-            imageUrl = await uploadImage(imageFile);
+            try {
+                console.log('Uploading image...');
+                // uploadImage returns relative path (e.g., /uploads/filename.jpg)
+                // The database virtual field will convert to full URL
+                imageUrl = await uploadImage(imageFile);
+                console.log('Uploaded image URL (relative):', imageUrl);
+                
+                // IMPORTANT: Do NOT add http://localhost:5000 prefix here!
+                // The virtual field in the schema will handle it
+                
+            } catch (uploadError) {
+                console.error('Image upload failed:', uploadError);
+                showToast('Image upload failed. Please try again.', 'warning');
+                // Continue without image
+            }
         }
         
         const payload = {
@@ -483,38 +1153,61 @@ async function saveEconomyArticle(formData) {
             section: document.getElementById('economy-article-section').value,
             category: document.getElementById('economy-article-category').value,
             author: document.getElementById('economy-article-author').value,
-            image_url: imageUrl,
+            image_url: imageUrl,  // Store relative path here
             image_alt: document.getElementById('economy-article-image-alt').value,
             status: document.getElementById('economy-article-status').value,
             featured: document.getElementById('economy-article-featured').checked
         };
         
+        console.log('Saving economy article payload:', payload);
+        
         let response;
         if (currentEditingId) {
+            console.log('Updating existing article ID:', currentEditingId);
             response = await apiCall(`/economy/articles/${currentEditingId}`, {
                 method: 'PUT',
                 body: JSON.stringify(payload)
             });
         } else {
+            console.log('Creating new article');
             response = await apiCall('/economy/articles', {
                 method: 'POST',
                 body: JSON.stringify(payload)
             });
         }
         
+        console.log('Save response:', response);
         showToast(`Economy article ${currentEditingId ? 'updated' : 'created'} successfully!`, 'success');
         hideEconomyArticleForm();
+        
+        // Reload appropriate articles based on section
+        const section = document.getElementById('economy-article-section').value;
+        console.log('Reloading articles for section:', section);
+        
+        switch(section) {
+            case 'eco-africa':
+                await loadAfricaArticles();
+                break;
+            case 'eco-agriculture':
+                await loadAgricultureArticles();
+                break;
+            case 'eco-innovation':
+                await loadInnovationArticles();
+                break;
+        }
         await loadEconomyArticles();
         
     } catch (error) {
         console.error('Error saving economy article:', error);
-        showToast('Failed to save economy article', 'danger');
+        console.error('Error stack:', error.stack);
+        showToast('Failed to save economy article: ' + error.message, 'danger');
     } finally {
         setLoading(document.getElementById('save-economy-article'), false);
     }
 }
 
 function showEconomyArticleForm(article = null) {
+    console.log('Showing economy article form for:', article);
     const formSection = document.getElementById('economy-article-form-section');
     const formTitle = document.getElementById('economy-article-form-title');
     
@@ -546,15 +1239,44 @@ function showEconomyArticleForm(article = null) {
     
     formSection.style.display = 'block';
     formSection.scrollIntoView({ behavior: 'smooth' });
+    
+    // Switch to articles section
+    switchSection('articles');
+}
+
+function showAfricaArticleForm() {
+    console.log('Showing Africa article form');
+    showEconomyArticleForm();
+    document.getElementById('economy-article-section').value = 'eco-africa';
+    switchSection('articles');
+}
+
+function showAgricultureArticleForm() {
+    console.log('Showing Agriculture article form');
+    showEconomyArticleForm();
+    document.getElementById('economy-article-section').value = 'eco-agriculture';
+    switchSection('articles');
+}
+
+function showInnovationArticleForm() {
+    console.log('Showing Innovation article form');
+    showEconomyArticleForm();
+    document.getElementById('economy-article-section').value = 'eco-innovation';
+    switchSection('articles');
 }
 
 function hideEconomyArticleForm() {
+    console.log('Hiding economy article form');
     document.getElementById('economy-article-form-section').style.display = 'none';
+    currentEditingId = null;
 }
 
 async function editEconomyArticle(id) {
     try {
+        console.log('Editing economy article:', id);
         const response = await apiCall(`/economy/articles/${id}`);
+        console.log('Edit response:', response);
+        
         if (response.article) {
             showEconomyArticleForm(response.article);
         }
@@ -568,53 +1290,57 @@ async function deleteEconomyArticle(id) {
     if (!confirm('Are you sure you want to delete this economy article?')) return;
     
     try {
+        console.log('Deleting economy article:', id);
         await apiCall(`/economy/articles/${id}`, { method: 'DELETE' });
         showToast('Economy article deleted successfully!', 'success');
-        await loadEconomyArticles();
+        
+        // Reload appropriate section
+        switch(currentSection) {
+            case 'eco-africa':
+                await loadAfricaArticles();
+                break;
+            case 'eco-agriculture':
+                await loadAgricultureArticles();
+                break;
+            case 'eco-innovation':
+                await loadInnovationArticles();
+                break;
+            case 'articles':
+                await loadEconomyArticles();
+                break;
+        }
+        
     } catch (error) {
         console.error('Error deleting economy article:', error);
         showToast('Failed to delete economy article', 'danger');
     }
 }
 
-// Economy event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Setup image previews
-    setupImagePreview('economy-article-image', 'economy-article-image-preview');
+// Test function to debug form submission
+function testFormSubmission() {
+    console.log('=== Testing Form Submission ===');
+    console.log('Title:', document.getElementById('economy-article-title').value);
+    console.log('Content:', document.getElementById('economy-article-content').value);
+    console.log('Section:', document.getElementById('economy-article-section').value);
+    console.log('Category:', document.getElementById('economy-article-category').value);
     
-    // Economy article form
-    document.getElementById('economy-article-form')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveEconomyArticle(new FormData(this));
-    });
+    // Trigger the save function
+    saveEconomyArticle();
+}
 
-    // Economy stats form
-    document.getElementById('economy-stats-form')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveEconomicIndicators(new FormData(this));
-    });
-
-    // Buttons
-    document.getElementById('add-economy-article-btn')?.addEventListener('click', function() {
-        showEconomyArticleForm();
-    });
-
-    document.getElementById('cancel-economy-article')?.addEventListener('click', function() {
-        hideEconomyArticleForm();
-    });
-
-    document.getElementById('refresh-economy-articles')?.addEventListener('click', function() {
-        loadEconomyArticles();
-    });
-    
-    // Load initial data
-    loadEconomyData();
-});
+// Make test function available globally
+window.testFormSubmission = testFormSubmission;
 
 // Make functions globally available
 window.editEconomyArticle = editEconomyArticle;
 window.deleteEconomyArticle = deleteEconomyArticle;
 window.showEconomyArticleForm = showEconomyArticleForm;
-</script>
+window.showAfricaArticleForm = showAfricaArticleForm;
+window.showAgricultureArticleForm = showAgricultureArticleForm;
+window.showInnovationArticleForm = showInnovationArticleForm;
+window.loadAfricaArticles = loadAfricaArticles;
+window.loadAgricultureArticles = loadAgricultureArticles;
+window.loadInnovationArticles = loadInnovationArticles;
+    </script>
 </body>
 </html>

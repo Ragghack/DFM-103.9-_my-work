@@ -1,1373 +1,1889 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DFM Media - Radio Station</title>
+    <title>DFM Radio 103.9 | Home - News Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-dark: #1a1814;
-            --primary-accent: #D4AF37;
-            --secondary-dark: #2d2b24;
-            --light-bg: #F8F5F0;
-            --card-bg: #ffffff;
-            --text-primary: #1a1814;
-            --text-secondary: #333333;
-            --border-light: #e5e7eb;
-            --glass-bg: rgba(255, 255, 255, 0.9);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --box-text-color: #1a1814;
+            --primary-color: #a69c44;
+            --secondary-color: #e3cb3e;
+            --accent-color: #FFD700;
+            --light-bg: #f8f9fa;
+            --dark-text: #070708;
+            --light-text: #6c757d;
         }
         
-        [data-theme="dark"] {
-            --light-bg: #121212;
-            --card-bg: #1a1a1a;
-            --text-primary: #D4AF37;
-            --text-secondary: #ffffff;
-            --border-light: #333333;
-            --glass-bg: rgba(26, 24, 20, 0.9);
-            --glass-border: rgba(212, 175, 55, 0.1);
-            --box-text-color: #f8f3c9;
-        }
-        
-        [data-theme="dark"] .featured-article p {
-            color: #fffbe6 !important;
-        }
-        
-        * {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--light-bg);
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-        
-        .theme-toggle {
-            position: relative;
-            width: 50px;
-            height: 26px;
-            background: var(--secondary-dark);
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            padding: 3px;
-            margin-left: 15px;
-        }
-        
-        .theme-toggle-handle {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--primary-accent);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        
-        [data-theme="dark"] .theme-toggle-handle {
-            transform: translateX(24px);
-        }
-        
-        .theme-toggle i {
-            font-size: 12px;
-            z-index: 1;
-            color: var(--primary-dark);
-        }
-        
-        .theme-toggle .fa-sun {
-            margin-right: auto;
-            padding-left: 4px;
-        }
-        
-        .theme-toggle .fa-moon {
-            margin-left: auto;
-            padding-right: 4px;
-        }
-        
-        .glass {
-            background: var(--glass-bg);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-        }
-        
-        header { 
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
-            color: white;
-            box-shadow: 0 4px 32px rgba(26, 24, 20, 0.3);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-        
-        header .navbar-brand { 
-            font-weight: 800;
-            font-size: 2rem;
-            letter-spacing: -0.025em;
-            background: linear-gradient(90deg, var(--primary-accent), #fff 80%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            padding-bottom: 100px;
         }
 
-        .Logo {
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-        
-        .navbar-nav .nav-link {
-            position: relative;
-            margin: 0 8px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding: 12px 16px !important;
-            border-radius: 10px;
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
-        
-        .navbar-nav .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: linear-gradient(45deg, var(--primary-accent), rgba(212, 175, 55, 0.6));
-            border-radius: 10px;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .navbar-nav .nav-link:hover::before,
-        .navbar-nav .nav-link.active::before {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            color: var(--primary-dark) !important;
-            transform: translateY(-2px);
-        }
-        
-        .breaking-news { 
-            padding: 8px 0;
-            overflow: hidden;
-            position: relative;
-            background: linear-gradient(270deg, var(--primary-accent), #f8e14d, var(--primary-accent));
-            background-size: 200% 200%;
-            animation: gradientShift 4s ease infinite;
-            color: var(--primary-dark); 
-            padding: 16px 0;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .breaking-news::before {
-            content: '';
-            position: absolute;
+        /* 1. TOP LOGO BAR */
+        .top-logo-bar {
+            background-color: #ffffff;
+            padding: 1rem 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 3s infinite;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-        
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+
+        .main-logo {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
         }
-        
-        .breaking-news span {
-            flex-shrink: 0;
-            padding: 4px 12px;
-            font-size: 0.9rem;
-            background: var(--primary-dark);
-            color: var(--primary-accent);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            margin-right: 20px;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .marquee-container {
-            overflow: hidden;
-            flex: 1;
-        }
-        
-        .marquee {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 20s linear infinite;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            color: var(--primary-dark);
-        }
-        
-        @keyframes marquee {
-            0%   { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        
-        .news-card { 
-            border: none;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            background: var(--card-bg);
-            position: relative;
-            color: var(--text-secondary);
-            min-height: 480px;
-        }
-        
-        .news-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 20px;
-            padding: 2px;
-            background: linear-gradient(45deg, transparent, var(--primary-accent), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .news-card:hover::before {
-            opacity: 1;
-        }
-        
-        .news-card:hover { 
-            transform: translateY(-12px) scale(1.02); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        
-        .news-card img { 
-            height: 320px;
-            object-fit: cover;
-            filter: brightness(0.9) contrast(1.1);
-        }
-        
-        .news-card:hover img {
-            transform: scale(1.1);
-            filter: brightness(1) contrast(1.2);
-        }
-        
-        .news-card .card-title { 
-            color: var(--text-primary);
-            font-weight: 700;
-            font-size: 1.1rem;
-            line-height: 1.4;
-        }
-        
-        .card-overlay {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: var(--primary-accent);
-            color: var(--primary-dark);
-            padding: 6px 14px;
-            border-radius: 25px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-        
-        .quick-link-icon {
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .section-header {
-            position: relative;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
+
+        .logo-text-fallback {
+            color: var(--secondary-color);
             font-weight: 900;
             font-size: 2rem;
-            color: var(--text-primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        
-        .section-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-accent), rgba(212, 175, 55, 0.3));
-            border-radius: 2px;
-        }
-        
-        .live-player { 
-            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
-            color: var(--primary-accent);
-            padding: 20px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 1.1rem;
-            box-shadow: 0 -8px 32px rgba(0,0,0,0.2);
+
+        /* 2. HERO BANNER WITH HOT INFO */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--primary-color), #1a1b3a);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 10px;
+            border-bottom: 4px solid var(--secondary-color);
             position: relative;
+            overflow: hidden;
         }
         
-        .live-player::before {
-            content: '';
+        .hot-info-badge {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-accent), #f8e14d, var(--primary-accent));
-            background-size: 200% 100%;
-            animation: gradientMove 3s linear infinite;
-        }
-        
-        @keyframes gradientMove {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        
-        .play-btn {
-            background: var(--primary-accent);
-            color: var(--primary-dark);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 20px;
-            font-size: 1.2rem;
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
-            position: relative;
-        }
-        
-        .play-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary-accent), #fff);
-            z-index: -1;
-            opacity: 0;
-        }
-        
-        .play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
-        }
-        
-        .play-btn:hover::before {
-            opacity: 1;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+            z-index: 10;
             animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 71, 87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
         }
         
-        footer { 
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
-            color: var(--primary-accent);
-            padding: 50px 0 30px;
-        }
-        
-         .social-icons a {
-            color: var(--primary-accent) !important;
-            font-size: 1.6rem;
-            margin: 0 10px;
-            transition: color 0.3s, text-shadow 0.3s;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.7), 0 0 2px #fff;
-        }
-        .social-icons a:hover {
-            color: #fff200 !important;
-            text-shadow: 0 0 16px #fff200, 0 0 4px var(--primary-accent);
-        }
-        
-        .search-container {
-            position: relative;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .search-input {
-            width: 100%;
-            padding: 12px 20px 12px 50px;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 0.95rem;
-            -webkit-backdrop-filter: blur(10px);
+        .hot-episode-card {
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
-        }
-        
-        .search-input::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255,255,255,0.7);
-        }
-        
-        .dropdown-menu {
-            background: var(--card-bg);
-            border: 1px solid var(--primary-accent);
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .dropdown-item {
-            color: var(--text-secondary);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin: 5px;
-        }
-        
-        .dropdown-item:hover {
-            background-color: rgba(212, 175, 55, 0.1);
-        }
-        
-        .audio-control {
-            background: none;
-            border: none;
-            color: var(--primary-accent);
-            font-size: 1.5rem;
-            margin-left: 15px;
-            cursor: pointer;
-        }
-        
-        .featured-article {
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .featured-content {
-            background: rgba(255,255,255,0.08);
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-            border-radius: 0 0 20px 20px;
-        }
-        
-        .trending-list .list-group-item {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--border-light);
-            padding: 15px 10px;
-        }
-        
-        .trending-list .list-group-item:last-child {
-            border-bottom: none;
-        }
-        
-        .trending-list .list-group-item a {
-            text-decoration: none;
-            color: var(--text-secondary);
-            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary-color);
+            margin-top: 1.5rem;
             transition: all 0.3s ease;
         }
         
-        .trending-list .list-group-item a:hover {
-            color: var(--primary-accent);
-            padding-left: 5px;
+        .hot-episode-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-3px);
         }
         
-        @media (max-width: 992px) {
-            .section-header {
-                font-size: 1.8rem;
-            }
-            
-            .navbar-nav .nav-link {
-                margin: 4px 0;
-                text-align: center;
-            }
-            
-            .search-container {
-                margin: 15px auto;
-            }
-            
-            .marquee {
-                animation: marquee 15s linear infinite;
-            }
-            
-            .featured-article h2 {
-                font-size: 1.5rem !important;
+        .hot-episode-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hot-episode-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 1rem;
+        }
+        
+        .hot-episode-audio {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+        
+        .hot-episode-play-btn {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .hot-episode-play-btn:hover {
+            background: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .btn-live {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .btn-live:hover { transform: scale(1.05); background-color: var(--accent-color); }
+
+        /* 3. LATEST EPISODE BANNER (NEW) */
+        .episode-banner {
+            background: linear-gradient(135deg, #111223, #1a1b3a);
+            color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .episode-banner-content {
+            padding: 1.5rem;
+        }
+        
+        .episode-banner-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .episode-banner-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .episode-banner-audio {
+            width: 100%;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        .episode-banner-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .episode-banner-thumbnail {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .episode-banner-badge {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .episode-thumbnail-container {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .episode-thumbnail-container img {
+            transition: transform 0.5s ease;
+        }
+        
+        .episode-thumbnail-container:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 4. DATA BANNER SECTION */
+        .data-banner {
+            background: linear-gradient(135deg, #111223, #1a1b3a);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .data-banner-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .data-banner-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: space-around;
+        }
+        
+        .data-stat {
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .data-stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+        
+        .data-stat-label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .data-stat-change {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+        
+        .change-positive { color: #4ade80; }
+        .change-negative { color: #f87171; }
+
+        /* 5. SECTION STYLES */
+        .section-header {
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+        
+        .section-subheader {
+            color: var(--light-text);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-subheader a {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        
+        .section-subheader a:hover {
+            text-decoration: underline;
+        }
+
+        /* 6. STATS CARDS */
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        .stat-label { font-size: 0.85rem; text-transform: uppercase; color: var(--light-text); }
+
+        /* 7. NEWS CARDS */
+        .news-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        .news-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .news-image { 
+            width: 100%; 
+            height: 180px; 
+            object-fit: cover; 
+        }
+        .news-content { padding: 1.25rem; }
+        .news-category {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+        
+        .news-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            color: var(--dark-text);
+        }
+        
+        .news-excerpt {
+            color: var(--light-text);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--light-text);
+        }
+
+        /* 8. FEATURED NEWS SECTION */
+        .featured-news-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .featured-news-card:hover { transform: translateY(-5px); }
+        .featured-image { 
+            width: 100%; 
+            height: 300px; 
+            object-fit: cover; 
+        }
+        .featured-content { padding: 2rem; }
+        .featured-category {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        .featured-title {
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+            line-height: 1.3;
+        }
+        .featured-excerpt {
+            color: var(--light-text);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 9. EPISODE PREVIEW CARD (NEW) */
+        .episode-preview-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .episode-preview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .episode-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .episode-preview-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .episode-preview-audio {
+            width: 100%;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        .episode-preview-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+        
+        .episode-preview-badge {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .episode-preview-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        /* 10. EPISODE TABLE (NEW) */
+        .episode-table-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .episode-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .episode-table th {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 2px solid var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .episode-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .episode-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .episode-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-published {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-draft {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-scheduled {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        /* 11. LOADING STATES */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            flex-direction: column;
+        }
+        
+        .skeleton-loader {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .skeleton-news-card {
+            height: 250px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 12. PILL NAVIGATION */
+        .pill-nav-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            z-index: 10000; display: flex; align-items: center;
+            background: rgba(17, 18, 35, 0.95); backdrop-filter: blur(10px);
+            padding: 8px 15px; border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(227, 203, 62, 0.3);
+        }
+        .pill-nav-item {
+            color: white; text-decoration: none; padding: 8px 15px;
+            display: flex; align-items: center; gap: 8px; border-radius: 30px;
+            transition: 0.3s;
+        }
+        .pill-nav-item i { color: var(--secondary-color); }
+        .pill-nav-item span { font-size: 0.9rem; font-weight: 500; display: none; }
+        .pill-nav-item:hover { background: rgba(255,255,255,0.1); }
+        .pill-nav-item.active { background: var(--secondary-color); color: var(--primary-color); }
+        .pill-nav-item.active i { color: var(--primary-color); }
+        .pill-nav-separator { width: 1px; height: 24px; background: rgba(255,255,255,0.2); margin: 0 10px; }
+        
+        /* 13. AUDIO PLAYER CUSTOMIZATION */
+        audio::-webkit-media-controls-panel {
+            background-color: var(--secondary-color);
+        }
+        
+        audio::-webkit-media-controls-play-button {
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+        
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            color: var(--primary-color);
+        }
+        
+        /* Responsive */
+        @media (min-width: 768px) { 
+            .pill-nav-item span { display: inline; } 
+            .featured-image { height: 350px; }
+            .data-banner-stats { justify-content: space-between; }
+            .hot-episode-card {
+                margin-top: 0;
             }
         }
         
         @media (max-width: 768px) {
-            .section-header {
-                font-size: 1.6rem;
-                margin-bottom: 20px;
+            .featured-title { font-size: 1.25rem; }
+            .data-banner { padding: 1rem; }
+            .data-stat { min-width: 90px; }
+            .data-stat-value { font-size: 1.5rem; }
+            .episode-banner-thumbnail { height: 200px; }
+            .episode-table-section { overflow-x: auto; }
+            .episode-table { min-width: 600px; }
+            .hot-info-badge {
+                top: 5px;
+                right: 5px;
+                font-size: 0.7rem;
+                padding: 3px 10px;
             }
-            
-            .news-card {
-                min-height: auto;
-            }
-            
-            .quick-link-icon {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .featured-article p {
-                font-size: 1rem !important;
-            }
-        }
-
-        .loading-placeholder {
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container">
-                <!-- Logo and station name -->
-                <a class="navbar-brand d-flex align-items-center" href="index.html" style="font-weight:800; font-size:2rem; letter-spacing:-0.025em;">
-                    <img class="Logo" src="Logo.png" alt="DFM Media Logo" width="70" height="70" class="d-inline-block align-text-top me-2">
-                    <i class="fas fa-microphone-alt me-2" style="color:#D4AF37; font-size:2.2rem;"></i>
-                    <span style="color:#D4AF37;">DFM</span><span style="color:#fff; margin-left:4px;"> MEDIA</span>
-                </a>
-                
-                <!-- Search Container -->
-                <div class="search-container d-none d-lg-block">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="search" class="search-input" placeholder="Search news...">
-                </div>
-                
-                <div class="d-flex align-items-center">
-                    <!-- Theme Toggle Button -->
-                    <div class="theme-toggle" id="themeToggle">
-                        <i class="fas fa-sun"></i>
-                        <i class="fas fa-moon"></i>
-                        <div class="theme-toggle-handle"></div>
-                    </div>
-                    
-                    <!-- Audio Controls -->
-                    <button class="audio-control" id="playButton">
-  <i class="fas fa-play" aria-hidden="true"></i>
-  <span class="visually-hidden">Play</span>
-</button>
-<button class="audio-control" id="stopButton">
-  <i class="fas fa-stop" aria-hidden="true"></i>
-  <span class="visually-hidden">Stop</span>
-</button>
 
-<!-- script : lie les boutons au stream -->
-<script>
-(function(){
-  // URL du stream
-  const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
+    <!-- Top Logo Bar -->
+    <div class="top-logo-bar">
+        <div class="container">
+            <img src="WhatsApp Image 2025-08-11 à 10.12.00_e3ecde60.jpg" alt="DFM Radio" class="main-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
+            <div id="logo-fallback" class="logo-text-fallback" style="display: none;">
+                DFM RADIO 103.9 FM<span style="color:white; font-size: 1rem; display:block; letter-spacing: 5px;">103.9 FM</span>
+            </div>
+        </div>
+    </div>
 
-  // éléments
-  const playBtn = document.getElementById("playButton");
-  const stopBtn  = document.getElementById("stopButton");
-  const playIcon = playBtn.querySelector("i");
-  const stopIcon = stopBtn.querySelector("i");
-  const playLabel = playBtn.querySelector(".visually-hidden");
-
-  // crée l'objet audio (ne pas ajouter d'élément <audio> visible si tu préfères)
-  const audio = new Audio(STREAM_URL);
-  audio.preload = "none"; // évite de charger automatiquement
-  audio.crossOrigin = "anonymous"; // utile si analyse future / visualiseur
-
-  // état
-  let isPlaying = false;
-
-  // helpers pour mettre à jour l'UI
-  function setPlayingUI() {
-    isPlaying = true;
-    // change icône play -> pause si tu veux
-    playIcon.classList.remove("fa-play");
-    playIcon.classList.add("fa-pause");
-    playBtn.setAttribute("aria-pressed", "true");
-    playLabel.textContent = "Pause";
-  }
-
-  function setStoppedUI() {
-    isPlaying = false;
-    playIcon.classList.remove("fa-pause");
-    playIcon.classList.add("fa-play");
-    playBtn.setAttribute("aria-pressed", "false");
-    playLabel.textContent = "Play";
-  }
-
-  // play / pause toggle
-  playBtn.addEventListener("click", async function (e) {
-    e.preventDefault();
-    try {
-      if (!isPlaying) {
-        // start
-        // certains navigateurs exigent un user gesture pour jouer, ici on est dans un click donc ok
-        await audio.play();
-        setPlayingUI();
-      } else {
-        // pause (ne pas "stop" complètement pour garder buffer)
-        audio.pause();
-        setStoppedUI();
-      }
-    } catch (err) {
-      console.error("Impossible de lancer le stream :", err);
-      alert("Impossible de lancer le stream. Vérifie la connexion ou la source.");
-    }
-  });
-
-  // stop complet — on met pause puis on remet à 0 (pour un flux live c'est surtout pause)
-  stopBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    try {
-      audio.pause();
-      // pour les flux live .currentTime n'a pas beaucoup d'effet, mais on réinitialise l'audio.
-      try { audio.currentTime = 0; } catch (_) {}
-      setStoppedUI();
-    } catch (err) {
-      console.error("Erreur lors de l'arrêt :", err);
-    }
-  });
-
-  // gestion d'erreurs
-  audio.addEventListener("error", function (ev) {
-    console.error("Erreur audio :", ev);
-    alert("Le lecteur a rencontré une erreur en chargeant le flux.");
-    setStoppedUI();
-  });
-
-  // si le flux coupe côté serveur
-  audio.addEventListener("ended", function () {
-    setStoppedUI();
-  });
-
-  // (option) si tu veux que le bouton devienne indéxable seulement quand prêt :
-  audio.addEventListener("canplay", function(){
-    // le flux est prêt à jouer
-  });
-
-  // accessibilité : touche espace/enter sur le bouton play
-  playBtn.addEventListener("keydown", function(e){
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
-      playBtn.click();
-    }
-  });
-  stopBtn.addEventListener("keydown", function(e){
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
-      stopBtn.click();
-    }
-  });
-
-  // Conseil : si tu veux démarrer/arrêter automatiquement quand l'utilisateur
-  // change de page ou ferme l'onglet :
-  window.addEventListener("pagehide", function(){ audio.pause(); setStoppedUI(); });
-})();
-</script>
-                    
-                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+    <!-- Hero Banner with Hot Info -->
+    <header class="hero-banner">
+        <div class="hot-info-badge">HOT INFO 🔥</div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-5 fw-bold mb-2">DFM RADIO 103.9</h1>
+                    <p class="mb-4 text-white-50">Your Source for Economy, Finance & Global News</p>
+                    <button class="btn btn-live" onclick="toggleRadio()">
+                        <i class="fas fa-play me-2"></i> Listen Live
                     </button>
                 </div>
-                
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="emmsion.html"><i class="fas fa-broadcast-tower me-1"></i> Emission</a></li>
-                        
-                        <!-- Economy Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="economyDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-chart-line me-1"></i> Economy
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="economy.html">Economy</a></li>
-                                <li><a class="dropdown-item" href="economy.html#eco-africa">Eco Africa</a></li>
-                                <li><a class="dropdown-item" href="economy.html#eco-agriculture">Eco Agriculture</a></li>
-                                <li><a class="dropdown-item" href="economy.html#eco-innovation">Eco Innovation</a></li>
-                            </ul>
-                        </li>
-                        
-                        <!-- Finance Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="financeDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-coins me-1"></i> Finance
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="finance.html">Finance Market</a></li>
-                                <li><a class="dropdown-item" href="finance.html#budget">National Budget</a></li>
-                                <li><a class="dropdown-item" href="finance.html#banking">Bank Projects</a></li>
-                                <li><a class="dropdown-item" href="finance.html#statistics">Statistics of the Day</a></li>
-                            </ul>
-                        </li>
-                        
-                        <!-- Articles Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="articlesDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-newspaper me-1"></i> Articles
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="articles.html">Articles</a></li>
-                                <li><a class="dropdown-item" href="articles.html#newsletter">Newsletter</a></li>
-                                <li><a class="dropdown-item" href="articles.html#blog">Blog</a></li>
-                            </ul>
-                        </li>
-                        
-                        <li class="nav-item"><a class="nav-link" href="actuality.html"><i class="fas fa-bullhorn me-1"></i> Actuality</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Breaking News Ticker -->
-    <div class="breaking-news">
-        <div class="container d-flex align-items-center">
-            <span><i class="fas fa-bolt me-2"></i>BREAKING NEWS</span>
-            <div class="marquee-container w-100">
-                <div class="marquee" id="breaking-news-ticker">
-                    Loading breaking news...
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="container my-5">
-        <!-- Featured Content Section -->
-        <section aria-labelledby="featured-content" class="mb-5">
-            <div class="row g-4 align-items-stretch">
-                <!-- Featured Article -->
-                <div class="col-12 col-lg-8 d-flex">
-                    <article class="featured-article card glass shadow-lg border-0 rounded-4 overflow-hidden flex-fill d-flex flex-column justify-content-between h-100" id="featured-article-container">
-                        <div class="loading-placeholder">
-                            <div class="spinner-border text-warning"></div>
-                            <span class="ms-2">Loading featured content...</span>
+                <div class="col-lg-6 mt-4 mt-lg-0">
+                    <div class="player-card d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="mb-0 text-white"><i class="fas fa-broadcast-tower text-danger me-2"></i>ON AIR</h6>
+                            <small class="text-white-50" id="current-show">Loading current show...</small>
                         </div>
-                    </article>
-                </div>
-                
-                <!-- Side Trending News -->
-                <div class="col-12 col-lg-4 d-flex">
-                    <section aria-labelledby="trending-news" class="w-100 d-flex flex-column justify-content-between">
-                        <h5 class="section-header" id="trending-news">Nos Emissions</h5>
-                        <ul class="list-group trending-list flex-grow-1" role="list" id="trending-list">
-                            <li class="list-group-item">
-                                <div class="spinner-border spinner-border-sm text-warning me-2"></div>
-                                Loading programs...
-                            </li>
-                        </ul>
-                    </section>
-                </div>
-            </div>
-        </section>
-
-        <!-- Current News Section -->
-        <section aria-labelledby="current-news" class="my-5">
-            <h2 class="section-header" id="current-news">Current News</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4" id="current-news-container">
-                <div class="col d-flex">
-                    <div class="card news-card w-100 h-100 d-flex flex-column">
-                        <div class="card-body d-flex flex-column flex-grow-1 text-center loading-placeholder">
-                            <div class="spinner-border text-warning my-5"></div>
-                            <p class="text-muted">Loading current news...</p>
-                        </div>
+                        <div class="spinner-grow text-warning" style="width: 1rem; height: 1rem;" role="status"></div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Links Section -->
-        <section aria-labelledby="quick-links" class="my-5">
-            <h2 class="section-header" id="quick-links">Explore Our Content</h2>
-            <div class="row quick-links" id="quick-links-container">
-                <div class="col-md-3 col-6 mb-4">
-                    <a href="economy.html" class="card news-card text-center text-decoration-none">
-                        <div class="card-body">
-                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                <i class="fas fa-chart-line fa-2x text-dark"></i>
+                    
+                    <!-- Hot Episode Mini Player -->
+                    <div id="hot-episode-container" class="hot-episode-card" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="hot-episode-title mb-2" id="hot-episode-title">Latest Episode</h6>
+                                <div class="hot-episode-meta">
+                                    <span><i class="fas fa-clock me-1"></i> <span id="hot-episode-duration">--:--</span></span>
+                                    <span><i class="fas fa-microphone me-1"></i> <span id="hot-episode-category">General</span></span>
+                                </div>
                             </div>
-                            <h5 class="card-title">Economy</h5>
-                            <p class="card-text">Loading description...</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 col-6 mb-4">
-                    <a href="finance.html" class="card news-card text-center text-decoration-none">
-                        <div class="card-body">
-                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                <i class="fas fa-coins fa-2x text-dark"></i>
-                            </div>
-                            <h5 class="card-title">Finance</h5>
-                            <p class="card-text">Loading description...</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 col-6 mb-4">
-                    <a href="articles.html" class="card news-card text-center text-decoration-none">
-                        <div class="card-body">
-                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                <i class="fas fa-newspaper fa-2x text-dark"></i>
-                            </div>
-                            <h5 class="card-title">Articles</h5>
-                            <p class="card-text">Loading description...</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 col-6 mb-4">
-                    <a href="actuality.html" class="card news-card text-center text-decoration-none">
-                        <div class="card-body">
-                            <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                <i class="fas fa-bullhorn fa-2x text-dark"></i>
-                            </div>
-                            <h5 class="card-title">Actuality</h5>
-                            <p class="card-text">Loading description...</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Radio Player Section -->
-        <section aria-labelledby="radio-player" class="my-5">
-            <h2 class="section-header" id="radio-player">Live Radio</h2>
-            <div class="card news-card text-center p-4">
-                <div class="row justify-content-center" id="radio-programs-container">
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="card news-card text-center p-3">
-                            <h6 class="mb-2">Loading...</h6>
-                            <button class="play-btn" title="Play program">
+                            <button class="hot-episode-play-btn" id="hot-episode-play">
                                 <i class="fas fa-play"></i>
                             </button>
-                            <div class="mt-2 text-muted" style="font-size:0.95rem;">Loading program info</div>
+                        </div>
+                        <audio id="hot-episode-audio" class="hot-episode-audio" preload="metadata">
+                            <source src="" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-white-50" id="hot-episode-progress">0:00 / 0:00</small>
+                            <a href="emissions.html" class="btn btn-sm btn-outline-light">
+                                <i class="fas fa-external-link-alt me-1"></i> Full
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-4">
+
+        <!-- LATEST EPISODE BANNER (NEW) - Display before Top Story -->
+        <section id="latest-episode-banner" style="display: none;">
+            <div class="episode-banner">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="episode-banner-content">
+                            <span class="episode-banner-badge">Latest Episode</span>
+                            <h2 class="episode-banner-title" id="latest-episode-title">Loading latest episode...</h2>
+                            <p class="episode-banner-subtitle" id="latest-episode-description">Loading description...</p>
+                            
+                            <div class="episode-banner-meta">
+                                <div><i class="fas fa-clock me-1"></i> <span id="latest-episode-duration">00:00</span></div>
+                                <div><i class="fas fa-calendar me-1"></i> <span id="latest-episode-date">Just added</span></div>
+                                <div><i class="fas fa-microphone me-1"></i> <span id="latest-episode-category">General</span></div>
+                            </div>
+                            
+                            <audio controls class="episode-banner-audio" id="latest-episode-audio" preload="metadata">
+                                <source src="" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <small class="text-white-50">Preview only - Listen to full episode in Emissions page</small>
+                                <a href="emissions.html" class="btn btn-sm btn-light">
+                                    <i class="fas fa-external-link-alt me-1"></i> Full Episode
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="episode-thumbnail-container h-100">
+                            <img id="latest-episode-thumbnail" src="" class="episode-banner-thumbnail" 
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80'">
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Blog Comments Section -->
-        <section aria-labelledby="blog-comments" class="my-5">
-            <h2 class="section-header" id="blog-comments">From Our Blog</h2>
-            <div class="row" id="blog-comments-container">
-                <div class="col-md-4 mb-4">
-                    <div class="card news-card h-100">
-                        <div class="card-body text-center loading-placeholder">
-                            <div class="spinner-border text-warning"></div>
-                            <p class="mt-2 text-muted">Loading blog comments...</p>
-                        </div>
+        <!-- Real-time Data Banner -->
+        <section id="data-banner-section" style="display: none;">
+            <h2 class="section-header">Today's Economic & Financial Snapshot</h2>
+            <div class="data-banner">
+                <h4 class="data-banner-title">Latest Market Indicators</h4>
+                <div class="data-banner-stats" id="data-banner-stats">
+                    <!-- Data will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured News Section -->
+        <section id="featured-news-section" style="display: none;">
+            <h2 class="section-header">Top Story</h2>
+            <div id="featured-news-container">
+                <!-- Featured article will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Quick Statistics Section -->
+        <section class="mb-5">
+            <h2 class="section-header">Financial Market Indicators</h2>
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-value" id="gdp-growth">--%</div>
+                        <div class="stat-label">GDP Growth</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-value" id="inflation-rate">--%</div>
+                        <div class="stat-label">Inflation</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stock-market">--</div>
+                        <div class="stat-label">Stock Market</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-value" id="interest-rate">--</div>
+                        <div class="stat-label">Interest Rate</div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- EPISODE PREVIEWS SECTION (NEW) - Under Latest Economy News -->
+        <section class="mb-5">
+            <div class="section-subheader">
+                <h3 class="mb-0">Latest Radio Episodes Preview</h3>
+                <a href="emissions.html">Listen to All Episodes <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            
+            <div id="episodes-loading" class="loading-spinner">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2">Loading radio episodes...</p>
+            </div>
+
+            <div id="episodes-preview-content" style="display: none;">
+                <div class="row" id="episodes-preview-container">
+                    <!-- Episode previews will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Economy News Section -->
+        <section class="mb-5">
+            <div class="section-subheader">
+                <h3 class="mb-0">Latest Economy News</h3>
+                <a href="economy.html">View All Economy News <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            
+            <div id="economy-loading" class="loading-spinner">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2">Loading economy news...</p>
+            </div>
+
+            <div id="economy-news-content" style="display: none;">
+                <div class="row" id="economy-news-container">
+                    <!-- Economy news will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Financial Updates Section -->
+        <section class="mb-5">
+            <div class="section-subheader">
+                <h3 class="mb-0">Latest Financial Updates</h3>
+                <a href="finance.html">View All Finance News <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            
+            <div id="finance-loading" class="loading-spinner">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2">Loading financial updates...</p>
+            </div>
+
+            <div id="finance-news-content" style="display: none;">
+                <div class="row" id="finance-news-container">
+                    <!-- Financial news will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- EPISODE TABLE SECTION (NEW) - Right side column -->
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Currency Exchange Section -->
+                <section class="mb-5">
+                    <h2 class="section-header">Currency Exchange Rates</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="stat-card">
+                                <div class="stat-value text-success" id="usd-xaf">605.4</div>
+                                <div class="stat-label">USD / XAF</div>
+                                <small class="text-muted" id="usd-change">Loading...</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-card">
+                                <div class="stat-value text-primary" id="eur-xaf">655.9</div>
+                                <div class="stat-label">EUR / XAF</div>
+                                <small class="text-muted" id="eur-change">Loading...</small>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- Recent & Upcoming Episodes Table (NEW) -->
+                <section class="episode-table-section mb-5">
+                    <h5 class="mb-3" style="color: var(--primary-color); font-weight: 700;">
+                        <i class="fas fa-list-ul me-2"></i>Recent & Upcoming Episodes
+                    </h5>
+                    
+                    <div id="episode-table-loading" class="text-center py-4">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        <p class="mt-2 small text-muted">Loading episodes...</p>
+                    </div>
+                    
+                    <div id="episode-table-content" style="display: none;">
+                        <table class="episode-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="episode-table-body">
+                                <!-- Episode rows will be loaded here -->
+                            </tbody>
+                        </table>
+                        
+                        <div class="text-center mt-3">
+                            <a href="emissions.html" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-headphones me-1"></i> All Episodes
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div id="no-episodes-table" style="display: none;" class="text-center py-4">
+                        <i class="fas fa-podcast fa-2x text-muted mb-3"></i>
+                        <p class="text-muted small">No episodes available</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+
     </main>
 
-    <!-- Live Radio Player Footer -->
-    <div class="live-player">
-        <div class="container d-flex justify-content-between align-items-center">
-            <span>🎙️ Listen to DFM Radio Live</span>
-            <div>
-                <button class="play-btn me-2" id="footerPlay" title="Play radio">
-                    <i class="fas fa-play"></i>
-                </button>
-                <button class="play-btn" id="footerStop" title="Stop radio">
-                    <i class="fas fa-stop"></i>
-                </button>
-            </div>
-            <span id="current-program">Loading current program...</span>
-        </div>
-    </div>
-
     <!-- Footer -->
-    <footer class="text-center p-4">
+    <footer class="mt-5 py-4" style="background: #f8f9fa; border-top: 1px solid #dee2e6;">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5>DFM Media</h5>
-                    <p>Your reliable source for economic, political and social news.</p>
+                <div class="col-md-6">
+                    <h5>DFM RADIO</h5>
+                    <p class="text-muted">Your reliable source for economic, political and social news.</p>
                 </div>
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5>Connect With Us</h5>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">Data provided by Central Bank & Finance Ministry</p>
+                    <p class="text-muted small">Last fetched: <span id="data-timestamp">--:--:--</span></p>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
                     <div class="social-icons">
-                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" title="Phone"><i class="fas fa-phone"></i></a>
+                        <a href="https://www.facebook.com/dfmradio103.9mhz" title="Facebook" target="_blank" class="me-3">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029VacCrV7BadmgUIyluG2g" title="WhatsApp" target="_blank" class="me-3">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://cm.linkedin.com/company/dfm-radio-103-9-mhz" title="LinkedIn" target="_blank" class="me-3">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" title="Phone" class="me-3">
+                            <i class="fas fa-phone"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <h5>Contact</h5>
-                    <address>
-                        DFM Media<br>
-                        Cameroon<br>
-                        <i class="fas fa-envelope me-2"></i> contact@dfmmedia.cm<br>
-                        <i class="fas fa-phone me-2"></i> +237 650 155 155
+                <div class="col-md-6 text-md-end">
+                    <address class="mb-0">
+                        DFM RADIO | Cameroon<br>
+                        <i class="fas fa-envelope me-1"></i> contact@dfmmedia.cm<br>
+                        <i class="fas fa-phone me-1"></i> +237 650 155 155
                     </address>
                 </div>
             </div>
-            <hr class="my-4">
-            <p class="mb-0">&copy; 2025 DFM Media – All rights reserved.</p>
+            <hr class="my-3">
+            <p class="mb-0 text-center">&copy; 2025 DFM Media – All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Pill Navigation -->
+    <nav class="pill-nav-container">
+        <a href="index.html" class="pill-nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <div class="pill-nav-separator"></div>
+        <a href="emissions.html" class="pill-nav-item">
+           <i class="fas fa-broadcast-tower"></i>
+            <span>Emissions</span>
+        </a>
+        <a href="economy.html" class="pill-nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Economy</span>
+        </a>
+        <a href="finance.html" class="pill-nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>Finance</span>
+        </a>
+    </nav>
+
+    <!-- Article Modal -->
+    <div class="modal fade" id="articleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">News</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div id="modalBody" class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // API Configuration
         const API_BASE = 'http://localhost:5000/api';
+        let allArticles = [];
+        let indicatorsData = {};
+        let financeData = {};
+        let episodesData = [];
+        let draftEpisodes = [];
+        let currentHotEpisode = null;
+        let hotEpisodeAudio = null;
+        let isHotEpisodePlaying = false;
 
-        // Load all homepage data
-        async function loadHomepageData() {
-            try {
-                await Promise.all([
-                    loadBreakingNews(),
-                    loadFeaturedContent(),
-                    loadCurrentNews(),
-                    loadQuickLinks(),
-                    loadRadioPrograms(),
-                    loadBlogComments(),
-                    loadTrendingPrograms()
-                ]);
-            } catch (error) {
-                console.error('Error loading homepage data:', error);
-                showNotification('Failed to load some content. Please refresh the page.', 'warning');
-            }
-        }
-
-        // Load breaking news from admin settings
-        async function loadBreakingNews() {
-            try {
-                const response = await fetch(`${API_BASE}/homepage`);
-                const data = await response.json();
-                
-                if (data.homepage && data.homepage.breakingNews) {
-                    document.getElementById('breaking-news-ticker').textContent = data.homepage.breakingNews;
-                } else {
-                    document.getElementById('breaking-news-ticker').textContent = 'Stay tuned for the latest updates from DFM Media';
-                }
-            } catch (error) {
-                console.error('Error loading breaking news:', error);
-                document.getElementById('breaking-news-ticker').textContent = 'Stay tuned for the latest updates from DFM Media';
-            }
-        }
-
-        // Load featured article from admin settings
-        async function loadFeaturedContent() {
-            try {
-                const response = await fetch(`${API_BASE}/homepage`);
-                const data = await response.json();
-                const container = document.getElementById('featured-article-container');
-                
-                if (data.homepage && data.homepage.featuredArticleData) {
-                    const article = data.homepage.featuredArticleData;
-                    container.innerHTML = `
-                        <img src="${article.image_url || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80'}" 
-                             class="w-100" alt="${article.title}" loading="lazy" style="max-height:340px; object-fit:cover;">
-                        <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1">
-                            <div class="card-overlay" style="top:24px;right:24px;">Featured</div>
-                            <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">${article.title}</h2>
-                            <p class="mb-4 fs-5" style="color:var(--text-secondary);">${article.excerpt || article.content.substring(0, 200)}...</p>
-                            <a href="articles.html?id=${article._id || article.id}" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-start">
-                                Read more <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    `;
-                } else {
-                    // Fallback to latest article if no featured article set
-                    const articlesResponse = await fetch(`${API_BASE}/articles?limit=1`);
-                    const articlesData = await articlesResponse.json();
-                    
-                    if (articlesData.items && articlesData.items.length > 0) {
-                        const article = articlesData.items[0];
-                        container.innerHTML = `
-                            <img src="${article.image_url || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80'}" 
-                                 class="w-100" alt="${article.title}" loading="lazy" style="max-height:340px; object-fit:cover;">
-                            <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1">
-                                <div class="card-overlay" style="top:24px;right:24px;">Latest</div>
-                                <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">${article.title}</h2>
-                                <p class="mb-4 fs-5" style="color:var(--text-secondary);">${article.excerpt || article.content.substring(0, 200)}...</p>
-                                <a href="articles.html?id=${article._id || article.id}" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-start">
-                                    Read more <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        `;
-                    } else {
-                        container.innerHTML = `
-                            <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1 text-center">
-                                <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">Welcome to DFM Media</h2>
-                                <p class="mb-4 fs-5" style="color:var(--text-secondary);">Your trusted source for economic, political and social news in Cameroon and Africa.</p>
-                                <a href="articles.html" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-center">
-                                    Explore Articles <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        `;
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading featured content:', error);
-                document.getElementById('featured-article-container').innerHTML = `
-                    <div class="featured-content p-4 d-flex flex-column justify-content-center flex-grow-1 text-center">
-                        <h2 class="fw-bold mb-3" style="font-size:2rem; color:var(--primary-accent);">Welcome to DFM Media</h2>
-                        <p class="mb-4 fs-5" style="color:var(--text-secondary);">Your trusted source for news and information.</p>
-                        <a href="articles.html" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm align-self-center">
-                            Explore Content <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                `;
-            }
-        }
-
-        // Load current news from database
-        async function loadCurrentNews() {
-            try {
-                const response = await fetch(`${API_BASE}/news?limit=3&status=published`);
-                const data = await response.json();
-                const container = document.getElementById('current-news-container');
-                
-                if (data.items && data.items.length > 0) {
-                    container.innerHTML = data.items.map(news => `
-                        <div class="col d-flex">
-                            <article class="card news-card w-100 h-100 d-flex flex-column">
-                                <img src="${news.image_url || getDefaultImage(news.category)}" 
-                                     class="card-img-top" alt="${news.title}" loading="lazy" style="height: 250px; object-fit: cover;">
-                                <div class="card-body d-flex flex-column flex-grow-1">
-                                    <span class="badge ${getCategoryBadge(news.category)} mb-2">${formatCategory(news.category)}</span>
-                                    <h5 class="card-title">${news.title}</h5>
-                                    <p class="card-text flex-grow-1">${news.excerpt || news.content.substring(0, 120)}...</p>
-                                    <a href="actuality.html?id=${news._id || news.id}" class="btn btn-sm btn-dark mt-auto">Read more</a>
-                                </div>
-                            </article>
-                        </div>
-                    `).join('');
-                } else {
-                    container.innerHTML = `
-                        <div class="col-12 text-center">
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                No current news available. Check back later for updates.
-                            </div>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading current news:', error);
-                document.getElementById('current-news-container').innerHTML = `
-                    <div class="col-12 text-center">
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            Unable to load current news. Please try again later.
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        // Load quick links from admin settings
-        async function loadQuickLinks() {
-            try {
-                const response = await fetch(`${API_BASE}/homepage`);
-                const data = await response.json();
-                
-                if (data.homepage && data.homepage.quickLinks) {
-                    const links = data.homepage.quickLinks;
-                    const container = document.getElementById('quick-links-container');
-                    
-                    container.innerHTML = `
-                        <div class="col-md-3 col-6 mb-4">
-                            <a href="economy.html" class="card news-card text-center text-decoration-none">
-                                <div class="card-body">
-                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                        <i class="fas fa-chart-line fa-2x text-dark"></i>
-                                    </div>
-                                    <h5 class="card-title">Economy</h5>
-                                    <p class="card-text">${links.economy}</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-6 mb-4">
-                            <a href="finance.html" class="card news-card text-center text-decoration-none">
-                                <div class="card-body">
-                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                        <i class="fas fa-coins fa-2x text-dark"></i>
-                                    </div>
-                                    <h5 class="card-title">Finance</h5>
-                                    <p class="card-text">${links.finance}</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-6 mb-4">
-                            <a href="articles.html" class="card news-card text-center text-decoration-none">
-                                <div class="card-body">
-                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                        <i class="fas fa-newspaper fa-2x text-dark"></i>
-                                    </div>
-                                    <h5 class="card-title">Articles</h5>
-                                    <p class="card-text">${links.articles}</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-6 mb-4">
-                            <a href="actuality.html" class="card news-card text-center text-decoration-none">
-                                <div class="card-body">
-                                    <div class="bg-warning rounded-circle p-3 mb-3 mx-auto quick-link-icon">
-                                        <i class="fas fa-bullhorn fa-2x text-dark"></i>
-                                    </div>
-                                    <h5 class="card-title">Actuality</h5>
-                                    <p class="card-text">${links.actuality}</p>
-                                </div>
-                            </a>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading quick links:', error);
-            }
-        }
-
-        // Load radio programs
-        async function loadRadioPrograms() {
-            try {
-                // This would typically come from your emissions API
-                const programs = [
-                    { title: "Economic Debate", description: "Guest: Finance Minister" },
-                    { title: "Market Update", description: "Live: Stock Trends" },
-                    { title: "Banking Hour", description: "Live: Banking Projects" }
-                ];
-                
-                const container = document.getElementById('radio-programs-container');
-                container.innerHTML = programs.map(program => `
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="card news-card text-center p-3">
-                            <h6 class="mb-2">${program.title}</h6>
-                            <button class="play-btn" title="Play ${program.title}">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="mt-2 text-muted" style="font-size:0.95rem;">${program.description}</div>
-                        </div>
-                    </div>
-                `).join('');
-                
-                // Update current program in footer
-                document.getElementById('current-program').textContent = `Live: ${programs[0].title} - ${programs[0].description}`;
-                
-            } catch (error) {
-                console.error('Error loading radio programs:', error);
-            }
-        }
-
-        // Load blog comments
-        async function loadBlogComments() {
-            try {
-                // This would typically come from your articles API with comments
-                const comments = [
-                    { 
-                        name: "John Doe", 
-                        comment: "The economic analysis provided by Dfm Media has been invaluable for my business decisions. Keep up the great work!",
-                        role: "Business Owner"
-                    },
-                    { 
-                        name: "Marie Ngassa", 
-                        comment: "I appreciate the focus on African economic trends. It's refreshing to hear perspectives that are relevant to our context.",
-                        role: "Economist"
-                    },
-                    { 
-                        name: "Paul Biya", 
-                        comment: "The agricultural segment last week provided excellent insights into modern farming techniques. Very informative!",
-                        role: "Farmer"
-                    }
-                ];
-                
-                const container = document.getElementById('blog-comments-container');
-                container.innerHTML = comments.map(comment => `
-                    <div class="col-md-4 mb-4">
-                        <div class="card news-card h-100">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="bg-warning rounded-circle p-2 me-2">
-                                        <i class="fas fa-user text-dark"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="card-subtitle mb-0">${comment.name}</h6>
-                                        <small class="text-muted">${comment.role}</small>
-                                    </div>
-                                </div>
-                                <p class="card-text">"${comment.comment}"</p>
-                                <a href="articles.html#blog" class="btn btn-sm btn-outline-dark mt-2">View Blog</a>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                
-            } catch (error) {
-                console.error('Error loading blog comments:', error);
-            }
-        }
-
-        // Load trending programs
-        async function loadTrendingPrograms() {
-            try {
-                // This would typically come from your emissions API
-                const programs = [
-                    "New economic developments in Europe",
-                    "National debate on pensions tonight at 8pm",
-                    "Tax reforms: what changes in 2025",
-                    "Education budget: historic increase",
-                    "Exclusive interview with the finance minister"
-                ];
-                
-                const container = document.getElementById('trending-list');
-                container.innerHTML = programs.map(program => `
-                    <li class="list-group-item" role="listitem">
-                        <a href="emmsion.html">${program}</a>
-                    </li>
-                `).join('');
-                
-            } catch (error) {
-                console.error('Error loading trending programs:', error);
-            }
-        }
-
-        // Helper functions
-        function getDefaultImage(category) {
-            const images = {
-                'economy': 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
-                'agriculture': 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
-                'innovation': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80',
-                'finance': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80'
-            };
-            return images[category] || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80';
-        }
-
-        function getCategoryBadge(category) {
-            const badges = {
-                'economy': 'bg-warning text-dark',
-                'agriculture': 'bg-success text-white', 
-                'innovation': 'bg-info text-white',
-                'finance': 'bg-primary text-white'
-            };
-            return badges[category] || 'bg-secondary text-white';
-        }
-
-        function formatCategory(category) {
-            const formatted = {
-                'economy': 'Economy',
-                'agriculture': 'Agriculture',
-                'innovation': 'Innovation',
-                'finance': 'Finance'
-            };
-            return formatted[category] || category;
-        }
-
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        if (savedTheme === 'dark') {
-            body.setAttribute('data-theme', 'dark');
-        } else {
-            body.removeAttribute('data-theme');
-        }
-        
-        function toggleTheme() {
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-        
-        themeToggle.addEventListener('click', toggleTheme);
-        
-        // Audio controls functionality
-        const playButton = document.getElementById('playButton');
-        const stopButton = document.getElementById('stopButton');
-        const footerPlay = document.getElementById('footerPlay');
-        const footerStop = document.getElementById('footerStop');
-        
-        function playAudio() {
-            showNotification('Radio is now playing', 'info');
-        }
-        
-        function stopAudio() {
-            showNotification('Radio stopped', 'info');
-        }
-        
-        playButton.addEventListener('click', playAudio);
-        stopButton.addEventListener('click', stopAudio);
-        footerPlay.addEventListener('click', playAudio);
-        footerStop.addEventListener('click', stopAudio);
-        
-        // Show notification function
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-            notification.style.top = '20px';
-            notification.style.right = '20px';
-            notification.style.zIndex = '1050';
-            notification.style.minWidth = '300px';
-            notification.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize all data loading
+            await loadDashboardData();
+            document.getElementById('data-timestamp').innerText = new Date().toLocaleTimeString();
             
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadHomepageData();
+            // Setup hot episode audio player
+            setupHotEpisodePlayer();
         });
 
-        // Refresh content every 5 minutes
-        setInterval(loadHomepageData, 300000);
+        // Setup hot episode audio player functionality
+        function setupHotEpisodePlayer() {
+            hotEpisodeAudio = document.getElementById('hot-episode-audio');
+            const playButton = document.getElementById('hot-episode-play');
+            
+            if (!hotEpisodeAudio || !playButton) return;
+            
+            // Play/pause functionality
+            playButton.addEventListener('click', function() {
+                if (isHotEpisodePlaying) {
+                    hotEpisodeAudio.pause();
+                    playButton.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    hotEpisodeAudio.play().catch(e => {
+                        console.log('Audio play failed:', e);
+                        alert('Please click the audio player in the episode banner to start playback.');
+                    });
+                    playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+                isHotEpisodePlaying = !isHotEpisodePlaying;
+            });
+            
+            // Update progress
+            hotEpisodeAudio.addEventListener('timeupdate', function() {
+                const current = formatTime(this.currentTime);
+                const duration = formatTime(this.duration || 0);
+                document.getElementById('hot-episode-progress').textContent = `${current} / ${duration}`;
+                
+                // If preview ended (2 minutes), pause and reset
+                if (this.currentTime >= 120) {
+                    this.pause();
+                    this.currentTime = 0;
+                    playButton.innerHTML = '<i class="fas fa-play"></i>';
+                    isHotEpisodePlaying = false;
+                    alert('Preview ended. Visit Emissions page for full episode.');
+                }
+            });
+            
+            // Handle audio ended
+            hotEpisodeAudio.addEventListener('ended', function() {
+                playButton.innerHTML = '<i class="fas fa-play"></i>';
+                isHotEpisodePlaying = false;
+            });
+            
+            // Handle play/pause from other sources
+            hotEpisodeAudio.addEventListener('play', function() {
+                playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                isHotEpisodePlaying = true;
+            });
+            
+            hotEpisodeAudio.addEventListener('pause', function() {
+                playButton.innerHTML = '<i class="fas fa-play"></i>';
+                isHotEpisodePlaying = false;
+            });
+        }
+
+        // Main Dashboard Data Loader
+        async function loadDashboardData() {
+            try {
+                console.log('Loading dashboard data...');
+                
+                // Load all data in parallel
+                await Promise.allSettled([
+                    loadLatestEpisode(),
+                    loadEpisodePreviews(),
+                    loadEpisodeTable(),
+                    loadEconomicIndicators(),
+                    loadLatestNews(),
+                    loadFinancialData(),
+                    loadCurrencyRates()
+                ]);
+                
+                // After loading, set up featured content
+                setupFeaturedContent();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showError('Some data may not be available. Please try again later.');
+            }
+        }
+
+        // 1. LOAD LATEST EPISODE FOR BANNER
+        async function loadLatestEpisode() {
+            try {
+                const res = await fetch(`${API_BASE}/emissions?status=published&limit=1&sort=-publish_date`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.emissions && data.emissions.length > 0) {
+                        currentHotEpisode = data.emissions[0];
+                        displayLatestEpisode(currentHotEpisode);
+                        setupHotEpisodeInHero(currentHotEpisode);
+                    }
+                }
+            } catch (e) {
+                console.log('Latest episode error:', e);
+                // Use mock data for demo
+                const mockEpisode = getMockLatestEpisode();
+                currentHotEpisode = mockEpisode;
+                displayLatestEpisode(mockEpisode);
+                setupHotEpisodeInHero(mockEpisode);
+            }
+        }
+
+        // 2. DISPLAY LATEST EPISODE IN BANNER
+        function displayLatestEpisode(episode) {
+            const bannerSection = document.getElementById('latest-episode-banner');
+            
+            if (!episode) {
+                bannerSection.style.display = 'none';
+                return;
+            }
+            
+          // Update episode details
+    document.getElementById('latest-episode-title').textContent = episode.title || 'Latest Radio Episode';
+    document.getElementById('latest-episode-description').textContent = episode.description ? (episode.description.substring(0, 150) + '...') : 'Listen to our latest radio broadcast';
+    document.getElementById('latest-episode-duration').textContent = episode.duration || '30:00';
+    document.getElementById('latest-episode-date').textContent = formatDate(episode.publish_date);
+    document.getElementById('latest-episode-category').textContent = episode.category || 'General';
+            
+            // Set thumbnail with proper error handling
+            const thumbnailImg = document.getElementById('latest-episode-thumbnail');
+            if (episode.thumbnail) {
+                const imageUrl = getFullUrl(episode.thumbnail);
+                thumbnailImg.src = imageUrl;
+                
+                // Add error handling for the image
+                thumbnailImg.onerror = function() {
+                    this.src = 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80';
+                    this.onerror = null; // Prevent infinite loop
+                };
+                
+                // Add load event to handle successful loading
+                thumbnailImg.onload = function() {
+                    console.log('Episode thumbnail loaded successfully:', imageUrl);
+                };
+            } else {
+                thumbnailImg.src = 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80';
+            }
+            
+            // Set audio for banner player
+            const audioElement = document.getElementById('latest-episode-audio');
+            if (episode.audio_url) {
+                const audioUrl = getFullUrl(episode.audio_url, 'audio');
+                audioElement.src = audioUrl;
+                audioElement.load();
+                
+                // Add audio load event
+                audioElement.addEventListener('loadeddata', function() {
+                    console.log('Banner audio loaded:', audioUrl);
+                });
+                
+                // Add audio error handling
+                audioElement.addEventListener('error', function(e) {
+                    console.error('Audio loading error:', e);
+                    // Fallback to demo audio
+                    audioElement.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+                    audioElement.load();
+                });
+                
+                // For demo: Limit playback to 120 seconds (2 minutes) as preview
+                audioElement.addEventListener('timeupdate', function() {
+                    if (this.currentTime > 120) { // 2 minutes
+                        this.pause();
+                        this.currentTime = 0;
+                        alert('This is a preview only. Please visit the Emissions page to listen to the full episode.');
+                    }
+                });
+            }
+            
+            bannerSection.style.display = 'block';
+        }
+
+        // 3. SETUP HOT EPISODE IN HERO BANNER
+        function setupHotEpisodeInHero(episode) {
+            const hotEpisodeContainer = document.getElementById('hot-episode-container');
+            const currentShowElement = document.getElementById('current-show');
+            
+            if (!episode) {
+                hotEpisodeContainer.style.display = 'none';
+                currentShowElement.textContent = 'Morning Economy Brief';
+                return;
+            }
+            
+            // Update hot episode details
+            document.getElementById('hot-episode-title').textContent = 
+                episode.title.length > 40 ? episode.title.substring(0, 40) + '...' : episode.title;
+            document.getElementById('hot-episode-duration').textContent = episode.duration || '30:00';
+            document.getElementById('hot-episode-category').textContent = episode.category || 'General';
+            
+            // Update current show text
+            currentShowElement.textContent = `Now: ${episode.title}`;
+            
+            // Set audio for hot episode player
+            if (episode.audio_url && hotEpisodeAudio) {
+                const audioUrl = getFullUrl(episode.audio_url, 'audio');
+                hotEpisodeAudio.src = audioUrl;
+                hotEpisodeAudio.load();
+                
+                // Add audio load event
+                hotEpisodeAudio.addEventListener('loadeddata', function() {
+                    console.log('Hot episode audio loaded:', audioUrl);
+                    const duration = formatTime(this.duration || 0);
+                    document.getElementById('hot-episode-duration').textContent = duration;
+                    document.getElementById('hot-episode-progress').textContent = `0:00 / ${duration}`;
+                });
+                
+                // Add audio error handling
+                hotEpisodeAudio.addEventListener('error', function(e) {
+                    console.error('Hot episode audio error:', e);
+                    // Fallback to demo audio
+                    hotEpisodeAudio.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+                    hotEpisodeAudio.load();
+                });
+            }
+            
+            hotEpisodeContainer.style.display = 'block';
+        }
+
+        // 4. LOAD EPISODE PREVIEWS (3 samples under Latest Economy News)
+        async function loadEpisodePreviews() {
+            try {
+                const res = await fetch(`${API_BASE}/emissions?status=published&limit=3&sort=-publish_date`);
+                const loadingEl = document.getElementById('episodes-loading');
+                const contentEl = document.getElementById('episodes-preview-content');
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.emissions && data.emissions.length > 0) {
+                        displayEpisodePreviews(data.emissions);
+                        loadingEl.style.display = 'none';
+                        contentEl.style.display = 'block';
+                        return;
+                    }
+                }
+                
+                // Use mock data if API fails
+                displayEpisodePreviews(getMockEpisodePreviews());
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                
+            } catch (e) {
+                console.log('Episode previews error:', e);
+                // Use mock data
+                displayEpisodePreviews(getMockEpisodePreviews());
+                document.getElementById('episodes-loading').style.display = 'none';
+                document.getElementById('episodes-preview-content').style.display = 'block';
+            }
+        }
+
+        // 5. DISPLAY EPISODE PREVIEWS WITH IMAGES
+        function displayEpisodePreviews(episodes) {
+            const container = document.getElementById('episodes-preview-container');
+            
+            if (!episodes || episodes.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No episodes available at the moment.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            episodes.forEach(episode => {
+                const imageUrl = getFullUrl(episode.thumbnail);
+                const audioUrl = getFullUrl(episode.audio_url, 'audio');
+                
+                html += `
+                    <div class="col-md-4">
+                        <div class="episode-preview-card">
+                            <div class="episode-preview-header">
+                                <span class="episode-preview-badge">${episode.category || 'Episode'}</span>
+                                ${episode.featured ? '<span class="badge bg-warning text-dark">Featured</span>' : ''}
+                            </div>
+                            
+                            <img src="${imageUrl}" class="episode-preview-image" 
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400&q=80'"
+                                 alt="${episode.title}">
+                            
+                            <h4 class="episode-preview-title">${episode.title}</h4>
+                            <p class="text-muted small">${episode.description ? (episode.description.substring(0, 80) + '...') : 'Radio episode'}</p>
+                            
+                            <audio controls class="episode-preview-audio" preload="metadata">
+                                <source src="${audioUrl}" type="audio/mpeg">
+                            </audio>
+                            
+                            <div class="episode-preview-meta">
+                                <div><i class="fas fa-clock me-1"></i> ${episode.duration || '--:--'}</div>
+                                <div><i class="fas fa-calendar me-1"></i> ${formatDate(episode.publish_date)}</div>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <a href="emissions.html" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-headphones me-1"></i> Full Episode
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Add preview limitations to all audio players
+            document.querySelectorAll('.episode-preview-audio').forEach(audio => {
+                // Add error handling
+                audio.addEventListener('error', function(e) {
+                    console.error('Preview audio error:', e);
+                    this.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+                    this.load();
+                });
+                
+                // Add time limit
+                audio.addEventListener('timeupdate', function() {
+                    if (this.currentTime > 90) { // 1.5 minutes preview
+                        this.pause();
+                        this.currentTime = 0;
+                        alert('Preview ended. Visit Emissions page for full episode.');
+                    }
+                });
+            });
+        }
+
+        // 6. LOAD EPISODE TABLE (Published and Draft episodes)
+        async function loadEpisodeTable() {
+            try {
+                // For demo, we'll use mock data since we don't have backend
+                const episodes = getMockEpisodesForTable();
+                
+                // Filter out drafts older than 7 days
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                
+                const filteredEpisodes = episodes.filter(ep => {
+                    if (ep.status === 'draft') {
+                        const publishDate = new Date(ep.publish_date);
+                        return publishDate >= sevenDaysAgo;
+                    }
+                    return true;
+                });
+                
+                displayEpisodeTable(filteredEpisodes);
+                
+            } catch (e) {
+                console.log('Episode table error:', e);
+                displayEpisodeTable(getMockEpisodesForTable());
+            }
+        }
+
+        // 7. DISPLAY EPISODE TABLE
+        function displayEpisodeTable(episodes) {
+            const loadingEl = document.getElementById('episode-table-loading');
+            const contentEl = document.getElementById('episode-table-content');
+            const noEpisodesEl = document.getElementById('no-episodes-table');
+            const tableBody = document.getElementById('episode-table-body');
+            
+            loadingEl.style.display = 'none';
+            
+            if (!episodes || episodes.length === 0) {
+                noEpisodesEl.style.display = 'block';
+                return;
+            }
+            
+            let html = '';
+            episodes.forEach(episode => {
+                const statusClass = episode.status === 'published' ? 'status-published' : 
+                                  episode.status === 'draft' ? 'status-draft' : 'status-scheduled';
+                const statusText = episode.status === 'published' ? 'Live' : 
+                                 episode.status === 'draft' ? 'Draft' : 'Scheduled';
+                
+                html += `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 500; font-size: 0.9rem;">${episode.title}</div>
+                            <div style="font-size: 0.75rem; color: #6c757d;">${formatDate(episode.publish_date)}</div>
+                        </td>
+                        <td><span class="episode-status ${statusClass}">${statusText}</span></td>
+                    </tr>
+                `;
+            });
+            
+            tableBody.innerHTML = html;
+            contentEl.style.display = 'block';
+        }
+
+        // 8. Load Economic Indicators
+        async function loadEconomicIndicators() {
+            try {
+                const res = await fetch(`${API_BASE}/economy/indicators`);
+                if (res.ok) {
+                    const data = await res.json();
+                    indicatorsData = data;
+                    
+                    // Update indicators
+                    if(data.gdp_growth) document.getElementById('gdp-growth').innerText = data.gdp_growth + '%';
+                    if(data.inflation_rate) document.getElementById('inflation-rate').innerText = data.inflation_rate + '%';
+                    
+                    console.log('Economic indicators loaded:', data);
+                }
+            } catch (e) { 
+                console.log('Economic indicators error:', e); 
+            }
+        }
+
+        // 9. Load Latest News
+        async function loadLatestNews() {
+            try {
+                // Fetch economy news
+                const economyRes = await fetch(`${API_BASE}/economy/articles?limit=6&status=published`);
+                const economyData = await economyRes.json();
+                
+                // Fetch finance news
+                const financeRes = await fetch(`${API_BASE}/finance/articles?limit=6&status=published`);
+                const financeData = await financeRes.json();
+                
+                // Combine all articles
+                allArticles = [
+                    ...(economyData.items || []),
+                    ...(financeData.items || [])
+                ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                console.log('Total articles loaded:', allArticles.length);
+                
+                // Render economy news
+                renderEconomyNews(economyData.items || []);
+                
+                // Render finance news
+                renderFinanceNews(financeData.items || []);
+                
+            } catch (e) {
+                console.error("News loading error:", e);
+                document.getElementById('economy-loading').innerHTML = '<p class="text-danger">Failed to load news.</p>';
+                document.getElementById('finance-loading').innerHTML = '<p class="text-danger">Failed to load news.</p>';
+            }
+        }
+
+        // 10. Load Financial Data
+        async function loadFinancialData() {
+            try {
+                const res = await fetch(`${API_BASE}/finance/overview`);
+                if (res.ok) {
+                    const data = await res.json();
+                    financeData = data;
+                    
+                    // Update financial indicators
+                    if(data.financialData?.stock_market_growth) {
+                        document.getElementById('stock-market').innerText = data.financialData.stock_market_growth + '%';
+                    }
+                    if(data.financialData?.interest_rate) {
+                        document.getElementById('interest-rate').innerText = data.financialData.interest_rate + '%';
+                    }
+                    
+                    console.log('Financial data loaded:', data);
+                }
+            } catch (e) { 
+                console.log('Financial data error:', e); 
+            }
+        }
+
+        // 11. Load Currency Rates
+        async function loadCurrencyRates() {
+            try {
+                // For now, using mock data
+                const mockRates = {
+                    USD: { value: '605.4', change: '+0.2%', changeType: 'positive' },
+                    EUR: { value: '655.9', change: '-0.1%', changeType: 'negative' }
+                };
+                
+                document.getElementById('usd-xaf').innerText = mockRates.USD.value;
+                document.getElementById('eur-xaf').innerText = mockRates.EUR.value;
+                document.getElementById('usd-change').innerText = mockRates.USD.change;
+                document.getElementById('eur-change').innerText = mockRates.EUR.change;
+                document.getElementById('usd-change').className = `text-${mockRates.USD.changeType}`;
+                document.getElementById('eur-change').className = `text-${mockRates.EUR.changeType}`;
+                
+            } catch (e) { 
+                console.log('Currency rates error:', e); 
+            }
+        }
+
+        // 12. Setup Featured Content
+        function setupFeaturedContent() {
+            // Find featured article or use most recent
+            const featuredArticle = allArticles.find(a => a.featured) || allArticles[0];
+            
+            if (featuredArticle) {
+                renderFeaturedArticle(featuredArticle);
+            }
+            
+            // Update data banner
+            updateDataBanner();
+        }
+
+        // 13. Render Featured Article
+        function renderFeaturedArticle(article) {
+            const container = document.getElementById('featured-news-section');
+            const contentContainer = document.getElementById('featured-news-container');
+            
+            if (!article) return;
+            
+            contentContainer.innerHTML = `
+                <div class="featured-news-card" onclick="openArticleModal('${article._id}')">
+                    ${article.image_url ? `
+                    <img src="${getFullUrl(article.image_url)}" class="featured-image" 
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'">
+                    ` : ''}
+                    <div class="featured-content">
+                        <span class="featured-category">${article.category || 'Featured'}</span>
+                        <h3 class="featured-title">${article.title}</h3>
+                        <p class="featured-excerpt">${article.excerpt || article.content.substring(0, 200)}...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i> ${formatDate(article.createdAt)}
+                            </small>
+                            <a href="javascript:void(0)" onclick="openArticleModal('${article._id}')" 
+                               class="btn btn-sm btn-dark">Read Full Story</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.style.display = 'block';
+        }
+
+        // 14. Render Economy News
+        function renderEconomyNews(articles) {
+            const loadingEl = document.getElementById('economy-loading');
+            const contentEl = document.getElementById('economy-news-content');
+            const container = document.getElementById('economy-news-container');
+            
+            if (!articles || articles.length === 0) {
+                loadingEl.innerHTML = '<p>No economy news available.</p>';
+                return;
+            }
+            
+            loadingEl.style.display = 'none';
+            contentEl.style.display = 'block';
+            
+            let html = '';
+            const displayArticles = articles.slice(0, 3);
+            
+            displayArticles.forEach(article => {
+                html += `
+                    <div class="col-md-4">
+                        <div class="news-card" onclick="openArticleModal('${article._id}')">
+                            ${article.image_url ? `
+                            <img src="${getFullUrl(article.image_url)}" class="news-image" 
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                            ` : ''}
+                            <div class="news-content">
+                                <span class="news-category">${article.category || 'Economy'}</span>
+                                <h4 class="news-title">${article.title}</h4>
+                                <p class="news-excerpt">${article.excerpt || article.content.substring(0, 100)}...</p>
+                                <div class="news-meta">
+                                    <span><i class="fas fa-clock"></i> ${formatDate(article.createdAt)}</span>
+                                    <span><i class="fas fa-eye"></i> Read</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // 15. Render Finance News
+        function renderFinanceNews(articles) {
+            const loadingEl = document.getElementById('finance-loading');
+            const contentEl = document.getElementById('finance-news-content');
+            const container = document.getElementById('finance-news-container');
+            
+            if (!articles || articles.length === 0) {
+                loadingEl.innerHTML = '<p>No financial updates available.</p>';
+                return;
+            }
+            
+            loadingEl.style.display = 'none';
+            contentEl.style.display = 'block';
+            
+            let html = '';
+            const displayArticles = articles.slice(0, 3);
+            
+            displayArticles.forEach(article => {
+                html += `
+                    <div class="col-md-4">
+                        <div class="news-card" onclick="openArticleModal('${article._id}')">
+                            ${article.image_url ? `
+                            <img src="${getFullUrl(article.image_url)}" class="news-image" 
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                            ` : ''}
+                            <div class="news-content">
+                                <span class="news-category">${article.category || 'Finance'}</span>
+                                <h4 class="news-title">${article.title}</h4>
+                                <p class="news-excerpt">${article.excerpt || article.content.substring(0, 100)}...</p>
+                                <div class="news-meta">
+                                    <span><i class="fas fa-clock"></i> ${formatDate(article.createdAt)}</span>
+                                    <span><i class="fas fa-eye"></i> Read</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // 16. Update Data Banner with latest statistics
+        function updateDataBanner() {
+            const bannerSection = document.getElementById('data-banner-section');
+            const statsContainer = document.getElementById('data-banner-stats');
+            
+            const stats = [];
+            
+            // Add GDP Growth if available
+            if (indicatorsData.gdp_growth) {
+                stats.push({
+                    label: 'GDP GROWTH',
+                    value: `${indicatorsData.gdp_growth}%`,
+                    change: '+0.2%',
+                    changeType: 'positive'
+                });
+            }
+            
+            // Add Inflation Rate if available
+            if (indicatorsData.inflation_rate) {
+                stats.push({
+                    label: 'INFLATION',
+                    value: `${indicatorsData.inflation_rate}%`,
+                    change: '-0.1%',
+                    changeType: 'negative'
+                });
+            }
+            
+            // Add Stock Market if available
+            if (financeData.financialData?.stock_market_growth) {
+                stats.push({
+                    label: 'STOCK MARKET',
+                    value: `${financeData.financialData.stock_market_growth}%`,
+                    change: '+1.5%',
+                    changeType: 'positive'
+                });
+            }
+            
+            // Add Interest Rate if available
+            if (financeData.financialData?.interest_rate) {
+                stats.push({
+                    label: 'INTEREST RATE',
+                    value: `${financeData.financialData.interest_rate}%`,
+                    change: '0.0%',
+                    changeType: 'neutral'
+                });
+            }
+            
+            // Add Currency Rates
+            stats.push({
+                label: 'USD / XAF',
+                value: '605.4',
+                change: '+0.2%',
+                changeType: 'positive'
+            });
+            
+            stats.push({
+                label: 'EUR / XAF',
+                value: '655.9',
+                change: '-0.1%',
+                changeType: 'negative'
+            });
+            
+            // Generate HTML for stats
+            let statsHTML = '';
+            stats.forEach(stat => {
+                statsHTML += `
+                    <div class="data-stat">
+                        <div class="data-stat-value">${stat.value}</div>
+                        <div class="data-stat-label">${stat.label}</div>
+                        <div class="data-stat-change ${stat.changeType === 'positive' ? 'change-positive' : stat.changeType === 'negative' ? 'change-negative' : ''}">
+                            ${stat.change}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            statsContainer.innerHTML = statsHTML;
+            bannerSection.style.display = 'block';
+        }
+
+        // 17. Article Modal Functions
+        function openArticleModal(id) {
+            const article = allArticles.find(a => a._id === id);
+            if (!article) return;
+
+            document.getElementById('modalTitle').innerText = article.title;
+            document.getElementById('modalBody').innerHTML = `
+                ${article.image_url ? `
+                <img src="${getFullUrl(article.image_url)}" class="img-fluid rounded mb-3 w-100">
+                ` : ''}
+                <div class="text-muted mb-3 small">
+                    <strong>${article.author || 'DFM Team'}</strong> | 
+                    ${new Date(article.createdAt).toLocaleDateString()} | 
+                    <span class="badge bg-secondary">${article.category || 'News'}</span>
+                </div>
+                <div style="line-height: 1.8;">${article.content}</div>
+            `;
+            new bootstrap.Modal(document.getElementById('articleModal')).show();
+        }
+
+        // 18. Utility Functions
+        function getFullUrl(url, type = 'image') {
+            if (!url) {
+                return type === 'image' 
+                    ? 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80' 
+                    : 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+            }
+            if (url.startsWith('http')) return url;
+            
+            // For audio files, check if it's a full URL or needs the uploads path
+            if (type === 'audio') {
+                if (url.includes('soundhelix.com') || url.includes('unsplash.com')) {
+                    return url;
+                }
+                return `http://localhost:5000/uploads/${url}`;
+            }
+            
+            // For images
+            return `http://localhost:5000/uploads/${url}`;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Recent';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffHours = diffMs / (1000 * 60 * 60);
+            
+            if (diffHours < 24) {
+                if (diffHours < 1) {
+                    const diffMins = Math.floor(diffMs / (1000 * 60));
+                    return `${diffMins}m ago`;
+                }
+                return `${Math.floor(diffHours)}h ago`;
+            } else if (diffHours < 48) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function showError(message) {
+            console.error('Dashboard Error:', message);
+        }
+
+        function toggleRadio() {
+            alert("Starting DFM 103.9 Stream...");
+        }
+
+        // 19. MOCK DATA FUNCTIONS (for demo without backend)
+        function getMockLatestEpisode() {
+            return {
+                _id: 'mock_episode_1',
+                title: 'Market Crisis: How to Protect Your Investments',
+                description: 'Exclusive analysis of the current market volatility with expert advice on safeguarding your portfolio during economic uncertainty.',
+                duration: '45:30',
+                publish_date: new Date().toISOString(),
+                category: 'Finance',
+                thumbnail: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                audio_url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                featured: true
+            };
+        }
+
+        function getMockEpisodePreviews() {
+            return [
+                {
+                    _id: 'mock_episode_1',
+                    title: 'Tech Innovations in Finance',
+                    description: 'Exploring how technology is transforming the financial sector with blockchain and AI solutions.',
+                    duration: '38:15',
+                    publish_date: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+                    category: 'Technology',
+                    thumbnail: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    audio_url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+                    featured: false
+                },
+                {
+                    _id: 'mock_episode_2',
+                    title: 'Agriculture Investment Opportunities',
+                    description: 'Discussion on sustainable agriculture and investment potential in the agri-tech sector.',
+                    duration: '52:10',
+                    publish_date: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+                    category: 'Agriculture',
+                    thumbnail: 'https://images.unsplash.com/photo-1586771107445-d3ca888129fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    audio_url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+                    featured: true
+                },
+                {
+                    _id: 'mock_episode_3',
+                    title: 'Political Outlook 2025',
+                    description: 'Analysis of upcoming political changes and their impact on economic policies.',
+                    duration: '41:25',
+                    publish_date: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
+                    category: 'Politics',
+                    thumbnail: 'https://images.unsplash.com/photo-1551135049-8a33b2fb2f7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    audio_url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+                    featured: false
+                }
+            ];
+        }
+
+        function getMockEpisodesForTable() {
+            const now = new Date();
+            const futureDate = new Date(now);
+            futureDate.setDate(futureDate.getDate() + 3);
+            
+            const oldDraftDate = new Date(now);
+            oldDraftDate.setDate(oldDraftDate.getDate() - 10); // 10 days ago
+            
+            return [
+                {
+                    _id: 'mock_1',
+                    title: 'Market Analysis Today',
+                    publish_date: now.toISOString(),
+                    status: 'published'
+                },
+                {
+                    _id: 'mock_2',
+                    title: 'Financial Regulations Update',
+                    publish_date: futureDate.toISOString(),
+                    status: 'draft'
+                },
+                {
+                    _id: 'mock_3',
+                    title: 'Weekly Business Review',
+                    publish_date: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+                    status: 'published'
+                },
+                {
+                    _id: 'mock_4',
+                    title: 'Interview with Finance Minister',
+                    publish_date: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+                    status: 'published'
+                },
+                {
+                    _id: 'mock_5',
+                    title: 'Tech Startups Discussion',
+                    publish_date: new Date(Date.now() - 432000000).toISOString(), // 5 days ago
+                    status: 'draft'
+                },
+                {
+                    _id: 'mock_6',
+                    title: 'Old Draft: Agriculture Report',
+                    publish_date: oldDraftDate.toISOString(), // 10 days ago - will be filtered out
+                    status: 'draft'
+                },
+                {
+                    _id: 'mock_7',
+                    title: 'Global Economic Trends',
+                    publish_date: new Date(Date.now() - 604800000).toISOString(), // 7 days ago
+                    status: 'published'
+                }
+            ];
+        }
+
+        // Auto-refresh data every 5 minutes
+        setInterval(() => {
+            console.log('Auto-refreshing dashboard data...');
+            loadDashboardData();
+            document.getElementById('data-timestamp').innerText = new Date().toLocaleTimeString();
+        }, 5 * 60 * 1000);
     </script>
 </body>
 </html>

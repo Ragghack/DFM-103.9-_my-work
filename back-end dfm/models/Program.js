@@ -26,16 +26,17 @@ const programSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  category: {
-    type: String,
-    required: true,
-    enum: ['economy', 'finance', 'agriculture', 'technology', 'business', 'interview']
-  },
-  status: {
-    type: String,
-    enum: ['active', 'upcoming', 'future', 'inactive'],
-    default: 'active'
-  },
+  // Update Program.js
+category: {
+  type: String,
+  required: true,
+  enum: ['economy', 'finance', 'agriculture', 'Agriculture', 'technology', 'business', 'interview']
+},
+status: {
+  type: String,
+  enum: ['active', 'upcoming', 'Upcoming', 'future', 'inactive'],
+  default: 'active'
+},
   featured: {
     type: Boolean,
     default: false
