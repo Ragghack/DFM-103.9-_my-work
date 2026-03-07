@@ -655,8 +655,8 @@
                     <h1 class="display-5 fw-bold mb-2">DFM RADIO 103.9</h1>
                     <p class="mb-4 text-white-50">Your Source for Economy, Finance & Global News</p>
                     <button class="btn btn-live" onclick="toggleRadio()">
-                        <i class="fas fa-play me-2"></i> Listen Live
-                    </button>
+    <i class="fas fa-play me-2"></i> Listen Live
+</button>
                 </div>
                 <div class="col-lg-6 mt-4 mt-lg-0">
                     <div class="player-card d-flex align-items-center justify-content-between">
@@ -995,6 +995,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        
         const API_BASE = 'http://localhost:5000/api';
         let allArticles = [];
         let indicatorsData = {};
@@ -1004,6 +1005,65 @@
         let currentHotEpisode = null;
         let hotEpisodeAudio = null;
         let isHotEpisodePlaying = false;
+// Global variables
+let radioStream = null;
+let isRadioPlaying = false;
+
+function toggleRadio() {
+    const STREAM_URL = "http://streaming.shoutcast.com/dfm-radio";
+    
+    if (!radioStream) {
+        radioStream = new Audio(STREAM_URL);
+        radioStream.crossOrigin = 'anonymous';
+        radioStream.preload = 'none';
+    }
+    
+    const playBtn = document.querySelector(".btn-live");
+    const playIcon = playBtn.querySelector("i");
+    
+    if (isRadioPlaying) {
+        // Stop radio
+        radioStream.pause();
+        playIcon.className = 'fas fa-play me-2';
+        playBtn.innerHTML = '<i class="fas fa-play me-2"></i> Listen Live';
+        isRadioPlaying = false;
+        
+        // Update ON AIR text
+        document.getElementById('current-show').textContent = 'Radio Offline';
+    } else {
+        // Start radio
+        try {
+            radioStream.play();
+            playIcon.className = 'fas fa-stop me-2';
+            playBtn.innerHTML = '<i class="fas fa-stop me-2"></i> Stop Radio';
+            isRadioPlaying = true;
+            
+            // Update ON AIR text
+            document.getElementById('current-show').textContent = 'Live Radio Streaming';
+            
+            // Add event listeners for error handling
+            radioStream.onerror = function() {
+                console.error('Radio stream error');
+                playIcon.className = 'fas fa-play me-2';
+                playBtn.innerHTML = '<i class="fas fa-play me-2"></i> Listen Live';
+                isRadioPlaying = false;
+                document.getElementById('current-show').textContent = 'Stream Error - Try Again';
+                alert('Unable to connect to radio stream.');
+            };
+            
+            radioStream.onended = function() {
+                playIcon.className = 'fas fa-play me-2';
+                playBtn.innerHTML = '<i class="fas fa-play me-2"></i> Listen Live';
+                isRadioPlaying = false;
+                document.getElementById('current-show').textContent = 'Stream Ended';
+            };
+            
+        } catch (error) {
+            console.error('Error playing radio:', error);
+            alert('Please allow audio playback in your browser settings.');
+        }
+    }
+}
 
         document.addEventListener('DOMContentLoaded', async () => {
             // Initialize all data loading
@@ -1778,9 +1838,7 @@ function displayLatestEpisode(episode) {
             console.error('Dashboard Error:', message);
         }
 
-        function toggleRadio() {
-            alert("Starting DFM 103.9 Stream...");
-        }
+    
 
         // 19. MOCK DATA FUNCTIONS (for demo without backend)
         function getMockLatestEpisode() {
